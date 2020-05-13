@@ -1,0 +1,10 @@
+[book]
+title = "Alan Interactive Documentation"
+
+[output.html.playpen]
+editable = true
+line-numbers = true
+editor = "ace"
+
+[output.html.fold]
+enable = true
