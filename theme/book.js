@@ -34,7 +34,7 @@ function playpen_text(playpen) {
     })
     .then(response => response.json())
     .then(response => {
-    // get list of crates available in the rust playground
+      // get list of crates available in the rust playground
       let playground_crates = response.crates.map(item => item["id"]);
       playpens.forEach(block => handle_crate_list_update(block, playground_crates));
     });
@@ -65,8 +65,8 @@ function playpen_text(playpen) {
     }
   }
 
-// updates the visibility of play button based on `no_run` class and
-// used crates vs ones available on http://play.rust-lang.org
+  // updates the visibility of play button based on `no_run` class and
+  // used crates vs ones available on http://play.rust-lang.org
   function update_play_button(pre_block, playground_crates) {
     var play_button = pre_block.querySelector(".play-button");
 
@@ -122,14 +122,20 @@ function playpen_text(playpen) {
       params.version = "nightly";
     }
 
+    result_block.innerText = 'Running...'
+
     // console log returns undefined so wrap it
-    console.oldLog = console.log;
-    console.log = function(value)
-    {
-      console.oldLog(value);
+    var newInnerText = "";
+    console.log = function(value) {
+      newInnerText += value + '\n';
       return value;
     };
-    result_block.innerText = eval(text);
+    try {
+      eval(text);
+      result_block.innerText = newInnerText;
+    } catch (e) {
+      result_block.innerText = e.message;
+    }
 
     /*
     fetch_with_timeout("https://play.rust-lang.org/evaluate.json", {
@@ -146,7 +152,7 @@ function playpen_text(playpen) {
      */
   }
 
-// Syntax highlighting Configuration
+  // Syntax highlighting Configuration
   hljs.configure({
     tabReplace: '    ', // 4 spaces
     languages: [],      // Languages used for auto-detection
@@ -231,7 +237,7 @@ function playpen_text(playpen) {
     });
   }
 
-// Process playpen code blocks
+  // Process playpen code blocks
   Array.from(document.querySelectorAll(".playpen")).forEach(function (pre_block) {
     // Add play button
     var buttons = pre_block.querySelector(".buttons");
@@ -354,7 +360,7 @@ function playpen_text(playpen) {
     html.classList.add(theme);
   }
 
-// Set theme
+  // Set theme
   var theme = get_theme();
 
   set_theme(theme, false);
@@ -373,13 +379,13 @@ function playpen_text(playpen) {
   });
 
   themePopup.addEventListener('focusout', function(e) {
-// e.relatedTarget is null in Safari and Firefox on macOS (see workaround below)
+    // e.relatedTarget is null in Safari and Firefox on macOS (see workaround below)
     if (!!e.relatedTarget && !themeToggleButton.contains(e.relatedTarget) && !themePopup.contains(e.relatedTarget)) {
       hideThemes();
     }
   });
 
-// Should not be needed, but it works around an issue on macOS & iOS: https://github.com/rust-lang/mdBook/issues/628
+  // Should not be needed, but it works around an issue on macOS & iOS: https://github.com/rust-lang/mdBook/issues/628
   document.addEventListener('click', function(e) {
     if (themePopup.style.display === 'block' && !themeToggleButton.contains(e.target) && !themePopup.contains(e.target)) {
       hideThemes();
@@ -462,9 +468,14 @@ function playpen_text(playpen) {
     try { localStorage.setItem('mdbook-sidebar', 'hidden'); } catch (e) { }
   }
 
-// Toggle sidebar
+  // Toggle sidebar
   sidebarToggleButton.addEventListener('click', function sidebarToggle() {
     if (html.classList.contains("sidebar-hidden")) {
+      var current_width = parseInt(
+        document.documentElement.style.getPropertyValue('--sidebar-width'), 10);
+      if (current_width < 150) {
+        document.documentElement.style.setProperty('--sidebar-width', '150px');
+      }
       showSidebar();
     } else if (html.classList.contains("sidebar-visible")) {
       hideSidebar();
@@ -485,9 +496,18 @@ function playpen_text(playpen) {
     html.classList.add('sidebar-resizing');
   }
   function resize(e) {
-    document.documentElement.style.setProperty('--sidebar-width', (e.clientX - sidebar.offsetLeft) + 'px');
+    var pos = (e.clientX - sidebar.offsetLeft);
+    if (pos < 20) {
+      hideSidebar();
+    } else {
+      if (html.classList.contains("sidebar-hidden")) {
+        showSidebar();
+      }
+      pos = Math.min(pos, window.innerWidth - 100);
+      document.documentElement.style.setProperty('--sidebar-width', pos + 'px');
+    }
   }
-//on mouseup remove windows functions mousemove & mouseup
+  //on mouseup remove windows functions mousemove & mouseup
   function stopResize(e) {
     html.classList.remove('sidebar-resizing');
     window.removeEventListener('mousemove', resize, false);
@@ -519,10 +539,10 @@ function playpen_text(playpen) {
     }
   }, { passive: true });
 
-// Scroll sidebar to current active section
+  // Scroll sidebar to current active section
   var activeSection = document.getElementById("sidebar").querySelector(".active");
   if (activeSection) {
-// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
     activeSection.scrollIntoView({ block: 'center' });
   }
 })();
@@ -603,15 +623,15 @@ function playpen_text(playpen) {
     var scrollTop = document.scrollingElement.scrollTop;
     var prevScrollTop = scrollTop;
     var minMenuY = -menu.clientHeight - 50;
-// When the script loads, the page can be at any scroll (e.g. if you reforesh it).
+    // When the script loads, the page can be at any scroll (e.g. if you reforesh it).
     menu.style.top = scrollTop + 'px';
-// Same as parseInt(menu.style.top.slice(0, -2), but faster
+    // Same as parseInt(menu.style.top.slice(0, -2), but faster
     var topCache = menu.style.top.slice(0, -2);
     menu.classList.remove('sticky');
     var stickyCache = false; // Same as menu.classList.contains('sticky'), but faster
     document.addEventListener('scroll', function () {
       scrollTop = Math.max(document.scrollingElement.scrollTop, 0);
-// `null` means that it doesn't need to be updated
+      // `null` means that it doesn't need to be updated
       var nextSticky = null;
       var nextTop = null;
       var scrollDown = scrollTop > prevScrollTop;
