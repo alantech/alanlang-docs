@@ -1,12 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="{{ language }}" class="sidebar-visible no-js {{ default_theme }}">
+<html lang="{{ language }}" class="sidebar-visible no-js">
 <head>
     <!-- Book generated using mdBook -->
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    {{#if is_print }}
-        <meta name="robots" content="noindex" />
-    {{/if}}
 
     <!-- Custom HTML head -->
     {{> head}}
@@ -20,7 +17,6 @@
     <link rel="stylesheet" href="{{ path_to_root }}css/variables.css">
     <link rel="stylesheet" href="{{ path_to_root }}css/general.css">
     <link rel="stylesheet" href="{{ path_to_root }}css/chrome.css">
-    <link rel="stylesheet" href="{{ path_to_root }}css/print.css" media="print">
 
     <!-- Fonts -->
     <link rel="stylesheet" href="{{ path_to_root }}FontAwesome/css/font-awesome.css">
@@ -53,12 +49,7 @@
 <!-- Work around some values being stored in localStorage wrapped in quotes -->
 <script type="text/javascript">
     try {
-        var theme = localStorage.getItem('mdbook-theme');
         var sidebar = localStorage.getItem('mdbook-sidebar');
-
-        if (theme.startsWith('"') && theme.endsWith('"')) {
-            localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-        }
 
         if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
             localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
@@ -68,13 +59,9 @@
 
 <!-- Set the theme before any content is loaded, prevents flash -->
 <script type="text/javascript">
-    var theme;
-    try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
-    if (theme === null || theme === undefined) { theme = default_theme; }
     var html = document.querySelector('html');
     html.classList.remove('no-js')
-    html.classList.remove('{{ default_theme }}')
-    html.classList.add(theme);
+    html.classList.add(default_theme);
     html.classList.add('js');
 </script>
 
@@ -107,16 +94,6 @@
                 <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                     <i class="fa fa-bars"></i>
                 </button>
-                <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                    <i class="fa fa-paint-brush"></i>
-                </button>
-                <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                    <li role="none"><button role="menuitem" class="theme" id="light">{{ theme_option "Light" }}</button></li>
-                    <li role="none"><button role="menuitem" class="theme" id="rust">{{ theme_option "Rust" }}</button></li>
-                    <li role="none"><button role="menuitem" class="theme" id="coal">{{ theme_option "Coal" }}</button></li>
-                    <li role="none"><button role="menuitem" class="theme" id="navy">{{ theme_option "Navy" }}</button></li>
-                    <li role="none"><button role="menuitem" class="theme" id="ayu">{{ theme_option "Ayu" }}</button></li>
-                </ul>
                 {{#if search_enabled}}
                     <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                         <i class="fa fa-search"></i>
@@ -127,9 +104,6 @@
             <h1 class="menu-title">{{ book_title }}</h1>
 
             <div class="right-buttons">
-                <a href="{{ path_to_root }}print.html" title="Print this book" aria-label="Print this book">
-                    <i id="print-button" class="fa fa-print"></i>
-                </a>
                 {{#if git_repository_url}}
                     <a href="{{git_repository_url}}" title="Git repository" aria-label="Git repository">
                         <i id="git-repository-button" class="fa {{git_repository_icon}}"></i>
@@ -270,24 +244,6 @@
 {{#each additional_js}}
     <script type="text/javascript" src="{{ ../path_to_root }}{{this}}"></script>
 {{/each}}
-
-{{#if is_print}}
-    {{#if mathjax_support}}
-        <script type="text/javascript">
-            window.addEventListener('load', function() {
-                MathJax.Hub.Register.StartupHook('End', function() {
-                    window.setTimeout(window.print, 100);
-                });
-            });
-        </script>
-    {{else}}
-        <script type="text/javascript">
-            window.addEventListener('load', function() {
-                window.setTimeout(window.print, 100);
-            });
-        </script>
-    {{/if}}
-{{/if}}
 
 </body>
 </html>

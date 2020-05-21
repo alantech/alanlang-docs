@@ -1,10 +1,27 @@
 [book]
+src = 'src'
 title = "Alan Interactive Documentation"
+
+[output.html]
+theme = "theme"
+git-repository-url = "https://github.com/alantech"
+default-theme = "solarized-light"
+preferred-dark-theme = "solarized-dark"
+additional-css = [
+  "css/solarized-light-hljs.css",
+  "css/solarized-dark-hljs.css",
+]
+additional-js = [
+  # ace editor themes
+  # mdbook requires these to be located at the top level
+  # and with this specific file name convention
+  "theme-solarized_dark.js",
+  "theme-solarized_light.js",
+]
 
 [output.html.playpen]
 editable = true
 line-numbers = true
-editor = "ace"
 
 [output.html.fold]
 enable = true
