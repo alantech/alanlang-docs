@@ -287,145 +287,65 @@ function playpen_text(playpen) {
 })();
 
 (function themes() {
-  var html = document.querySelector('html');
-  var themeToggleButton = document.getElementById('theme-toggle');
-  var themePopup = document.getElementById('theme-list');
-  var themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
-  var stylesheets = {
+  let stylesheets = {
     ayuHighlight: document.querySelector("[href$='ayu-highlight.css']"),
     tomorrowNight: document.querySelector("[href$='tomorrow-night.css']"),
     highlight: document.querySelector("[href$='highlight.css']"),
+    solarizedLightHljs: document.querySelector("[href$='solarized-light-hljs.css']"),
+    solarizedDarkHljs: document.querySelector("[href$='solarized-dark-hljs.css']"),
   };
 
-  function showThemes() {
-    themePopup.style.display = 'block';
-    themeToggleButton.setAttribute('aria-expanded', true);
-    themePopup.querySelector("button#" + get_theme()).focus();
-  }
-
-  function hideThemes() {
-    themePopup.style.display = 'none';
-    themeToggleButton.setAttribute('aria-expanded', false);
-    themeToggleButton.focus();
-  }
-
-  function get_theme() {
-    var theme;
-    try { theme = localStorage.getItem('mdbook-theme'); } catch (e) { }
-    if (theme === null || theme === undefined) {
-      return default_theme;
-    } else {
-      return theme;
-    }
-  }
-
-  function set_theme(theme, store = true) {
+  function set_theme(theme) {
     let ace_theme;
 
-    if (theme == 'coal' || theme == 'navy') {
+    if (theme === 'coal' || theme === 'navy') {
       stylesheets.ayuHighlight.disabled = true;
       stylesheets.tomorrowNight.disabled = false;
       stylesheets.highlight.disabled = true;
-
+      stylesheets.solarizedDarkHljs.disabled = true;
+      stylesheets.solarizedLightHljs.disabled = true;
       ace_theme = "ace/theme/tomorrow_night";
-    } else if (theme == 'ayu') {
+    } else if (theme === 'ayu') {
       stylesheets.ayuHighlight.disabled = false;
       stylesheets.tomorrowNight.disabled = true;
       stylesheets.highlight.disabled = true;
+      stylesheets.solarizedDarkHljs.disabled = true;
+      stylesheets.solarizedLightHljs.disabled = true;
       ace_theme = "ace/theme/tomorrow_night";
+    }  else if (theme  === 'solarized-dark') {
+      stylesheets.ayuHighlight.disabled = true;
+      stylesheets.tomorrowNight.disabled = true;
+      stylesheets.highlight.disabled = true;
+      stylesheets.solarizedDarkHljs.disabled = false;
+      stylesheets.solarizedLightHljs.disabled = true;
+      ace_theme = "ace/theme/solarized_dark";
+    } else if (theme  === 'solarized-light') {
+      stylesheets.ayuHighlight.disabled = true;
+      stylesheets.tomorrowNight.disabled = true;
+      stylesheets.highlight.disabled = true;
+      stylesheets.solarizedLightHljs.disabled = false;
+      stylesheets.solarizedDarkHljs.disabled = true;
+      ace_theme = "ace/theme/solarized_light";
     } else {
       stylesheets.ayuHighlight.disabled = true;
       stylesheets.tomorrowNight.disabled = true;
       stylesheets.highlight.disabled = false;
+      stylesheets.solarizedDarkHljs.disabled = true;
+      stylesheets.solarizedLightHljs.disabled = true;
       ace_theme = "ace/theme/dawn";
     }
-
-    setTimeout(function () {
-      themeColorMetaTag.content = getComputedStyle(document.body).backgroundColor;
-    }, 1);
 
     if (window.ace && window.editors) {
       window.editors.forEach(function (editor) {
         editor.setTheme(ace_theme);
       });
     }
-
-    var previousTheme = get_theme();
-
-    if (store) {
-      try { localStorage.setItem('mdbook-theme', theme); } catch (e) { }
-    }
-
-    html.classList.remove(previousTheme);
-    html.classList.add(theme);
   }
 
-  // Set theme
-  var theme = get_theme();
+  set_theme(default_theme);
 
-  set_theme(theme, false);
-
-  themeToggleButton.addEventListener('click', function () {
-    if (themePopup.style.display === 'block') {
-      hideThemes();
-    } else {
-      showThemes();
-    }
-  });
-
-  themePopup.addEventListener('click', function (e) {
-    var theme = e.target.id || e.target.parentElement.id;
-    set_theme(theme);
-  });
-
-  themePopup.addEventListener('focusout', function(e) {
-    // e.relatedTarget is null in Safari and Firefox on macOS (see workaround below)
-    if (!!e.relatedTarget && !themeToggleButton.contains(e.relatedTarget) && !themePopup.contains(e.relatedTarget)) {
-      hideThemes();
-    }
-  });
-
-  // Should not be needed, but it works around an issue on macOS & iOS: https://github.com/rust-lang/mdBook/issues/628
-  document.addEventListener('click', function(e) {
-    if (themePopup.style.display === 'block' && !themeToggleButton.contains(e.target) && !themePopup.contains(e.target)) {
-      hideThemes();
-    }
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) { return; }
-    if (!themePopup.contains(e.target)) { return; }
-
-    switch (e.key) {
-      case 'Escape':
-        e.preventDefault();
-        hideThemes();
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        var li = document.activeElement.parentElement;
-        if (li && li.previousElementSibling) {
-          li.previousElementSibling.querySelector('button').focus();
-        }
-        break;
-      case 'ArrowDown':
-        e.preventDefault();
-        var li = document.activeElement.parentElement;
-        if (li && li.nextElementSibling) {
-          li.nextElementSibling.querySelector('button').focus();
-        }
-        break;
-      case 'Home':
-        e.preventDefault();
-        themePopup.querySelector('li:first-child button').focus();
-        break;
-      case 'End':
-        e.preventDefault();
-        themePopup.querySelector('li:last-child button').focus();
-        break;
-    }
-  });
 })();
+
 
 (function sidebar() {
   var html = document.querySelector("html");
