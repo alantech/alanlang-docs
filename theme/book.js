@@ -16,86 +16,8 @@ function playpen_text(playpen) {
 }
 
 (function codeSnippets() {
-  function fetch_with_timeout(url, options, timeout = 6000) {
-    return Promise.race([
-      fetch(url, options),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout))
-    ]);
-  }
-
-  var playpens = Array.from(document.querySelectorAll(".playpen"));
-  if (playpens.length > 0) {
-    fetch_with_timeout("https://play.rust-lang.org/meta/crates", {
-      headers: {
-        'Content-Type': "application/json",
-      },
-      method: 'POST',
-      mode: 'cors',
-    })
-    .then(response => response.json())
-    .then(response => {
-      // get list of crates available in the rust playground
-      let playground_crates = response.crates.map(item => item["id"]);
-      playpens.forEach(block => handle_crate_list_update(block, playground_crates));
-    });
-  }
-
-  function handle_crate_list_update(playpen_block, playground_crates) {
-    // update the play buttons after receiving the response
-    update_play_button(playpen_block, playground_crates);
-
-    // and install on change listener to dynamically update ACE editors
-    if (window.ace) {
-      let code_block = playpen_block.querySelector("code");
-      if (code_block.classList.contains("editable")) {
-        let editor = window.ace.edit(code_block);
-        editor.addEventListener("change", function (e) {
-          update_play_button(playpen_block, playground_crates);
-        });
-        // add Ctrl-Enter command to execute rust code
-        editor.commands.addCommand({
-          name: "run",
-          bindKey: {
-            win: "Ctrl-Enter",
-            mac: "Ctrl-Enter"
-          },
-          exec: _editor => run_rust_code(playpen_block)
-        });
-      }
-    }
-  }
-
-  // updates the visibility of play button based on `no_run` class and
-  // used crates vs ones available on http://play.rust-lang.org
-  function update_play_button(pre_block, playground_crates) {
-    var play_button = pre_block.querySelector(".play-button");
-
-    // skip if code is `no_run`
-    if (pre_block.querySelector('code').classList.contains("no_run")) {
-      play_button.classList.add("hidden");
-      return;
-    }
-
-    // get list of `extern crate`'s from snippet
-    var txt = playpen_text(pre_block);
-    var re = /extern\s+crate\s+([a-zA-Z_0-9]+)\s*;/g;
-    var snippet_crates = [];
-    var item;
-    while (item = re.exec(txt)) {
-      snippet_crates.push(item[1]);
-    }
-
-    // check if all used crates are available on play.rust-lang.org
-    var all_available = snippet_crates.every(function (elem) {
-      return playground_crates.indexOf(elem) > -1;
-    });
-
-    if (all_available) {
-      play_button.classList.remove("hidden");
-    } else {
-      play_button.classList.add("hidden");
-    }
-  }
+  // Browserify creates a toplevel `require` function that you can use to get the modules
+  const alanCompiler = require('alan-compiler')
 
   function run_rust_code(code_block) {
     var result_block = code_block.querySelector(".result");
@@ -107,49 +29,21 @@ function playpen_text(playpen) {
     }
 
     let text = playpen_text(code_block);
-    let classes = code_block.querySelector('code').classList;
-    let has_2018 = classes.contains("edition2018");
-    let edition = has_2018 ? "2018" : "2015";
 
-    var params = {
-      version: "stable",
-      optimize: "0",
-      code: text,
-      edition: edition
-    };
-
-    if (text.indexOf("#![feature") !== -1) {
-      params.version = "nightly";
-    }
-
-    result_block.innerText = 'Running...'
-
-    // console log returns undefined so wrap it
-    var newInnerText = "";
-    console.log = function(value) {
-      newInnerText += value + '\n';
-      return value;
-    };
+    // transpile alan to js and eval it
+    var oldLog = console.log;
     try {
-      eval(text);
-      result_block.innerText = newInnerText;
+      const js = alanCompiler('ln', 'js', text)
+      result_block.innerText = "";
+      console.log = function() {
+        result_block.innerText += arguments[0];
+        oldLog.apply(oldLog, arguments);
+      };
+      eval(js);
     } catch (e) {
       result_block.innerText = e.message;
     }
-
-    /*
-    fetch_with_timeout("https://play.rust-lang.org/evaluate.json", {
-      headers: {
-        'Content-Type': "application/json",
-      },
-      method: 'POST',
-      mode: 'cors',
-      body: JSON.stringify(params)
-    })
-    .then(response => response.json())
-    .then(response => result_block.innerText = response.result)
-    .catch(error => result_block.innerText = "Playground Communication: " + error.message);
-     */
+    console.log = oldLog;
   }
 
   // Syntax highlighting Configuration

@@ -12,6 +12,7 @@ additional-css = [
   "css/solarized-dark-hljs.css",
 ]
 additional-js = [
+  "bundle.js",
   # ace editor themes
   # mdbook requires these to be located at the top level
   # and with this specific file name convention
