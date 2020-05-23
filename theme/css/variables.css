@@ -67,6 +67,15 @@
     --fg: var(--base00);
     --title: var(--base01);
 
+    --icons: var(--base01);
+    --icons-hover: var(--cyan);
+
+    --sidebar-bg: var(--base2);
+    --sidebar-fg: var(--base01);
+
+    --searchbar-shadow-color: var(--base1);
+    --searchbar-border-color: var(--base1);
+
     --links: var(--blue);
 
     --inline-code-color: var(--yellow); /*var(--base1);*/
@@ -80,6 +89,15 @@
     --bg: var(--base03);
     --fg: var(--base0);
     --title: var(--base1);
+
+    --icons: var(--base1);
+    --icons-hover: var(--cyan);
+
+    --sidebar-bg: var(--base02);
+    --sidebar-fg: var(--base1);
+
+    --searchbar-shadow-color: var(--base01);
+    --searchbar-border-color: var(--base01);
 
     --links: var(--cyan);
 
