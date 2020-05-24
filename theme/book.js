@@ -28,22 +28,25 @@ function playpen_text(playpen) {
       code_block.append(result_block);
     }
 
-    let text = playpen_text(code_block);
-
-    // transpile alan to js and eval it
-    var oldLog = console.log;
-    try {
-      const js = alanCompiler('ln', 'js', text)
-      result_block.innerText = "";
-      console.log = function() {
-        result_block.innerText += arguments[0];
-        oldLog.apply(oldLog, arguments);
-      };
-      eval(js);
-    } catch (e) {
-      result_block.innerText = e.message;
-    }
-    console.log = oldLog;
+    result_block.innerText = "Compiling...";
+    // Wrap in a `setTimeout` to make sure the following happens after the UI can update
+    setTimeout(() => {
+      let text = playpen_text(code_block);
+      // transpile alan to js and eval it
+      var oldLog = console.log;
+      try {
+        const js = alanCompiler('ln', 'js', text)
+        result_block.innerText = "";
+        console.log = function() {
+          result_block.innerText += arguments[0];
+          oldLog.apply(oldLog, arguments);
+        };
+        eval(js);
+      } catch (e) {
+        result_block.innerText = e.message;
+      }
+      console.log = oldLog;
+    }, 10)
   }
 
   // Syntax highlighting Configuration
