@@ -33,19 +33,20 @@ function playpen_text(playpen) {
     setTimeout(() => {
       let text = playpen_text(code_block);
       // transpile alan to js and eval it
-      var oldLog = console.log;
+      const realLog = console.log
+      console.log = (...args) => {
+        result_block.innerText += args[0]
+        realLog.apply(realLog, args)
+      }
       try {
         const js = alanCompiler('ln', 'js', text)
         result_block.innerText = "";
-        console.log = function() {
-          result_block.innerText += arguments[0];
-          oldLog.apply(oldLog, arguments);
-        };
-        eval(js);
+        eval(js)
       } catch (e) {
         result_block.innerText = e.message;
+      } finally {
+        console.log = realLog
       }
-      console.log = oldLog;
     }, 10)
   }
 
