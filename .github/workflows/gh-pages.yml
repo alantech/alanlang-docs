@@ -4,6 +4,8 @@ name: github pages
 on:
   push:
     branches: [ master ]
+  repository_dispatch:
+    types: [ autopublish ]
 
 jobs:
   deploy:
