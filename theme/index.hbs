@@ -195,24 +195,19 @@
     </script>
 {{/if}}
 
-{{#if google_analytics}}
-    <!-- Google Analytics Tag -->
-    <script type="text/javascript">
-        var localAddrs = ["localhost", "127.0.0.1", ""];
+<!-- Analytics Tag -->
+<script type="text/javascript">
+    var localAddrs = ["localhost", "127.0.0.1", ""];
 
-        // make sure we don't activate google analytics if the developer is
-        // inspecting the book locally...
-        if (localAddrs.indexOf(document.location.hostname) === -1) {
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-            ga('create', '{{google_analytics}}', 'auto');
-            ga('send', 'pageview');
-        }
-    </script>
-{{/if}}
+    // make sure we don't activate analytics if the developer is
+    // inspecting the book locally...
+    if (localAddrs.indexOf(document.location.hostname) === -1) {
+        !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var t=analytics.methods[e];analytics[t]=analytics.factory(t)}analytics.load=function(e,t){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+e+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=t};analytics.SNIPPET_VERSION="4.1.0";
+            analytics.load("fGya8GY5wLqdnLzyXnGM2HjYglPszWS0");
+            analytics.page("Docs", {{ chapter_title }});
+        }}();
+    }
+</script>
 
 {{#if playpen_line_numbers}}
     <script type="text/javascript">
