@@ -75,6 +75,10 @@
 
     --searchbar-shadow-color: var(--base1);
     --searchbar-border-color: var(--base1);
+    --searchbar-bg: var(--base2);
+    --searchbar-fg: var(--base01);
+    --searchresults-border-color: var(--base01);
+    --search-mark-bg: var(--cyan);
 
     --links: var(--blue);
 
@@ -98,6 +102,10 @@
 
     --searchbar-shadow-color: var(--base01);
     --searchbar-border-color: var(--base01);
+    --searchbar-bg: var(--base02);
+    --searchbar-fg: var(--base00);
+    --searchresults-border-color: var(--base01);
+    --search-mark-bg: var(--yellow);
 
     --links: var(--cyan);
 
