@@ -55,3 +55,4 @@
 - [Examples with Explanations](./examples_with_explanations.md)
   - [The many forms of "Hello, World!"](./many_forms_hello_world.md)
   - [More advanced examples](./advanced_examples.md)
+- [Contributing to `alan`](./contributing.md)
