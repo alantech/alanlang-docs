@@ -4,6 +4,7 @@
 
 * The compiler can determine which array operations are safely parallelizable and automatically distributes them across a threadpool.
 * The runtime can determine which operations are IO operations and automatically `async/await` them, as well as automatically batch IO operations that can be executed in parallel safely.
+* The runtime has automatic memory management without a GC made possible by the language scoping semantics.
 * The type system enforces safe code to prevent most runtime errors (out-of-memory being a notable exception).
 * The module system has a built-in mocking mechanism (with no runtime performance penalty) that can be used for fine-grained permissioning of access to the standard library for third-party libraries.
 * Aggressive function inlining and dead-code removal to make sure unused code isn't even available in the output to potentially exploit.
@@ -12,7 +13,7 @@ To accomplish this, `alan` makes one single, significant trade-off versus other 
 
 This does not mean that you can't loop over data or write recursive algorithms, just that they are provided through controlled built-in functions that the compiler and runtime can reason about to provide automatic parallelization when possible, or to force handling a recursion error instead of crashing on a stack overflow.
 
-This means that the code that you write in `alan` is not *quite* Turing-complete[^1]. But we believe that we have cut "close enough" to Turing-completeness and provided enough controlled mechanisms to fill the gaps that the advantages in having predictable functions which allows the runtime to be able to judge when parallelization makes sense based on the data to be processed and the complexity of the code to be executed outweighs the few places where `alan`'s syntax is slightly more awkward than its peers'.
+This means that the code that you write in `alan` is not *quite* Turing-complete[^1]. But we believe that we have cut "close enough" to Turing-completeness and provided enough controlled mechanisms to fill the gaps that the advantages in having predictable functions outweigh the few places where `alan`'s syntax is slightly more awkward than its peers'.This allows the runtime to be able to judge when parallelization makes sense based on the data to be processed and the complexity of the code to be executed.
 
 Based on this, we can now make `alan`'s boldest claim: `alan` solves the Halting Problem -- by sidestepping it. `alan` pushes you to write deterministic code with known execution patterns, and forces eventual halting of non-deterministic code by wrapping it in constructs that demand a maximum number of loops before erroring out. We believe this is what the vast majority of developers and companies alike want from their language, even real Computer Scientists, because while not every question you can ask of a computer will ever return an answer, only those that do are useful to humanity.
 
