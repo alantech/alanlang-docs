@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide walks you through the steps needed to get the `alan` compiler and runtimes on your local machine. To work on `alan` itself, see [./contributing](Contributing to `alan`).
+This guide walks you through the steps needed to get the `alan` compiler and runtimes on your local machine. To work on `alan` itself, see [Contributing to `alan`](./contributing.md).
 
 ## Prerequisites
 
