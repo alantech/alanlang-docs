@@ -1,7 +1,7 @@
 # Summary
 
-- [About `alan`](./about_alan.md)
 - [Getting Started](./getting_started.md)
+- [About `alan`](./about_alan.md)
 - [Language Reference](./language_reference.md)
   - [Structure and Notation](./structure_and_notation.md)
     - [File Structure](./file_structure.md)
