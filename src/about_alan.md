@@ -1,20 +1,20 @@
 # About `alan`
 
-`alan` is meant to fit like a glove. Like a glove, it's meant to be familiar and obvious how to use and generally not restricting. But like a glove, it has a few restrictions at the edges that going without it wouldn't have. And also like a glove, `alan` lets you grasp at things that would otherwise hurt you if you tried. ;)
+`alan` is a natively-parallel, statically-compiled, type-inferred language with a familiar syntax and many compile-time and run-time safety guarantees.
 
-## `alan`'s not turing
+* The compiler can determine which array operations are safely parallelizable and automatically distributes them across a threadpool.
+* The runtime can determine which operations are IO operations and automatically `async/await` them, as well as automatically batch IO operations that can be executed in parallel safely.
+* The runtime has automatic memory management without a GC made possible by the language scoping semantics.
+* The type system enforces safe code to prevent most runtime errors (out-of-memory being a notable exception).
+* The module system has a built-in mocking mechanism (with no runtime performance penalty) that can be used for fine-grained permissioning of access to the standard library for third-party libraries.
+* Aggressive function inlining and dead-code removal to make sure unused code isn't even available in the output to potentially exploit.
 
-The `alan` programming language is a little bit different from most programming languages, in that it is intentionally not Turing-complete. Loops and recursion have been eliminated[^1] from the language. But this doesn't make it a dumb declarative thing like HTML or eBPF[^2]. Instead, substitutes for looping and recursion have been provided by the language that should cover all[^3] of your needs in a controlled way, such that it should be impossible[^4] to write code that doesn't halt.
+To accomplish this, `alan` makes one single, significant trade-off versus other programming languages: Functions in `alan` are all acyclic directed graphs. No arbitrary loops or recursion are allowed.
+
+This does not mean that you can't loop over data or write recursive algorithms, just that they are provided through controlled built-in functions that the compiler and runtime can reason about to provide automatic parallelization when possible, or to force handling a recursion error instead of crashing on a stack overflow.
+
+This means that the code that you write in `alan` is not *quite* Turing-complete[^1]. But we believe that we have cut "close enough" to Turing-completeness and provided enough controlled mechanisms to fill the gaps that the advantages in having predictable functions outweigh the few places where `alan`'s syntax is slightly more awkward than its peers'.This allows the runtime to be able to judge when parallelization makes sense based on the data to be processed and the complexity of the code to be executed.
+
+`alan` solves the Halting Problem -- by sidestepping it. `alan` pushes you to write deterministic code with known execution patterns, and forces eventual halting of non-deterministic code by wrapping it in constructs that demand a maximum number of loops before erroring out. We believe this is what the vast majority of developers and companies alike want from their language because while not every question you can ask of a computer will ever return an answer, only those that do are useful to humanity.
 
 [^1]: Technically an escape hatch through the event loop has been left open for very awkward recursive calls. This does not impact the advantages of the runtime for the language, however, and can be useful if absolutely necessary, but please reach out if you feel the need to use it, as that means either you're doing something wrong, or there's something missing to the language that should be added.
-[^2]: http://www.brendangregg.com/ebpf.html
-[^3]: Again, there is an intentional escape hatch, but it should be considered an emergency-only usage.
-[^4]: Assuming no bugs in the runtime and no mistakes in our reasoning. This hasn't been formally verified, so I may be wrong, but it doesn't appear that way after a lot of ad-hoc analysis.
-
-What you get in return for accepting these hopefully minor restrictions is a language that can automatically scale to your workload without rewriting, ever. Since all code is guaranteed[^5] to halt, it is possible to predict its runtime, and therefore to decide which thread(s) on which machine(s)[^6] should execute any particular part of it.
-
-[^5]: Guarantees not guaranteed! ;)
-[^6]: This will only be available from the proprietary SaaS service at first, and eventually a proprietary enterprise compiler will be available to license once less-predictable datacenters are handled by the runtime. The open source runtime will only decide which threads to use for any given task, making it more like Go, but with less insulting assumptions that developers are idiots.
-
-It's not likely that `alan` will beat an experienced software architect in finding the absolute best cluster design for a given problem, but it will do a good job on all problems and not cause headaches when attempting to refactor that a large, rigid structure like that would entail. It's also likely that `alan` can't beat an experienced software architect *yet*, just like early compilers could not generate optimal assembly that those with years of experience writing assembly directly could, but eventually the compilers caught up for all but particular corner-cases and thus only rarely relevant today.
-
