@@ -11,7 +11,7 @@ As `alan` is not self-hosting, other languages runtimes are necessary for the co
 To install `alan-compile`, run:
 
 ```bash
-npm i -g @alantech/alan-compiler
+npm i -g @alantech/alan-compile
 ```
 
 To install `alan-js-runtime`, run:
