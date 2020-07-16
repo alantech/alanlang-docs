@@ -1,22 +1,22 @@
 #### Handlers
 
-Handlers are what are triggered by events emitted to the event loop. They are the functions that are at the root of all stacks in `alan`. Like many languages with event loops, multiple handlers can exist for a single event.
+Handlers are special functions that are triggered by events emitted to the event loop. They are the root of all stacks in `alan`. Like many languages with event loops, multiple handlers can exist for a single event.
 
-Event handler functions *must* always have a `void` return. From the perspective of the language, handlers are self-contained side-effects, because it is unclear where a returned value should even go.
+Event handler functions *must* always have a `void` return. From the perspective of the language, handlers are self-contained side-effects.
 
-Handlers can only be registered at the module level, not within a function. This is both to discourage abuse of the event loop and make sure that the potential workload on future events is knowable and known by all instances across a distributed cluster so execution planning can take that into consideration. 
+Handlers can only be registered at the module level, not within a function. This is both to discourage abuse of the event loop and make a more intelligent execution planning possible in the future (such as switching from minimizing total latency for any given event to maximizing the total throughput of event processing if the event loop queue is backing up).
 
-For example, once compiled, the list of event handlers would be a static, known value, with known execution time ranges for each, and then the size of the event loop queue can be considered when determining the execution plans: should it focus on event throughput at the expense of latency, or optimize for event processing latency if there are extra resources available? The interpreter in its current state does none of this, but this is why it is designed the way it is.
+Furthermore, function calls within the handler run may trigger multiple simultaneous executions and IO operations can break up the handler call into multiple fragments to be re-scheduled onto the event loop. The vast majority of the time, direct control on how work is scheduled onto the event loop should not be of any concern to you as a developer.
 
 The event handler syntax is relatively simple:
 
-```
+```rust
 on eventName function
 ```
 
 where `eventName` is the name of the event to register a handler for and `function` is either the name of a function, or an in-line defined function, eg:
 
-```
+```rust
 on event fn namedHandler(argument: eventType) {
   ...
 }
@@ -24,7 +24,7 @@ on event fn namedHandler(argument: eventType) {
 
 for a fully-named in-line defined function with an event payload. Without a payload, the argument list can be dropped:
 
-```
+```rust
 on event fn namedHandler {
   ...
 }
@@ -32,7 +32,7 @@ on event fn namedHandler {
 
 In both cases, the name is also optional because it is being registered immediately:
 
-```
+```rust
 on event fn (argument: eventType) {
   ...
 }
@@ -40,7 +40,7 @@ on event fn (argument: eventType) {
 
 or
 
-```
+```rust
 on event fn {
   ...
 }
@@ -48,7 +48,7 @@ on event fn {
 
 The latter purely-side-effect-only function can also omit the `fn` if desired as it is unambiguous in this context:
 
-```
+```rust
 on event {
   ...
 }
@@ -56,7 +56,7 @@ on event {
 
 ##### Special Events: @std/app.start, @std/app.exit, and @std/app.stdout
 
-There are events that are particularly special for `alan`. The `start`, `exit`, and `stdout` events in the `@std/app` standard library module. They are separated from the built-ins because most modules should not need to ever touch them, but the root module of your project will.
+There are events that are particularly special for `alan`. The `start`, `exit`, and `stdout` events in the `@std/app` standard library module. They are separated from the built-ins because most modules should not need to ever touch them, but the root module of your project may.
 
 When `alan` has finished loading your code and has the event loop set up, it emits a single `start` event (of type `void`). That should trigger a special function used to set up the rest of your program: loading configuration, starting up an http server, or what have you.
 

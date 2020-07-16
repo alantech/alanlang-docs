@@ -1,57 +1,76 @@
 #### Types
 
-There are two major categories of types in `alan`: built-in types and user-defined types. User-defined types are similar to `struct`s in C as they are simply named compound types made up of other user-defined types or built-in types.
+There are two major categories of types in `alan`: built-in types and user-defined types. User-defined types are similar to `struct`s in C as they are simply named compound types made up of other user-defined types or built-in types. They can also be only partially-defined as generic types, more on that later.
 
 Built-in types also divide into a few categories: basic types, strings, and special types.
 
 ##### Basic Types
 
-Basic types include integers (`int8`, `int16`, `int32`, and `int64`), floating point numbers (`float32` and `float64`), booleans (`bool`), and the `void` (no value) type. The numbers refer to the number of bits consumed by the basic type, and because of the limitations of the JVM, there are no unsigned variants (it's possible, but it'll be difficult and slow -- I'll eventually have to fix this, but I'm hoping I can do it by just rewriting on top of LLVM when the actual compiler gets started).
+Basic types include integers (`int8`, `int16`, `int32`, and `int64`), floating point numbers (`float32` and `float64`), booleans (`bool`), and the `void` (no value) type. The numbers refer to the number of bits consumed by the basic type. There are currently no unsigned variants of the integer types, though that may change if there is demand for it.
 
-The basic types all have in-line constant representations.
+The four "main" basic types (`int64`, `float64`, `bool` and `void`) have constant representations that you can easily type. The non-64-bit numeric types are considered specialized types and are discouraged (the runtime does not take advantage of the potential space optimizations they provide to keep the internal memory addressing system simpler), so constants for those types must be explicitly casted using the `to<Type>` functions discussed in the [Built-ins](./built_ins.md) section.
 
-The integers have basic base-10 integer form as well as hexadecimal form supported right now. Eventually binary and octal will also be supported but that is not yet implemented.
+The integers have basic base-10 integer form as well as hexadecimal form. Binary and Octal forms are not implemented but that may change if there is demand for it.
 
-The floating point numbers have only basic base-10 with a decimal point form, no scientific notation form yet, but that will also be implemented in the future.
+```rust
+const base10 = 12345
+const base16 = 0xabcde
+```
 
-Booleans are represented by the keywords `true` and `false`. `void` has no representation beyond `void`. It can't be assigned to, and is meant to represent when functions return nothing.
+The floating point numbers have only basic base-10 with a decimal point form, no scientific notation form yet, but that may change if there is demand for it.
+
+```rust
+const floating = 1.2345
+```
+
+Booleans are represented by the keywords `true` and `false`. `void` has no representation beyond `void`. It can't be assigned to, and is meant to represent functions that return nothing.
+
+```rust
+const boolean = true
+const someVoid = void
+```
 
 The basic types are included in the root scope and never need to be explicitly defined, they always exist.
 
 ##### Strings
 
-Strings (`string`) are a bit beyond the basic type. Traditionally they can be thought of as a byte array, but UTF codepoints make that representation not manageable. From the perspective of the user of `alan` they are `utf-8` codepoints (as that is what the parser reads the files as), from the perspective of the `alan` interpreter they are `utf-16` codepoints, and from the perspective of conversion of the string into bytes, that is undefined because I haven't built that yet. ;)
+Strings (`string`) are a bit beyond the basic type. From the perspective of the user of `alan` they are `utf-8` byte arrays (multi-byte code points increase the string length by 2 or 3, not 1). If there is significant demand for it, string length checks and other operations will be switched to the codepoint model versus the byte array model.
 
-Strings are defined by wrapping double or single quotes (`"` or `'`) around text. Right now they are very primitive and don't understand escape codes so it is impossible to define a string that uses both single and double quotes internally, along with unprintable characters, but based on my reading of the parser they should handle multi-line strings just fine? All of this is subject to change as the parser and interpreter (and eventually compiler) are polished up.
+Strings are defined by wrapping double or single quotes (`"` or `'`) around text. They work identically to Javascript strings, with the same sorts of C-style escape codes. Within the runtime, however, they are represented as Pascal strings with a 64-bit header, which makes certain operations faster than their C-string counterparts (particularly length checking, which is O(1)) but means 8 extra bytes are required for each string versus C-string's traditional 1 extra byte, so lots of small strings will consume more memory.
+
+```rust
+const myString = "My string's string"
+const myOtherString = 'My other string\'s string'
+```
 
 Strings are also included in the root scope and never need to be explicitly defined.
 
 ##### User-Defined Types
 
-User-defined types must be declared by the user (er, duh?), and they follow the following syntax:
+User-defined types must be declared by the user and they follow the following syntax:
 
-```
+```rust
 type typename {
   propertyName: propertyType
   otherProperty: otherType
 }
 ```
 
-There is currently no syntax to define a user-defined type constant (so they can't be used as constants, yet), but the intended syntax that will eventually be implemented looks like the following:
+The syntax to construct a new instance of a user type is as follows:
 
-```
+```rust
 const myVal: typename = new typename {
-  propertyName: propertyValue
-  otherProperty: otherValue
+  propertyName = propertyValue
+  otherProperty = otherValue
 }
 ```
 
 The redundant `typename` in that example will also eventually be eliminated by type inference, reducing it to just:
 
-```
+```rust
 const myVal = new typename {
-  propertyName: propertyValue
-  otherProperty: otherValue
+  propertyName = propertyValue
+  otherProperty = otherValue
 }
 ```
 
@@ -59,7 +78,7 @@ User-defined types have another interesting feature: they can be generic. That m
 
 Generic types look like this:
 
-```
+```rust
 type typename<A, B> {
   propertyName: A
   otherProperty: B
@@ -68,25 +87,23 @@ type typename<A, B> {
 
 Where later on you can "solidify" that type either by creating an alias with the types filled in:
 
-```
+```rust
 type typenameIntStr = typename<int64, string>
 ```
 
 or just declaring a variable that uses a "solidified" type:
 
-```
-let myVar: typename<bool, float64>
+```rust
+let myVar = new typename<bool, float64> {
+  propertyName = true
+  otherProperty = 0.0
+}
 ```
 
-However, until interfaces are implemented, you cannot write functions that operate on generic types, because there is no guarantee that the type it solidifies into has the necessary primitives to operate on, so generic types are mostly an oddity used to make the special types possible until that is added.
+Functions cannot operate on Generic types directly, but they can work on Generics that have been "solidified" with interfaces. More on this in the [Interfaces](./interfaces.md) section.
 
-##### Special Types: Arrays, Maps, and Trees (and Sets?)
+##### Special Types
 
 In a language with no looping or recursion, every function has a predictable runtime, but they also can't do very much, as evidenced by the limited utility of eBPF (but also the lack of an issue with it running in kernel-space). It is essentially impossible to implement any real computing algorithms yourself.
 
-But if there were the right built-in primitives with the right built-in functionality, you could combine them to create the algorithms you need without the looping construct. This is the purpose of the special types, Arrays, Maps, and Trees. They are special-cased generic types that come with built-in functions to perform all of the various transforms one would want, taking functions to perform the tasks.
-
-`Array<V>`, `Tree<V>`, (and `Set<V>`) are singly-generic while `Map<K, V>` has two generic types. They function almost identically to the built-in generic types from Java of a similar name, but it is `alan`'s job to determine the correct way to realize them: whether the `Array` is a `LinkedList` or `ArrayList` (hint: it's gonna be a hybrid, but mostly `ArrayList`), and whether to shard the data across threads to run in parallel or just stick with sequential because the scatter-gather synchronization costs are too high.
-
-Still working on this part, but it's what will make the language bearable, and coming from JavaScript will likely not impact your idiomatic style much at all.
-
+But if there were the right built-in primitives with the right built-in functionality, you could combine them to create the algorithms you need without the looping construct. The special built-in types are covered in depth in [Built-ins](./built_ins.md), but they can be used within your own types like any other.

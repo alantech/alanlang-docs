@@ -6,101 +6,79 @@ Functions are where actual work happens. There are built-in functions and user-d
 
 Declaration of functions works like so:
 
-```
+```rust
+// A named function with two arguments and a particular return type
 fn functionName (firstArgument: argumentType, secondArgument: anotherType): returnType {
   ...statements...
 }
-```
 
-This is a named function with a name, some arguments, and a return type.
+// The return type can always be inferred in `alan` so it is optional
+fn functionName(firstArgument: argumentType, secondArgument: anotherType) {
+  ...statements...
+}
 
-```
+// This s a named function that does not return a value, so it has a return type of void
 fn functionName (firstArgument: argumentType, secondArgument: anotherType): void {
   ...statements...
 }
-```
 
-This is a named function that does not return any value.
-
-```
+// If you have a named function with no return arguments but want to annotate the return type
+// you must include empty parens when defining it
 fn functionName (): returnType {
   ... statements...
 }
-```
 
-This is a named function that takes no arguments but returns a value.
-
-```
+// But if you do not care about annotating the return type, you can omit it and immediately start
+// the open brace for the function
 fn functionName {
   ...statements...
 }
-```
 
-This is a named function that takes no arguments and returns no value. (So side-effects only.)
+// If the function is a single statement that is returned, it can be written with a shorthand syntax
+fn addOne(i: int64) = i + 1
 
-```
+// This syntax can be annotated with the return type, but that is unlikely to improve clarity
+fn subtractOne(i: int64): int64 = i - 1
+
+// Anonymous functions can only be used as an assignable value either to a variable
 const anonymousFunction = fn (firstArg: argType, secondArg: anotherType): returnType {
   ...statements...
 }
-```
 
-This is an anonymous function that takes arguments and returns a value. Anonymous functions can only be assigned to variables or immediately passed to other syntax that takes a function (event handlers, conditionals, or as an argument to another function).
+// Or being passed into a higher-order function
+const doubled = someArray.map(fn (val: int64) = val * 2)
 
-```
-const anonymousArglessFunction = fn (): returnType {
-  ...statements...
-```
-
-This is an anonymous function that takes no arguments and returns a value.
-
-```
-const anonymousSideEffectFunction = fn {
-  ...statements...
-```
-
-This is an anonymous function that takes no arguments and returns no value (side-effect only).
-
-```
+// In situations where a function takes no arguments and it is unambiguous, the function can be
+// represented solely with the curly braces
 on eventname {
+  ...statements...
+}
+
+// Equivalent to:
+on eventname fn (): void {
   ...statements...
 }
 ```
 
-When an anonymous, argumentless, no-return function is defined inline with event handlers or conditionals, it is unambiguous to omit the `fn` so it is allowed in these conditions.
-
 ##### Function Dispatch
 
-When determining which function to use in a function call (more on calls later), the argument types and count are taken into consideration. Multiple functions with the same name may be declared as long as the argument types and/or counts are different between them. For example:
+`alan` uses multiple dispatch for determining which function to use when a function name is called. This means that the argument types and count are taken into consideration. Multiple functions with the same name may be declared as long as the argument types and/or counts are different between them. For example:
 
-```
+```rust
 fn someFn (arg1: string, arg2: bool): string {
   ...
 }
 
-fn someFn (arg1: int64, arg2: bool): int64 {
+fn someFn (arg1: int64, arg2: float64): int64 {
   ...
 }
 ```
 
-If you provide a `string` to `someFn` it will use the first definition, and if provided an `int64` it will use the second.
-
-This means it is possible to alias/replace even built-in functions within your module scope. **This is dangerous.** If you are not aware that, for instance, the `+` operator is also called `add` as a function, and define your own `add` function that works on numbers, you'll find things are very broken. I think I will add warnings or errors on aliasing built-in functions (where the original can no longer be accessed because it perfectly matches the type signatures), but currently you're on your own here.
-
-##### Function -arity
-
-`alan`'s interpreter has the ability to use functions with `n`-arity, functions where the last argument is actually treated as an array of an arbitrary length of the same type. This is used to implement the `concat` built-in function, allowing an arbitrary number of `string`s to be concatenated together. The syntax in the language does not allow that *yet* as it depends on the `Array` special type to be fully functional, first. Eventually, the expected syntax will look something like this:
-
-```
-fn narityFunction(arg1: type1, ...arg2: Array<type2>): returnType {
-  ...statements...
-}
-```
-
-where the last argument is allowed to have the `...` syntax to indicate that the function should expect 0 or more of these elements in the call and automatically box them into an array of that type (or if the last element provided *is* an array of that type, just use it as-is).
+If you provide a `string` and `bool` to `someFn` it will use the first definition, and if provided an `int64` and `float64` it will use the second, while if you use any other combination of argument types or number of arguments, it will fail to compile.
 
 ##### Function Type
 
-A function's type is simply `function` right now. It is intended to expand this to use a syntax allowing more precise argument matching when passing functions to higher-order functions, so the user can know what arguments and return type their function is expected to have. This type syntax would look like:
+A function's type is simply `function` right now. The compiler will complain if the provided function's argument signature does not match the types the higher-order function expects, but it is not clearly documented by the type signature, itself. It is intended to expand this to use a syntax allowing more precise argument matching when passing functions to higher-order functions, so the user can know what arguments and return type their function is expected to have. This type syntax would look like:
 
 ```
 (firstType, secondType): returnType
@@ -112,7 +90,7 @@ Essentially the argument list with only the types specified and the return type.
 (): void
 ```
 
-Because type names are specified in very specific situations, the extra colon and space in the type name should not be unambiguous to the interpreter.
+Because type names are specified in very specific situations, the extra colon and space in the type name should not be unambiguous to the compiler.
 
 ##### Function Calls
 

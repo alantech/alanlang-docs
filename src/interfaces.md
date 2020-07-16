@@ -8,8 +8,8 @@ interface interfaceName {
   function2 (interfaceName, interfaceName): interfaceName
   interfaceName <operatorSymbol> interfaceName: interfaceName
   <operatorSymbol2> interfaceName: concreteType
-  potentialPropertyName: concreteType
-  potentialPropertyName2: concreteType
+  requiredPropertyName: concreteType
+  requiredPropertyName2: concreteType
 }
 ```
 
@@ -19,25 +19,37 @@ Within a function, the interface name simply substitutes for a type and is used 
 
 This is because invocation of the function in that scope also counts as definition of that function within the scope, with the original being used as a template for the function, and the current module's scope being injected between the export scope of the module it was pulled from (if it was imported across scope boundaries).
 
-Coming Soon (tm) there will be a way to declare generic types within the `interface` to alias interfaces. This is to allow specification that two different arguments (or the return type) of a function can be the same interface, but should or should not resolve to the exact same type.
+When interfaces are used in a function, they are matched against the incoming argument types. Once it is "realized" as a concrete type, the compiler assumes any other usage of that same interface will be the same realized type.
 
-For example:
+This means writing a constructor function to make a `KeyVal` object like so:
 
-```
-interface Mappable {
-  map(Array<any>, fn (any): any): Array<any>
+```rust
+fn makeKV(key: any, val: any) = new KeyVal<any, any> {
+  key = key
+  val = val
 }
 ```
 
-provides no guarantees that the `any` in the first argument's `Array<any>` should also be the first `any` in the provided function declaration `fn (any): any`, while the second `any` in that function declaration does *not* need to match the first, but it *does* need to match the `any` in the return type of the `map` function.
+will fail to compile unless both the `key` and the `val` are the same type, which may be unexpected. However, an identical interface with a different name will be matched separately, so if you have the following two otherwise identical interfaces:
 
-To make this clear, this syntax is proposed (but not yet implemented):
-
+```rust
+interface any {}
+interface anythingElse {}
 ```
-interface Mappable {
-  type A as any
-  type B as any
-  map(Array<A>, fn (A): B): Array<B>
+
+That both would match *any* type given to them, you can then use them in the `KeyVal` constructor like this:
+
+```rust
+fn makeKv(key: any, val: anythingElse) = new KeyVal<any, anythingElse> {
+  key = key
+  val = val
 }
 ```
 
+Currently the interfaces have to be redeclared for this to work, but if there is demand for it, we can add an interface aliasing feature, so one could simply write:
+
+```rust
+interface anythingElse = any
+```
+
+and have it do the right thing.

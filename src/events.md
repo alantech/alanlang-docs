@@ -6,5 +6,4 @@ Events are sources for activity in `alan`. No code is run that isn't triggered b
 event eventName: typename
 ```
 
-where `eventName` is the name of the event. It is also possible to construct an event with a function if the set of possible events to work with is difficult to describe statically. A function that returns an instance of a realized `Event<E>` type can also be used to emit to or register a handler for. Since event handler registration can only happen in module scope, this is more of a macro-like expansion and the total set of event types in the system is still known statically to the compiler. See the HTTP Server example near the end of this document for more information.
-
+where `eventName` is the name of the event. The `typename` annotation for events is required, unlike other places within the codebase. This requirement may change in the future as the event handler(s) listening to the event, and/or the event emit statement(s) emitting to the event could determine the type of the event, but it would impact the clarity of code surrounding the event as well as make the parser more complex.

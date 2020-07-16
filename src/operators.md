@@ -27,18 +27,20 @@ Infix operators can also be declared to be commutative or associative (or neithe
 The syntax to define a prefix operator looks like this:
 
 ```
-prefix <operatorSymbol> <precedenceNumber> functionName
+prefix functionName as <operatorSymbol> precedence <precedenceNumber>
+prefix precedence <precedenceNumber> functionName as <operatorSymbol>
 ```
 
-where `<operatorSymbol>` is some combination of the symbols listed above (with a special ban on a solitary `=` as that is already used for assignment) and `<precedenceNumber>` is an `int8` number (`(-128, 127)` inclusive) indicating the precedence level, with a larger number taking precedence over a smaller one. Only the numbers `0 - 4` are used by any built-in operator, and the `functionName` being the function to map to the prefix. Only functions with that name with a single argument will be considered (or n-arity functions where the first argument is also the "last", once n-arity support is added).
+where `<operatorSymbol>` is some combination of the symbols listed above (with a special ban on a solitary `=` as that is already used for assignment) and `<precedenceNumber>` is an `int8` number (`(-128, 127)` inclusive) indicating the precedence level, with a larger number taking precedence over a smaller one. Only the numbers `0 - 6` are used by any built-in operator, and the `functionName` being the function to map to the prefix. Only functions with that name with a single argument will be considered (or n-arity functions where the first argument is also the "last", once n-arity support is added). Either the function to operator aliasing or the precedence level may be written first, depending on your own preferences.
 
 The syntax to define infix operators is similar, and looks like this:
 
 ```
-infix [commutative] [associative] <operatorSymbol> <precedenceNumber> functionName
+infix functionName as <operatorSymbol> precedence <precedenceNumber>
+infix precedence <precedenceNumber> functionName as <operatorSymbol>
 ```
 
-where `[commutative]` is either the `commutative` keyword or blank, `[associative]` is the `associative` keyword or blank, `<operatorSymbol>` is the symbol for the operator, `<precedenceNumber>` is an `int8` number, and `functionName` is the function being mapped to the operator. Only functions with two arguments will be considered.
+where `<operatorSymbol>` is the symbol for the operator, `<precedenceNumber>` is an `int8` number, and `functionName` is the function being mapped to the operator. Only functions with two arguments will be considered.
 
-The example earlier of the function calls `3.add(2).mul(5).mod(3)` / `mod(mul(add(3, 2), 5, 3)` can be written with operators as `(3 + 2) * 5 % 3` or `5 * (3 + 2) % 5`, where the parenthesis break the operator precedence to allow addition to come first. See the built-in operators section below for the list of built-in operators and an operator precedence table.
+The example earlier of the function calls `3.add(2).mul(5).mod(3)` or `mod(mul(add(3, 2), 5), 3)` can be written with operators as `(3 + 2) * 5 % 3` or `5 * (3 + 2) % 5`, where the parenthesis break the operator precedence to allow addition to come first. See the built-in operators section in the [Built-Ins](./built_ins.md) section for the complete list of operators and their precedence.
 
