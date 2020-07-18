@@ -565,7 +565,7 @@ assign(string): string
 ##### Error, Maybe, Result, and Either Functions
 
 ```rust
-// Returns a non-error error
+// Returns a non-error error object
 noerr(): Error
 ```
 

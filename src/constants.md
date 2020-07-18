@@ -19,4 +19,4 @@ fn saveForLater(val: int64) {
 }
 ```
 
-Shared mutable global state inherently prevents parallelization, so it is discouraged, but provided through [a standard library](./std_datastore.md) to allow safe operations on shared, mutable state with explicit guarantees (or not, if not needed) on locking and read-after-write.
+Shared mutable global state inherently prevents parallelization, so it is discouraged.
