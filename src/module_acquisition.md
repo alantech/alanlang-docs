@@ -14,7 +14,7 @@ Beyond that, `alan` automatically assumes all dependencies are listed as git URL
 
 Long-term, though, `alan` intends to have a centralized package hosting system because there are several advantages to the community for such a thing:
 
-1. The packages can be guaranteed immutable to make sure production deployments are more reliable.
-2. The central repository can require package signing to make it harder for popular packages to be hijacked and have malware injected into them (and also raise the bar to make sure only more serious projects are submitted).
-3. The semantic versioning (major, minor, patch) meaning can be better trusted by requiring published packages to conform to a validation mechanism we call "Semantic BDD." (TODO: Write up blog post on Semantic BDD, and link to it here.)
-4. Finally, the central repository can provide discoverability and recommendation mechanisms to developers on which packages may be worth using versus others. Simple metrics like download and star counts are one, but beyond that there could be recommendations based on things starred by other developers that also starred things you have, or the total coverage of their Semantic BDD tests versus the entirety of their export scope surface area.
+* The packages can be guaranteed immutable to make sure production deployments are more reliable.
+* The central repository can require package signing to make it harder for popular packages to be hijacked and have malware injected into them (and also raise the bar to make sure only more serious projects are submitted).
+* The semantic versioning (major, minor, patch) meaning can be better trusted by requiring published packages to conform to a validation mechanism we call "Semantic BDD." (TODO: Write up blog post on Semantic BDD, and link to it here.)
+* Finally, the central repository can provide discoverability and recommendation mechanisms to developers on which packages may be worth using versus others. Simple metrics like download and star counts are one, but beyond that there could be recommendations based on things starred by other developers that also starred things you have, or the total coverage of their Semantic BDD tests versus the entirety of their export scope surface area.

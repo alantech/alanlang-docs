@@ -6,7 +6,7 @@ The built-ins for `alan` all involve the built-in types and the functions and op
 
 #### Built-in Types
 
-The built-in types for `alan` are:
+The built-in [types](./types.md) for `alan` are:
 
 * `void`
 * `int8`
@@ -30,7 +30,7 @@ The `int64` and `float64` types are special among the numeric types, as these ar
 
 #### Built-in Interfaces
 
-There are a few built-in interfaces meant for working with several built-in types and functions.
+There are a few built-in [interfaces](./interfaces.md) meant for working with several built-in types and functions.
 
 ```rust
 // An empty interface, it can match any value, but you can only accept it and pass it along to
@@ -62,7 +62,7 @@ interface Hashable {
 
 #### Built-in Functions
 
-The function signatures will be written in the form `functionName(argumentType, argumentType): returnType` with a brief description above each. These functions will be grouped into general categories, such as type coersion, arithmetic, etc.
+The [function](./functions.md) signatures will be written in the form `functionName(argumentType, argumentType): returnType` with a brief description above each. These functions will be grouped into general categories, such as type coersion, arithmetic, etc.
 
 ##### Type Coersion
 
@@ -442,7 +442,7 @@ index(Array<int8>, int8): int64
 index(Array<int16>, int16): int64
 index(Array<int32>, int32): int64
 index(Array<int64>, int64): int64
-index(Array<float32>, float32): int64 
+index(Array<float32>, float32): int64
 index(Array<float64>, float64): int64
 index(Array<bool>, bool): int64
 ```
@@ -656,7 +656,7 @@ getAltOr(Either<any, anythingElse>, anythingElse): anythingElse
 
 #### Built-in Operators
 
-As operators in `alan` are simply aliases for functions with a precedence value associated, all of the following operators have their underlying implementation defined above.
+As [operators](./operators.md) in `alan` are simply aliases for functions with a precedence value associated, all of the following operators have their underlying implementation defined above.
 
 <table>
   <thead>

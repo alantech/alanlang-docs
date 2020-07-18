@@ -9,7 +9,7 @@ const othervar = otherconstval
 
 The `typename` is not required due to type inference, but can be added for clarity.
 
-For those coming from Javascript/Typescript, `const` in `alan` is much more strict. A constant is truely constant, not just a variable that can't be reassigned with a new struct. This means the following is invalid:
+For those coming from Javascript/Typescript, `const` in `alan` is much more strict. A constant is truly constant, not just a variable that can't be reassigned with a new struct. This means the following is invalid:
 
 ```rust
 const pushedVals = new Array<int64> [ ]

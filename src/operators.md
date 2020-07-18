@@ -2,7 +2,7 @@
 
 In `alan`, operators are just a special form of function.
 
-All operators are made up of only the symbols: ``+, -, /, *, ^, ., ~, `, !, @, #, $, %, &, |, :, ;, <, >, ?, =`` (excluding the commas used to separate them from each other, they are reserved for list separators only).
+All operators are made up of only the symbols: ``+, -, /, *, ^, ., ~, `, !, @, #, $, %, &, |, :, ;, <, >, ?, =`` (excluding the commas used to separate them from each other, they are reserved for list separators only). See the [built-in operators here](./built_ins.md#built-in-operators)
 
 Operators have operator precedence to determine how they are implicitly grouped by parenthesis.
 
