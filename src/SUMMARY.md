@@ -27,6 +27,7 @@
     - [@std/app](./std_app.md)
     - [@std/cmd](./std_cmd.md)
     - [@std/deps](./std_deps.md)
+    - [@std/trig](./std_trig.md)
 - [Examples with Explanations](./examples_with_explanations.md)
   - [The many forms of "Hello, World!"](./many_forms_hello_world.md)
   - [More advanced examples](./advanced_examples.md)
