@@ -448,6 +448,18 @@ index(Array<bool>, bool): int64
 ```
 
 ```rust
+// Returns true if the array has the specified value or return false
+has(Array<any>, any): int64
+has(Array<int8>, int8): int64
+has(Array<int16>, int16): int64
+has(Array<int32>, int32): int64
+has(Array<int64>, int64): int64
+has(Array<float32>, float32): int64
+has(Array<float64>, float64): int64
+has(Array<bool>, bool): int64
+```
+
+```rust
 // Push a value into the array and return the updated array
 push(Array<any>, any): Array<any>
 push(Array<int8>, int8): Array<int8>
