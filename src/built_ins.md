@@ -448,7 +448,7 @@ index(Array<bool>, bool): int64
 ```
 
 ```rust
-// Returns true if the array has the specified value or return false
+// Returns true if the array has the specified value or false otherwise
 has(Array<any>, any): int64
 has(Array<int8>, int8): int64
 has(Array<int16>, int16): int64
