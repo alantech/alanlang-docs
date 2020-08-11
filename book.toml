@@ -1,6 +1,6 @@
 [book]
 src = 'src'
-title = "Alan Interactive Documentation"
+description = "Alan Interactive Documentation"
 
 [output.html]
 theme = "theme"
