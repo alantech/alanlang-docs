@@ -52,7 +52,7 @@ function playpen_text(playpen) {
 
   // Syntax highlighting Configuration
   hljs.configure({
-    tabReplace: '    ', // 4 spaces
+    tabReplace: '  ', // 2 spaces
     languages: [],      // Languages used for auto-detection
   });
 
