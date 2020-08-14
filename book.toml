@@ -1,6 +1,7 @@
 [book]
 src = 'src'
-title = "Alan Interactive Documentation"
+title = "Alan Language"
+description = "Alan Interactive Documentation"
 
 [output.html]
 theme = "theme"
