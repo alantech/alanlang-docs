@@ -63,8 +63,8 @@
 }
 
 .solarized-light {
-    --bg: var(--base2);
-    --fg: var(--base01);
+    --bg: var(--base3);
+    --fg: var(--base00);
     --title: var(--base01);
 
     --icons: var(--base01);
@@ -90,7 +90,7 @@
 }
 
 .solarized-dark {
-    --bg: var(--base02);
+    --bg: var(--base03);
     --fg: var(--base0);
     --title: var(--base1);
 
