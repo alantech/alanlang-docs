@@ -241,6 +241,10 @@
     <script src="{{ path_to_root }}searcher.js" type="text/javascript" charset="utf-8"></script>
 {{/if}}
 
+<!-- BigInt is not defined in Safari. Define it before loading bundle.js -->
+<script type="text/javascript">
+    window.BigInt = window.BigInt || function() {}
+</script>
 <!-- Custom JS scripts -->
 {{#each additional_js}}
     <script type="text/javascript" src="{{ ../path_to_root }}{{this}}"></script>
