@@ -428,8 +428,8 @@ matches(string, string): bool
 ```
 
 ```rust,ignore
-// Returns the location of the second string within the first string, or `-1`
-index(string, string): int64
+// Returns the location of the second string within the first string as a Result, or errors
+index(string, string): Result<int64>
 ```
 
 ```rust,ignore
@@ -458,27 +458,27 @@ repeat(Array<any>, int64): Array<any>
 ```
 
 ```rust,ignore
-// Find the index of the specified value in the array or return `-1`
-index(Array<any>, any): int64
-index(Array<int8>, int8): int64
-index(Array<int16>, int16): int64
-index(Array<int32>, int32): int64
-index(Array<int64>, int64): int64
-index(Array<float32>, float32): int64
-index(Array<float64>, float64): int64
-index(Array<bool>, bool): int64
+// Find the index of the specified value in the array in a Result, or errors
+index(Array<any>, any): Result<int64>
+index(Array<int8>, int8): Result<int64>
+index(Array<int16>, int16): Result<int64>
+index(Array<int32>, int32): Result<int64>
+index(Array<int64>, int64): Result<int64>
+index(Array<float32>, float32): Result<int64>
+index(Array<float64>, float64): Result<int64>
+index(Array<bool>, bool): Result<int64>
 ```
 
 ```rust,ignore
 // Returns true if the array has the specified value or false otherwise
-has(Array<any>, any): int64
-has(Array<int8>, int8): int64
-has(Array<int16>, int16): int64
-has(Array<int32>, int32): int64
-has(Array<int64>, int64): int64
-has(Array<float32>, float32): int64
-has(Array<float64>, float64): int64
-has(Array<bool>, bool): int64
+has(Array<any>, any): bool
+has(Array<int8>, int8): bool 
+has(Array<int16>, int16): bool
+has(Array<int32>, int32): bool 
+has(Array<int64>, int64): bool
+has(Array<float32>, float32): bool
+has(Array<float64>, float64): bool
+has(Array<bool>, bool): bool
 ```
 
 ```rust,ignore
