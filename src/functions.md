@@ -6,13 +6,13 @@ Functions are where actual work happens. There are built-in functions and user-d
 
 Declaration of functions works like so:
 
-```rust
+```rust,ignore
 // A named function with two arguments and a particular return type
 fn functionName (firstArgument: argumentType, secondArgument: anotherType): returnType {
   ...statements...
 }
 
-// The return type can always be inferred in `alan` so it is optional
+// The return type can always be inferred in Alan so it is optional
 fn functionName(firstArgument: argumentType, secondArgument: anotherType) {
   ...statements...
 }
@@ -62,9 +62,9 @@ on eventname fn (): void {
 
 ##### Function Dispatch
 
-`alan` uses multiple dispatch for determining which function to use when a function name is called. This means that the argument types and count are taken into consideration. Multiple functions with the same name may be declared as long as the argument types and/or counts are different between them. For example:
+Alan uses multiple dispatch for determining which function to use when a function name is called. This means that the argument types and count are taken into consideration. Multiple functions with the same name may be declared as long as the argument types and/or counts are different between them. For example:
 
-```rust
+```rust,ignore
 fn someFn (arg1: string, arg2: bool): string {
   ...
 }
@@ -78,16 +78,16 @@ If you provide a `string` and `bool` to `someFn` it will use the first definitio
 
 ##### Function Type
 
-A function's type is simply `function` right now. The compiler will complain if the provided function's argument signature does not match the types the higher-order function expects, but it is not clearly documented by the type signature, itself. It is intended to expand this to use a syntax allowing more precise argument matching when passing functions to higher-order functions, so the user can know what arguments and return type their function is expected to have. This type syntax would look like:
+A function's type is simply `function` right now. The compiler will complain if the provided function's argument signature does not match the types the higher-order function expects, but it is not clearly documented by the type signature, itself. It is intended to expand this to use a syntax allowing more precise argument matching when passing functions to higher-order functions, so the user can know what arguments and return type their function is expected to have. This type syntax is proposed to look like:
 
 ```
-(firstType, secondType): returnType
+fn (firstType, secondType): returnType
 ```
 
 Essentially the argument list with only the types specified and the return type. In this case, the parenthesis and `void` would be required to prevent ambiguity (and keep it easier to follow), so a side-effect-only function type would look like this:
 
 ```
-(): void
+fn (): void
 ```
 
 Because type names are specified in very specific situations, the extra colon and space in the type name should not be unambiguous to the compiler.
@@ -98,13 +98,13 @@ One of the kinds of statements you can write inside of a function is a function 
 
 Standard form looks like this:
 
-```
+```rust,ignore
 add(3, 2)
 ```
 
 while method form looks like this:
 
-```
+```rust,ignore
 3.add(2)
 ```
 

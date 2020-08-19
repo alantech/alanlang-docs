@@ -1,6 +1,6 @@
 #### Imports
 
-To import the exports of other modules, `alan` provides two different syntaxes to select the exports to import. There are also two different syntaxes to identify the module you wish to import from. These two syntaxes are completely interchangeable leading to four different syntactic combinations.
+To import the exports of other modules, Alan provides two different syntaxes to select the exports to import. There are also two different syntaxes to identify the module you wish to import from. These two syntaxes are completely interchangeable leading to four different syntactic combinations.
 
 ##### Identifying Modules
 
@@ -24,7 +24,7 @@ The second form begins with an `@` and is a `named import`. It uses a more advan
 
 Once you've identified the module you want to import, now it's time to decide how you want to import it. There's the basic scoped import and the "plucking" unscoped import. These syntaxes are essentially lifted wholesale from Python:
 
-```rust
+```rust,ignore
 import @std/http
 import ./my/module as myModule
 from @std/app import start, print as println, exit
@@ -42,4 +42,4 @@ That's it.
 
 Those with experience in other module-based languages may be wondering where the `*` syntax is. That has been intentionally left out. It makes reading your own module more difficult as it can be unclear, especially when there are multiple `*` imports, where a specified name came from.
 
-The exception is when a data structure and a collection of functions and operators that work on that data are bundled together. Needing to explicitly import each of those separately would be painful, so when importing an `interface`, if that module defines a type and all functions and operators needed for that type and also exports them, `alan` will automatically pull those along as well in a quasi-Class-like fashion.
+The exception is when a data structure and a collection of functions and operators that work on that data are bundled together. Needing to explicitly import each of those separately would be painful, so when importing an `interface`, if that module defines a type and all functions and operators needed for that type and also exports them, Alan will automatically pull those along as well in a quasi-Class-like fashion.

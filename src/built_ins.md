@@ -1,12 +1,12 @@
 ### Built-ins
 
-All module-based languages have some things that are included without specifically importing anything. Some keep it to a minimum (Java) and some have a pretty high rate of inclusion (Python). `alan` biases more towards the Python end of the spectrum. Concepts and functionality common across many modules should not be manually imported all of the time, especially with the requirement that imports are fully qualified to improve legibility.
+All module-based languages have some things that are included without specifically importing anything. Some keep it to a minimum (Java) and some have a pretty high rate of inclusion (Python). Alan biases more towards the Python end of the spectrum. Concepts and functionality common across many modules should not be manually imported all of the time, especially with the requirement that imports are fully qualified to improve legibility.
 
-The built-ins for `alan` all involve the built-in types and the functions and operators to manipulate them.
+The built-ins for Alan all involve the built-in types and the functions and operators to manipulate them.
 
 #### Built-in Types
 
-The built-in [types](./types.md) for `alan` are:
+The built-in [types](./types.md) for Alan are:
 
 * `void`
 * `int8`
@@ -26,25 +26,25 @@ The built-in [types](./types.md) for `alan` are:
 * `Result<T>`
 * `Either<T, U>`
 
-The `int64` and `float64` types are special among the numeric types, as these are the types that any numeric constant will be represented as, depending on whether or not it has a decimal.
+The `int64` and `float64` types are special among the numeric types, as these are the types that any numeric constant will be represented as, depending on whether or not it has a decimal. They have been given aliases of `int` and `float` respectively for that reason.
 
 #### Built-in Interfaces
 
 There are a few built-in [interfaces](./interfaces.md) meant for working with several built-in types and functions.
 
-```rust
+```rust,ignore
 // An empty interface, it can match any value, but you can only accept it and pass it along to
 // something else. Useful for logical "glue" functions like `pair`, `cond`, `map`, `reduce`, etc.
 interface any {}
 ```
 
-```rust
+```rust,ignore
 // A second empty interface, useful to allow functions to declare that it accepts two arguments of
 // any kind and they don't need to match each other.
 interface anythingElse {}
 ```
 
-```rust
+```rust,ignore
 // An interface that restricts valid types to only those that can be converted into strings. Useful
 // for printing.
 interface Stringifiable {
@@ -52,7 +52,7 @@ interface Stringifiable {
 }
 ```
 
-```rust
+```rust,ignore
 // An interface that determines if a type is hashable and comparable. Used by HashMap for the keys.
 interface Hashable {
   toHash(Hashable): int64
@@ -62,11 +62,11 @@ interface Hashable {
 
 #### Built-in Functions
 
-The [function](./functions.md) signatures will be written in the form `functionName(argumentType, argumentType): returnType` with a brief description above each. These functions will be grouped into general categories, such as type coersion, arithmetic, etc.
+The [function](./functions.md) signatures will be written in the form `functionName(argumentType, argumentType): returnType` with a brief description above each. These functions will be grouped into general categories, such as type coersion, arithmetic, etc. Because of [multiple dispatch](./functions.md#function-dispatch) you may see the same function name repeated multiple times, while other times you may see the use of the `any` interface for a function that operates on multiple types. When you see multiple dispatch being used with specific types, that means there's an optimized implementation for that specific type, while the use of the `any` interface means that this was not done (many times because it was not necessary).
 
 ##### Type Coersion
 
-```rust
+```rust,ignore
 // Converts the built-in basic types to 64-bit floats
 toFloat64(int8): float64
 toFloat64(int16): float64
@@ -78,7 +78,7 @@ toFloat64(bool): float64
 toFloat64(string): float64
 ```
 
-```rust
+```rust,ignore
 // Converts the built-in basic types to 32-bit floats
 toFloat32(int8): float32
 toFloat32(int16): float32
@@ -90,7 +90,7 @@ toFloat32(bool): float32
 toFloat32(string): float32
 ```
 
-```rust
+```rust,ignore
 // Converts the built-in basic types to 64-bit integers
 toInt64(int8): int64
 toInt64(int16): int64
@@ -102,7 +102,7 @@ toInt64(bool): int64
 toInt64(string): int64
 ```
 
-```rust
+```rust,ignore
 // Converts the built-in basic types to 32-bit integers
 toInt32(int8): int32
 toInt32(int16): int32
@@ -114,7 +114,7 @@ toInt32(bool): int32
 toInt32(string): int32
 ```
 
-```rust
+```rust,ignore
 // Converts the built-in basic types to 16-bit integers
 toInt16(int8): int16
 toInt16(int16): int16
@@ -126,7 +126,7 @@ toInt16(bool): int16
 toInt16(string): int16
 ```
 
-```rust
+```rust,ignore
 // Converts the built-in basic types to 8-bit integers
 toInt8(int8): int8
 toInt8(int16): int8
@@ -138,7 +138,7 @@ toInt8(bool): int8
 toInt8(string): int8
 ```
 
-```rust
+```rust,ignore
 // Converts the built-in basic types to booleans
 toBool(int8): bool
 toBool(int16): bool
@@ -150,8 +150,8 @@ toBool(bool): bool
 toBool(string): bool
 ```
 
-```rust
-// Converts the built-in basic types to strings
+```rust,ignore
+// Converts the built-in types to strings
 toString(int8): string
 toString(int16): string
 toString(int32): string
@@ -160,13 +160,15 @@ toString(float32): string
 toString(float64): string
 toString(bool): string
 toString(string): string
+toString(Error): string
+toString(Result<Stringifiable>): string
 ```
 
-These coersions will not fail. When converting down into an integer of a smaller bitsize, numbers larger than that integer's `INT_MAX` are pegged at `INT_MAX`, smaller than `INT_MIN` pegged at `INT_MIN` and `NaN` or strings that aren't actually integers are converted to `0`. This may be changed to a `Result` type that requires a user-defined default value on failure.
+These coersions will not fail. When converting down into an integer of a smaller bitsize, numbers larger than that integer's `INT_MAX` are pegged at `INT_MAX`, smaller than `INT_MIN` pegged at `INT_MIN` and `NaN` or strings that aren't actually integers are converted to `0`. This may be changed to a `Result` type that requires a user-defined default value on failure. `Result` types wrapping a type that can also be converted to a string directly, with either the string version of the result, or the error message.
 
 ##### Arithmetic
 
-```rust
+```rust,ignore
 // Adds two numbers
 add(int8, int8): int8
 add(int16, int16): int16
@@ -176,7 +178,7 @@ add(float32, float32): float32
 add(float64, float64): float64
 ```
 
-```rust
+```rust,ignore
 // Subtracts two numbers
 sub(int8, int8): int8
 sub(int16, int16): int16
@@ -186,7 +188,27 @@ sub(float32, float32): float32
 sub(float64, float64): float64
 ```
 
-```rust
+```rust,ignore
+// Negates the number
+negate(int8, int8): int8
+negate(int16, int16): int16
+negate(int32, int32): int32
+negate(int64, int64): int64
+negate(float32, float32): float32
+negate(float64, float64): float64
+```
+
+```rust,ignore
+// Returns the absolute value of the number
+abs(int8, int8): int8
+abs(int16, int16): int16
+abs(int32, int32): int32
+abs(int64, int64): int64
+abs(float32, float32): float32
+abs(float64, float64): float64
+```
+
+```rust,ignore
 // Multiplies two numbers
 mul(int8, int8): int8
 mul(int16, int16): int16
@@ -196,7 +218,7 @@ mul(float32, float32): float32
 mul(float64, float64): float64
 ```
 
-```rust
+```rust,ignore
 // Divides two numbers
 div(int8, int8): int8
 div(int16, int16): int16
@@ -206,7 +228,7 @@ div(float32, float32): float32
 div(float64, float64): float64
 ```
 
-```rust
+```rust,ignore
 // Raises the first number to the power of the second number
 pow(int8, int8): int8
 pow(int16, int16): int16
@@ -216,7 +238,7 @@ pow(float32, float32): float32
 pow(float64, float64): float64
 ```
 
-```rust
+```rust,ignore
 // Returns the modulus (remainder) of an integer division
 mod(int8, int8): int8
 mod(int16, int16): int16
@@ -224,7 +246,7 @@ mod(int32, int32): int32
 mod(int64, int64): int64
 ```
 
-```rust
+```rust,ignore
 // Returns the square root of a number
 sqrt(float32): float32
 sqrt(float64): float64
@@ -232,7 +254,7 @@ sqrt(float64): float64
 
 ##### Logical and Bitwise
 
-```rust
+```rust,ignore
 // Return the logical or bitwise `and`
 and(int8, int8): int8
 and(int16, int16): int16
@@ -241,7 +263,7 @@ and(int64, int64): int64
 and(bool, bool): bool
 ```
 
-```rust
+```rust,ignore
 // Return the logical or bitwise `or`
 or(int8, int8): int8
 or(int16, int16): int16
@@ -250,7 +272,7 @@ or(int64, int64): int64
 or(bool, bool): bool
 ```
 
-```rust
+```rust,ignore
 // Return the logical or bitwise `xor`
 xor(int8, int8): int8
 xor(int16, int16): int16
@@ -259,7 +281,7 @@ xor(int64, int64): int64
 xor(bool, bool): bool
 ```
 
-```rust
+```rust,ignore
 // Return the logical or bitwise `not`
 not(int8): int8
 not(int16): int16
@@ -268,7 +290,7 @@ not(int64): int64
 not(bool): bool
 ```
 
-```rust
+```rust,ignore
 // Return the logical or bitwise `nand`
 nand(int8, int8): int8
 nand(int16, int16): int16
@@ -277,7 +299,7 @@ nand(int64, int64): int64
 nand(bool, bool): bool
 ```
 
-```rust
+```rust,ignore
 // Return the logical or bitwise `nor`
 nor(int8, int8): int8
 nor(int16, int16): int16
@@ -286,7 +308,7 @@ nor(int64, int64): int64
 nor(bool, bool): bool
 ```
 
-```rust
+```rust,ignore
 // Return the logical or bitwise `xnor`
 xnor(int8, int8): int8
 xnor(int16, int16): int16
@@ -297,7 +319,7 @@ xnor(bool, bool): bool
 
 ##### Comparators
 
-```rust
+```rust,ignore
 // Checks if the two values are equal
 eq(int8, int8): bool
 eq(int16, int16): bool
@@ -309,7 +331,7 @@ eq(string, string): bool
 eq(bool, bool): bool
 ```
 
-```rust
+```rust,ignore
 // Checks if the two values are not equal
 neq(int8, int8): bool
 neq(int16, int16): bool
@@ -321,7 +343,7 @@ neq(string, string): bool
 neq(bool, bool): bool
 ```
 
-```rust
+```rust,ignore
 // Checks if the first value is less than the second
 lt(int8, int8): bool
 lt(int16, int16): bool
@@ -332,7 +354,7 @@ lt(float64, float64): bool
 lt(string, string): bool
 ```
 
-```rust
+```rust,ignore
 // Checks if the first value is less than or equal to the second
 lte(int8, int8): bool
 lte(int16, int16): bool
@@ -343,7 +365,7 @@ lte(float64, float64): bool
 lte(string, string): bool
 ```
 
-```rust
+```rust,ignore
 // Checks if the first value is greater than the second
 gt(int8, int8): bool
 gt(int16, int16): bool
@@ -354,7 +376,7 @@ gt(float64, float64): bool
 gt(string, string): bool
 ```
 
-```rust
+```rust,ignore
 // Checks if the first value is greater than or equal to the second
 gte(int8, int8): bool
 gte(int16, int16): bool
@@ -367,7 +389,7 @@ gte(string, string): bool
 
 ##### Wait functions
 
-```rust
+```rust,ignore
 // Waits the specified number of milliseconds and then continues execution
 wait(int8): void
 wait(int16): void
@@ -377,17 +399,17 @@ wait(int64): void
 
 ##### String Manipulation
 
-```rust
+```rust,ignore
 // Concatenate two strings together
 concat(string, string): string
 ```
 
-```rust
+```rust,ignore
 // Splits the first string into an array of strings divided by the second delimiter string
 split(string, string): Array<string>
 ```
 
-```rust
+```rust,ignore
 // Repeats the contents of the string `n` times (so `repeat("hello", 1)` returns `"hello"`)
 repeat(string, int8): string
 repeat(string, int16): string
@@ -395,39 +417,39 @@ repeat(string, int32): string
 repeat(string, int64): string
 ```
 
-```rust
+```rust,ignore
 // Takes a string template and a HashMap of string keys to string values to substitute in
 template(string, HashMap<string, string>): string
 ```
 
-```rust
+```rust,ignore
 // Check if the first string matches the regular expression defined by the second string
 matches(string, string): bool
 ```
 
-```rust
+```rust,ignore
 // Returns the location of the second string within the first string, or `-1`
 index(string, string): int64
 ```
 
-```rust
+```rust,ignore
 // Returns the length of the string (as a byte array, not UTF codepoints)
 length(string): int64
 ```
 
-```rust
+```rust,ignore
 // Removes the whitespace on either end of the string
 trim(string): string
 ```
 
 ##### Array Manipulation
 
-```rust
+```rust,ignore
 // Concatenate two arrays into a new array containing the values of both
 concat(Array<any>, Array<any>): Array<any>
 ```
 
-```rust
+```rust,ignore
 // Create a new array with the contents of the original array repeated `n` times
 repeat(Array<any>, int8): Array<any>
 repeat(Array<any>, int16): Array<any>
@@ -435,7 +457,7 @@ repeat(Array<any>, int32): Array<any>
 repeat(Array<any>, int64): Array<any>
 ```
 
-```rust
+```rust,ignore
 // Find the index of the specified value in the array or return `-1`
 index(Array<any>, any): int64
 index(Array<int8>, int8): int64
@@ -447,7 +469,7 @@ index(Array<float64>, float64): int64
 index(Array<bool>, bool): int64
 ```
 
-```rust
+```rust,ignore
 // Returns true if the array has the specified value or false otherwise
 has(Array<any>, any): int64
 has(Array<int8>, int8): int64
@@ -459,7 +481,7 @@ has(Array<float64>, float64): int64
 has(Array<bool>, bool): int64
 ```
 
-```rust
+```rust,ignore
 // Push a value into the array and return the updated array
 push(Array<any>, any): Array<any>
 push(Array<int8>, int8): Array<int8>
@@ -471,204 +493,266 @@ push(Array<float64>, float64): Array<float64>
 push(Array<bool>, bool): Array<bool>
 ```
 
-```rust
-// Pop a value from an array and return that value
-pop(Array<any>): any
+```rust,ignore
+// Pop a value from an array and return that value wrapped in a result (or an error result)
+pop(Array<any>): Result<any>
 ```
 
-```rust
+```rust,ignore
 // Execute the provided side-effect function on each element of the array
-each(Array<any>, function): void
+each(Array<any>, function): void // Parallel if possible and worthwhile
+eachLin(Array<any>, function): void // Forced linear execution
 ```
 
-```rust
+```rust,ignore
 // Execute the provided converter function on each element of the array and return a new array
-map(Array<any>, function): Array<anythingElse>
+map(Array<any>, function): Array<anythingElse> // Parallel if possible and worthwhile
+mapLin(Array<any>, function): Array<anythingElse> // Forced linear execution
 ```
 
-```rust
+```rust,ignore
 // Execute the combining function on the array and return the new value
-reduce(Array<any>, function): anythingElse
+// The two argument reduce functions reduce into the same type as the input, while the
+// three and four argument reduce functions reduce into a new type. The three argument reduce
+// function is sequential and only requires an initial value to kick off the reduction, while the
+// four argument reducer requires one function and an initial value to kick off the reduction into
+// the new type, and then it requires a second function that reduces the new type into itself to
+// merge the various threads of execution back together.
+reduce(Array<any>, function): any // Forced linear execution
+reducePar(Array<any>, function): any // Parallel if possible and worthwhile
+reduce(Array<any>, function, anythingElse): anythingElse // Forced linear execution
+reducePar(Array<any>, function, function, anythingElse): anythingElse // Parallel if possible and worthwhile
 ```
 
-```rust
+```rust,ignore
 // Execute the filtering function on the array and return a new array with the allowed values
-filter(Array<any>, function): Array<any>
+filter(Array<any>, function): Array<any> // Parallel if possible and worthwhile
 ```
 
-```rust
-// Execute the comparison function on the array and return the first element that passes the check
-find(Array<any>, function): any
+```rust,ignore
+// Execute the comparison function on the array and return the first element that passes the check,
+// or an error
+find(Array<any>, function): Result<any> // Parallel if possible and worthwhile
+findLin(Array<any>, function): Result<any> // Forced linear execution
 ```
 
-```rust
+```rust,ignore
 // Execute the comparison function on the array and return `true` if all elements pass the check
-every(Array<any>, function): bool
+every(Array<any>, function): bool // Parallel if possible and worthwhile
+everyLin(Array<any>, function): bool // Forced linear execution
 ```
 
-```rust
+```rust,ignore
 // Execute the comparison function on the array and return `true` if any element passes the check
-some(Array<any>, function): bool
+some(Array<any>, function): bool // Parallel if possible and worthwhile
+someLin(Array<any>, function): bool // Forced linear execution
 ```
 
-```rust
+```rust,ignore
 // Take an array of strings and merge them into one string separated by the separator string. The
 // inverse of the `split` function
 join(Array<string>, string): string
 ```
 
+```rust,ignore
+// Override the value of an array element with a new value
+set(Array<any>, int64, any): Result<Array<any>>
+set(Array<int8>, int64, int8): Result<Array<int8>>
+set(Array<int16>, int64, int16): Result<Array<int16>>
+set(Array<int32>, int64, int32): Result<Array<int32>>
+set(Array<int64>, int64, int64): Result<Array<int64>>
+set(Array<float32>, int64, float32): Result<Array<float32>>
+set(Array<float64>, int64, float64): Result<Array<float64>>
+set(Array<bool>, int64, bool): Result<Array<bool>>
+```
+
 ##### HashMap Manipulation
 
-```rust
+```rust,ignore
+// Converts a value into a hash using the [xxh64](https://cyan4973.github.io/xxHash/) algorithm.
+// No user code ever has to overload the `toHash` function with their own implementation, but it is
+// required that the `eq` function is for user-defined types to check for hash collisions.
+toHash(any): int64
+toHash(int8): int64
+toHash(int16): int64
+toHash(int32): int64
+toHash(float32): int64
+toHash(float64): int64
+toHash(bool): int64
+```
+
+```rust,ignore
 // Takes a HashMap and returns an Array of KeyVal pairs
 keyVal(HashMap<Hashable, any>): Array<KeyVal<Hashable, any>>
 ```
 
-```rust
+```rust,ignore
 // Takes a HashMap and returns an Array of keys
 keys(HashMap<Hashable, any>): Array<Hashable>
 ```
 
-```rust
+```rust,ignore
 // Takes a HashMap and returns an Array of values
 values(HashMap<Hashable, any>: Array<any>
 ```
 
-```rust
+```rust,ignore
 // Takes a HashMap and returns the number of KeyVal pairs contained
 length(HashMap<Hashable, any>): int64
 ```
 
+```rust,ignore
+// Sets a key-value pair in the HashMap and returns the HashMap for chaining
+set(HashMap<Hashable, any>, Hashable, any): HashMap<Hashable, any>
+```
+
+```rust,ignore
+// Gets the value for a given key or an error
+get(HashMap<Hashable,any>, Hashable): Result<any>
+```
+
+```rust,ignore
+// Creates a new HashMap object with the first key-val pair and a decently-sized set of defaults for
+// the indexing
+newHashMap(Hashable, any): HashMap<Hashable, any>
+```
+
+```rust,ignore
+// The inverse of `keyVal`, takes an `Array<KeyVal<Hashable, any>>` and reindexes it as HashMap
+toHashMap(Array<KeyVal<Hashable, any>>): HashMap<Hashable, any>
+```
+
 ##### "Ternary" Functions
 
-```rust
+```rust,ignore
 // Takes two values of the same type and returns an array of those two values
 pair(any, any): Array<any>
 ```
 
-```rust
+```rust,ignore
 // Takes a boolean and an array of two values and returns the first value on `true` and the second
 // on `false`
 cond(bool, Array<any>): any
 ```
 
-```rust
+```rust,ignore
 // Takes a boolean and a function and conditionally executes that function if the bool is `true`
 cond(bool, function): void
 ```
 
-##### Assign Functions
+##### Clone Functions
 
-```rust
-// Explicitly duplicates the provided value and returns it
-assign(any): any
-assign(Array<any>): Array<any>
-assign(void): void
-assign(int8): int8
-assign(int16): int16
-assign(int32): int32
-assign(int64): int64
-assign(float32): float32
-assign(float64): float64
-assign(bool): bool
-assign(string): string
+```rust,ignore
+// Explicitly duplicates the provided value and returns it, useful when you don't want to mutate
+// the original value
+clone(any): any
+clone(Array<any>): Array<any>
+clone(void): void
+clone(int8): int8
+clone(int16): int16
+clone(int32): int32
+clone(int64): int64
+clone(float32): float32
+clone(float64): float64
+clone(bool): bool
+clone(string): string
 ```
 
 ##### Error, Maybe, Result, and Either Functions
 
-```rust
+```rust,ignore
 // Returns a non-error error object
 noerr(): Error
 ```
 
-```rust
+```rust,ignore
 // Wraps a given value into a Maybe type
 some(any): Maybe<any>
 ```
 
-```rust
+```rust,ignore
 // Creates an unassigned Maybe type
 none(): Maybe<void>
 ```
 
-```rust
+```rust,ignore
 // Determines if the Maybe has a value
 isSome(Maybe<any>): bool
 ```
 
-```rust
+```rust,ignore
 // Determines if the Maybe has no value
 isNone(Maybe<any>): bool
 ```
 
-```rust
+```rust,ignore
 // Returns the Maybe's value, or the default value if there is no value
 getOr(Maybe<any>, any): any
 ```
 
-```rust
+```rust,ignore
 // Creates a Result with a value
 ok(any): Result<any>
 ```
 
-```rust
+```rust,ignore
 // Creates a Result with an Error
 err(string): Result<any>
 ```
 
-```rust
+```rust,ignore
 // Checks if the Result has a value
 isOk(Result<any>): bool
 ```
 
-```rust
+```rust,ignore
 // Checks if the Result has an Error
 isErr(Result<any>): bool
 ```
 
-```rust
+```rust,ignore
 // Gets the Result's value or default if it is an Error
 getOr(Result<any>, any): any
 ```
 
-```rust
+```rust,ignore
 // Gets the Result's Error or default if it is a value
 getErr(Result<any>, Error): Error
 ```
 
-```rust
+```rust,ignore
 // Creates an Either with the main (first) type set
 main(any): Either<any, void>
 ```
 
-```rust
+```rust,ignore
 // Creates and Either with the alternative (second) type set
 alt(any): Either<void, any>
 ```
 
-```rust
+```rust,ignore
 // Checks if the Either's main type is set
 isMain(Either<any, anythingElse>): bool
 ```
 
-```rust
+```rust,ignore
 // Checks if the Either's alt type is set
 isAlt(Either<any, anythingElse>): bool
 ```
 
-```rust
+```rust,ignore
 // Gets the main type or the default if it is the alt type
 getMainOr(Either<any, anythingElse>, any): any
 ```
 
-```rust
+```rust,ignore
 // Gets the alt type or the default if it is the main type
 getAltOr(Either<any, anythingElse>, anythingElse): anythingElse
 ```
 
 #### Built-in Operators
 
-As [operators](./operators.md) in `alan` are simply aliases for functions with a precedence value associated, all of the following operators have their underlying implementation defined above.
+As [operators](./operators.md) in Alan are simply aliases for functions with a precedence value associated, all of the following operators have their underlying implementation defined above.
 
 <table>
   <thead>

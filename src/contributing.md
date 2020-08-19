@@ -1,3 +1,3 @@
-# Contributing to `alan`
+# Contributing to Alan
 
 TBD

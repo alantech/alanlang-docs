@@ -2,7 +2,7 @@
 
 In order to make generic types more useful, there must be a way to declare what operations/functions are possible to apply to the generic type in question so functions working with said generic are able to be checked even if the generic function is not "solidified" (for example, it is an exported library meant to be used by other code). Interfaces are the proposed solution, and they'll look something like this:
 
-```
+```rust,ignore
 interface interfaceName {
   functionname (concreteType, interfaceName): concreteType
   function2 (interfaceName, interfaceName): interfaceName
@@ -23,7 +23,7 @@ When interfaces are used in a function, they are matched against the incoming ar
 
 This means writing a constructor function to make a `KeyVal` object like so:
 
-```rust
+```rust,ignore
 fn makeKV(key: any, val: any) = new KeyVal<any, any> {
   key = key
   val = val
@@ -32,24 +32,24 @@ fn makeKV(key: any, val: any) = new KeyVal<any, any> {
 
 will fail to compile unless both the `key` and the `val` are the same type, which may be unexpected. However, an identical interface with a different name will be matched separately, so if you have the following two otherwise identical interfaces:
 
-```rust
+```rust,ignore
 interface any {}
 interface anythingElse {}
 ```
 
 That both would match *any* type given to them, you can then use them in the `KeyVal` constructor like this:
 
-```rust
+```rust,ignore
 fn makeKv(key: any, val: anythingElse) = new KeyVal<any, anythingElse> {
   key = key
   val = val
 }
 ```
 
-Currently the interfaces have to be redeclared for this to work, but if there is demand for it, we can add an interface aliasing feature, so one could simply write:
+There is an interface aliasing feature, so one could simply write:
 
-```rust
+```rust,ignore
 interface anythingElse = any
 ```
 
-and have it do the right thing.
+and have it do the right thing. Not super useful for the `any` interface, but for complex interfaces that you want to use in functions with the variables "unlinked" from each other, it can be quite useful.

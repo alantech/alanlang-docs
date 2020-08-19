@@ -1,8 +1,8 @@
 #### Events
 
-Events are sources for activity in `alan`. No code is run that isn't triggered by an event. Event declaration is relatively simple:
+Events are sources for activity in Alan. No code is run that isn't triggered by an event. Event declaration is relatively simple:
 
-```
+```rust,ignore
 event eventName: typename
 ```
 
