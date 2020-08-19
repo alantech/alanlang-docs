@@ -443,28 +443,29 @@ This example exercises many string manipulation mechanisms and alternate syntaxe
 ```rust,editable
 from @std/app import start, print, exit
 
-type box<V> {
+// Generic types don't need to be capitalized, but it tends to look nicer
+type Box<V> {
   set: bool
   val: V
 }
 
 on start fn {
-  let int8Box = new box<int64> {
+  let int8Box = new Box<int64> {
     val = 8
     set = true
   }
   print(int8Box.val)
   print(int8Box.set)
 
-  let stringBox = new box<string> {
+  let stringBox = new Box<string> {
     val = "hello, generics!"
     set = true
   }
   print(stringBox.val)
   print(stringBox.set)
 
-  const stringBoxBox = new box<box<string>> {
-    val = new box<string> {
+  const stringBoxBox = new Box<Box<string>> {
+    val = new Box<string> {
       val = "hello, nested generics!"
       set = true
     }
