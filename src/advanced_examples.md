@@ -61,24 +61,20 @@ on start {
   print(test3[1])
   print(test3[2])
 
-  let test4 = new Array<int64> [ 0, 1, 2, 3 ]
-  test4[0] = 1
+  let test4 = [ 0, 1, 2, 3 ]
+  test4.set(0, 1)
   print(test4[0])
 
-  print("Map literal assignment")
-  const test5 = new Map<bool, int64> {
-    true: 1
-    false: 0
-  }
+  print("HashMap literal assignment")
+  const test5 = newHashMap(true, 1)
+  test5.set(false, 0)
 
-  print(test5[true])
-  print(test5[false])
+  print(test5.get(true))
+  print(test5.get(false))
 
-  let test6 = new Map<string, string> {
-    "foo": "bar"
-  }
-  test6["foo"] = "baz"
-  print(test6["foo"])
+  let test6 = newHashMap("foo", "bar")
+  test6.set("foo", "baz")
+  print(test6.get("foo"))
 
   emit exit 0
 }
@@ -154,6 +150,7 @@ on start {
 
 This example demonstrates conditionals (if statements) and shows that the conditional "scopes" are actually functions, but due to how nested scope rules work, they can still manipulate the parent function scope as needed for execution to function. It also demonstrates "ternary" operators and how they are composed of `pair` and `cond` function calls.
 
+<!-- TODO: Restore these once we figure out how to do multi-file examples in mdbook and our browser-transpiled compiler
 ### `datetime.ln`
 
 ```rust,editable
@@ -399,6 +396,8 @@ on start fn {
 
 This example introduces method syntax, and shows multiple variants of the same statement at the end.
 
+-->
+
 ### `string.ln`
 
 ```rust,editable
@@ -416,17 +415,10 @@ on start fn {
   print(helloWorldArr2[0])
   print(helloWorldArr2[1])
 
-  const helloWorldMap = new Map<string, string> {
-    "hello": "Hello"
-    "world": "World"
-  }
-  print(template("${hello}, ${world}!", helloWorldMap))
-  print("${hello}, ${world}!" % helloWorldMap)
-
   print("Hi " * 5)
   print(repeat("Hi ", 5))
 
-  print(helloWorld ~ "or") // Java's regex engine is whack, this returns false, replace with PCRE
+  print(helloWorld ~ "or")
   print(helloWorld.matches("or"))
 
   print(helloWorld @ "or")
@@ -438,7 +430,7 @@ on start fn {
   helloWorld.length().print()
 
   print("'" + `("Hi " * 5) + "'")
-  print(concat("'", trim(repeat("Hi ", 5)), "'"))
+  print("'" + trim(repeat("Hi ", 5)) + "'")
 
   emit exit 0
 }
@@ -446,79 +438,45 @@ on start fn {
 
 This example exercises many string manipulation mechanisms and alternate syntaxes using operators and method style function calls.
 
-### `typeof.ln`
-
-```rust,editable
-from @std/app import start, print, exit
-
-type foo<A, B> {
-  bar: A
-  baz: B
-}
-
-type foo2 = foo<int64, float64>
-
-on start fn {
-  print(type 3)
-  print(type 3.14)
-  print(type (1 + 2))
-  print(type "str")
-  print(type true)
-  print(type true == "bool")
-  
-  let a: foo<string, int64>
-  let b: foo<int64, bool>
-  let c: foo2
-  let d: foo<int64, float64>
-  print(type a)
-  print(type b)
-  print(type type a)
-  print(type c)
-  print(type d)
-  print(type c == type d)
-
-  emit exit 0
-}
-```
-
-This example demonstrates acquiring the type of constants and variables, as well as the basics of generic types.
-
 ### `box.ln`
 
 ```rust,editable
 from @std/app import start, print, exit
 
-type box<V> {
+// Generic types don't need to be capitalized, but it tends to look nicer
+type Box<V> {
   set: bool
   val: V
 }
 
 on start fn {
-  let int8Box: box<int8>
-  int8Box.val = 8
-  int8Box.set = true
+  let int8Box = new Box<int64> {
+    val = 8
+    set = true
+  }
   print(int8Box.val)
   print(int8Box.set)
 
-  let stringBox: box<string>
-  stringBox.val = "hello, generics!"
-  stringBox.set = true
+  let stringBox = new Box<string> {
+    val = "hello, generics!"
+    set = true
+  }
   print(stringBox.val)
   print(stringBox.set)
 
-  const stringBoxBox = new box<box<string>> {
-    val = new box<string> {
+  const stringBoxBox = new Box<Box<string>> {
+    val = new Box<string> {
       val = "hello, nested generics!"
       set = true
     }
     set = true
   }
-  stringBoxBox.set.print()
-  stringBoxBox.val.set.print()
-  stringBoxBox.val.val.print()
+  print(stringBoxBox.set)
+  print(stringBoxBox.val.set)
+  print(stringBoxBox.val.val)
 
-  // The following should crash, later will be a compile-time error
-  stringBox.val = 8
+  // The following is a compile time error, uncomment to see!
+  // stringBox.val = 8
 
   emit exit 0
 }
@@ -526,7 +484,7 @@ on start fn {
 
 This example uses generics to define a Box type and how to work with it at a basic assignment level.
 
-### `big_loop.ln`
+### `loop.ln`
 
 ```rust,editable
 from @std/app import start, print, exit
@@ -535,7 +493,7 @@ event loop: int64
 
 on loop fn looper(val: int64) {
   print(val)
-  if val >= 1000000 {
+  if val >= 10 {
     emit exit 0
   } else {
     emit loop val + 1
@@ -547,10 +505,11 @@ on start {
 }
 ```
 
-This example defines a custom event type and then uses it to implement a recursive function that prints to 1 million and then quits. It also usesif statements to accomplish this.
+This example defines a custom event type and then uses it to implement a recursive function that prints to 10 and then quits. It also usesif statements to accomplish this.
 
-This is slow and intentionally awkward because this is an escape hatch to Turing-completeness and not the intended primary use case, as `alan`'s execution planner will not be able to properly optimize the parallelization of this approach (it is by definition a sequential operation, though the body of the recursive function may be parallelized). It shouldn't be necessary to accomplish your needs in the language, but it is there.
+This is slow and intentionally awkward because this is an escape hatch to Turing-completeness and not the intended primary use case, as Alan's execution planner will not be able to properly optimize the parallelization of this approach (it is by definition a sequential operation, though the body of the recursive function may be parallelized). It shouldn't be necessary to accomplish your needs in the language, but it is there.
 
+<!-- TODO: Should we even have an http server example in here? We can't run it. Also this syntax is very wrong
 ### `http.ln`
 
 ```rust,editable
@@ -564,3 +523,5 @@ on http.port(8080) fn (socket: http.Socket) {
 ```
 
 This example defines a `Hello, World!` http server on port 8080.
+
+-->

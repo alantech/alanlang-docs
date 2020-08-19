@@ -4,11 +4,19 @@ Currently very bare, only a single `print` function that takes all of the basic 
 
 The formal declarations:
 
-`fn print(Stringifiable): void`
+```rust,ignore
+fn print(Stringifiable): void
+```
 
-`event start: void`
+```rust,ignore
+event start: void
+```
 
-`event exit: int8`
+```rust,ignore
+event exit: int8
+```
 
-`event stdout: string`
+```rust,ignore
+event stdout: string
+```
 

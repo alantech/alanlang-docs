@@ -1,9 +1,17 @@
 ### @std/cmd
 
-Also very bare, only a single function: `exec` with the signature:
+Also very bare, only a single type `ExecRes`, and a function: `exec` with the signature:
 
-```rust
-exec(string): void
+```rust,ignore
+type ExecRes {
+  exitCode: int64
+  stdout: string
+  stderr: string
+}
 ```
 
-It simply side-effect executes the provided shell string.
+```rust,ignore
+exec(string): ExecRes
+```
+
+It simply executes the provided shell string and returns the outputs from it.

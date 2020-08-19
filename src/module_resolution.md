@@ -10,9 +10,9 @@ The other major issue with Node.js's module model is reducing the friction on us
 
 Combine that with Node.js's intentionally small standard library and there are lots of tiny modules that implement basic functionality because it wasn't available and people wrote and released their own implementations and other people installed the first ones they found, since it is so easy to do, and such cross-cutting core dependencies would show up in many different places in your project, each requiring a slightly different relative path invocation if it was a home-grown source file.
 
-`alan`'s module resolution system attempts to address these concerns by having separate directories for third-party dependencies you install and being able to uniformly name modules within your own codebase clearly.
+Alan's module resolution system attempts to address these concerns by having separate directories for third-party dependencies you install and being able to uniformly name modules within your own codebase clearly.
 
-While relative pathing is necessary for a module to reference its submodule and it is possible to traverse up the tree and back down, having `../` in your import path should be considered an anti-pattern in `alan`.
+While relative pathing is necessary for a module to reference its submodule and it is possible to traverse up the tree and back down, having `../` in your import path should be considered an anti-pattern in Alan.
 
 A project directory structure like this:
 

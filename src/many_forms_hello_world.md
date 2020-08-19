@@ -2,7 +2,7 @@
 
 The classic "Hello, World!" examples are a simple way to understand the minimum of structure you need to have in any code you write in a given language, with Java being famously heavyweight and Python famously featherweight.
 
-`alan` is in the middle, requiring some concepts from the get-go that would be confusing to absolute beginners, but not requiring as many concepts as Java.
+Alan is in the middle, requiring some concepts from the get-go that would be confusing to absolute beginners, but not requiring as many concepts as Java.
 
 ### `hello_world_1.ln`
 
@@ -85,7 +85,7 @@ from @std/app import start, exit, print
 on start fn {
   const hello: string = "Hello"
   const world: string = "World"
-  print(concat(hello, ", ", world, "!"))
+  print(hello + ", " + world + "!"))
   emit exit 0
 }
 ```
@@ -119,21 +119,4 @@ on start main
 ```
 
 This example demonstrates that the functions passed to an event handler don't have to be inline declared.
-
-### `hello_world_9.ln`
-
-```rust,editable
-from @std/app import start, print, exit
-
-prefix $> 1 print
-
-on start {
-  _ = $> "Hello, World!"
-  emit exit 0
-}
-```
-
-This example introduces the `_` special variable and prefix operators, effectively renaming `print` to `$>` and letting you print "Hello, World!" with another syntax.
-
-Because the statement would be ambiguous otherwise, the operator expression *must* be assigned to something. Since we don't care what value `print` returns (hint: `void`), we assign to the `_` variable to throw it away.
 

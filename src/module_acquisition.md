@@ -8,11 +8,11 @@ Different languages have had differing dependency resolution mechanisms.
 * Ruby and Node have fully centralized module repositories, dependency management (though there is a split between NPM and Yarn, but Yarn intentionally mirrors NPM and focuses on speed), and dependency installation. The dependencies are declared in a special JSON file for Node and a "Gemfile" Ruby source file in Ruby.
 * Go and the experimental Deno have taken different paths. Go originally ignored dependency management, as well, but is adopting one based on URLs to Git repositories. Deno goes one step further and uses HTTP/HTTPS URLs to raw source code, itself, with no explicit dependency declaration file.
 
-`alan` follows Ruby most closely in managing dependencies. Dependencies are specified in a `.dependencies.ln` file by convention that uses the `@std/deps` standard library to declare which dependencies are required and acquire them. Using `alan` itself as the dependency declaration file makes it possible to typecheck and validate the validity of the dependency configuration to an extent that is not possible in the declarative formats popular in Java, Python, Node, and Go.
+Alan follows Ruby most closely in managing dependencies. Dependencies are specified in a `.dependencies.ln` file by convention that uses the `@std/deps` standard library to declare which dependencies are required and acquire them. Using Alan itself as the dependency declaration file makes it possible to typecheck and validate the validity of the dependency configuration to an extent that is not possible in the declarative formats popular in Java, Python, Node, and Go.
 
-Beyond that, `alan` automatically assumes all dependencies are listed as git URLs and that git is available for use locally to access the third-party libraries. This makes acquisition and version pinning much simpler and without any requirement of a centralized host.
+Beyond that, Alan automatically assumes all dependencies are listed as git URLs and that git is available for use locally to access the third-party libraries. This makes acquisition and version pinning much simpler and without any requirement of a centralized host.
 
-Long-term, though, `alan` intends to have a centralized package hosting system because there are several advantages to the community for such a thing:
+Long-term, though, Alan intends to have a centralized package hosting system because there are several advantages to the community for such a thing:
 
 * The packages can be guaranteed immutable to make sure production deployments are more reliable.
 * The central repository can require package signing to make it harder for popular packages to be hijacked and have malware injected into them (and also raise the bar to make sure only more serious projects are submitted).
