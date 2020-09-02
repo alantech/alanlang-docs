@@ -42,3 +42,7 @@ alan-runtime run hello_world.agc
 ```
 
 which prints `Hello, World!`.
+
+## Syntax Highlighting
+
+We support syntax highlighting for [some](https://github.com/alantech/alan/issues/257) text editors and are actively working to add more. Contributions are most welcome.
