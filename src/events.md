@@ -2,7 +2,7 @@
 
 Events are sources for activity in Alan. No code is run that isn't triggered by an event. Event declaration is relatively simple:
 
-```rust,ignore
+```alan
 event eventName: typename
 ```
 

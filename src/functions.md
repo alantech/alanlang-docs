@@ -6,7 +6,7 @@ Functions are where actual work happens. There are built-in functions and user-d
 
 Declaration of functions works like so:
 
-```rust,ignore
+```alan
 // A named function with two arguments and a particular return type
 fn functionName (firstArgument: argumentType, secondArgument: anotherType): returnType {
   ...statements...
@@ -64,7 +64,7 @@ on eventname fn (): void {
 
 Alan uses multiple dispatch for determining which function to use when a function name is called. This means that the argument types and count are taken into consideration. Multiple functions with the same name may be declared as long as the argument types and/or counts are different between them. For example:
 
-```rust,ignore
+```alan
 fn someFn (arg1: string, arg2: bool): string {
   ...
 }
@@ -98,13 +98,13 @@ One of the kinds of statements you can write inside of a function is a function 
 
 Standard form looks like this:
 
-```rust,ignore
+```alan
 add(3, 2)
 ```
 
 while method form looks like this:
 
-```rust,ignore
+```alan
 3.add(2)
 ```
 

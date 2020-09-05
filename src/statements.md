@@ -8,20 +8,20 @@ Statements must be on different lines, but statements can span multiple lines. T
 
 There are two types of variables, constants and mutable variables. Constants are declared with these two syntaxes:
 
-```rust,ignore
+```alan
 const varname: typename = constantOrFunctionCallOrExpression
 const varname = constantOrFunctionCallOrExpression
 ```
 
 The typename is optional as it can be inferred from the value being assigned. Providing the type can be useful to make sure your code is doing what you expected, though, and not using an unexpected type. By default all numeric constants are automatically the highest definition version possible. (`int64` or `float64`) Explicitly setting a smaller bit size for the constant *will not* coerce the constant automatically, you must explicitly declare the down coersion, eg:
 
-```rust,ignore
+```alan
 const someI32: int32 = 5.toInt32()
 ```
 
 Any type that exists in the language can be assigned. Simple constants are simply declared, or produced via function calls or operator expressions. User-defined types can be assigned to constants through the use of a constructor function and calling it, through an expression involving operators that produces the user-defined type, or through the user-type literal syntax. Arrays and HashMaps have similar but slightly different syntaxes, as they deal with inherently plural data versus the struct-like user-defined types:
 
-```rust,ignore
+```alan
 const simpleConstant: bool = true
 const simpleConstant2 = "simple"
 const expressionResult: int64 = 3 + 5 * 2 + fnCall2(3, 1)
@@ -43,13 +43,13 @@ All three complex type literals begin with the `new` keyword, followed by the ty
 
 Beyond that, there is also the ability to assign the type name of another variable, but the constant *must* be a string in that case:
 
-```rust,ignore
+```alan
 const typename: string = type otherVariable
 ```
 
 For mutable variables, the syntax is nearly identical:
 
-```rust,ignore
+```alan
 let varname: typename = constantOrFunctionCallOrExpression 
 let varname = constantOrFunctionCallOrExpression
 ```
@@ -60,7 +60,7 @@ Where `const` is replaced with `let`, making it clear that this variable's value
 
 This syntax only works with mutable variables:
 
-```rust,ignore
+```alan
 varname = constantOrFunctionCallOrExpression
 varname.propertyName = constantOrFunctionCallOrExpression
 ```
@@ -71,7 +71,7 @@ Since the variable type is already known, it is no longer included. Anything tha
 
 Because functions can have side effects that might be desirable, and functions defined within the scope of the current function could potentially mutate multiple variables, and so on, it's allowed to call them without storing a return value. It simply looks like this:
 
-```rust,ignore
+```alan
 someFunction(arg1, arg2)
 ```
 
@@ -81,13 +81,13 @@ where the arguments themselves could be constants, variable names, other functio
 
 A return statement sets the value of the return type for the function and ends execution:
 
-```rust,ignore
+```alan
 return constantOrFunctionCallOrExpression
 ```
 
 If the function has no return value, you can also trigger an exit without assigning a return value by simply stating:
 
-```rust,ignore
+```alan
 return
 ```
 
@@ -97,7 +97,7 @@ If you have any statements after the `return` it will not compile, however (exce
 
 A function can trigger new events to occur by emitting one:
 
-```rust,ignore
+```alan
 emit eventName
 emit eventName constantOrFunctionCallOrExpression
 ```
@@ -110,7 +110,7 @@ Conditionals optionally run one block of code (or potentially another) based on 
 
 The conditional syntax is:
 
-```rust,ignore
+```alan
 if booleanConstantOrFunctionCallOrExpression thenFunction
 if booleanConstantOrFunctionCallOrExpression thenFunction else elseFunction
 if booleanConstantOrFunctionCallOrExpression thenFunction else if ...
@@ -120,7 +120,7 @@ where the constant, function call, or operational expression *must* evaluate to 
 
 Conditionals are one of the two places (the other being event handler declarations) where the `fn` may be omitted from a purely-side-effect function (no arguments, no return value), so the above can look exactly as one would expect:
 
-```rust,ignore
+```alan
 if 1 == 2 {
   print("Wrong")
 } else {
@@ -130,7 +130,7 @@ if 1 == 2 {
 
 The conditional has two anonymous functions declared inline. But it could just as easily be something like:
 
-```rust,ignore
+```alan
 fn right() {
   print("Right")
 }

@@ -2,7 +2,7 @@
 
 In order to make generic types more useful, there must be a way to declare what operations/functions are possible to apply to the generic type in question so functions working with said generic are able to be checked even if the generic function is not "solidified" (for example, it is an exported library meant to be used by other code). Interfaces are the proposed solution, and they'll look something like this:
 
-```rust,ignore
+```alan
 interface interfaceName {
   functionname (concreteType, interfaceName): concreteType
   function2 (interfaceName, interfaceName): interfaceName
@@ -23,7 +23,7 @@ When interfaces are used in a function, they are matched against the incoming ar
 
 This means writing a constructor function to make a `KeyVal` object like so:
 
-```rust,ignore
+```alan
 fn makeKV(key: any, val: any) = new KeyVal<any, any> {
   key = key
   val = val
@@ -32,14 +32,14 @@ fn makeKV(key: any, val: any) = new KeyVal<any, any> {
 
 will fail to compile unless both the `key` and the `val` are the same type, which may be unexpected. However, an identical interface with a different name will be matched separately, so if you have the following two otherwise identical interfaces:
 
-```rust,ignore
+```alan
 interface any {}
 interface anythingElse {}
 ```
 
 That both would match *any* type given to them, you can then use them in the `KeyVal` constructor like this:
 
-```rust,ignore
+```alan
 fn makeKv(key: any, val: anythingElse) = new KeyVal<any, anythingElse> {
   key = key
   val = val
@@ -48,7 +48,7 @@ fn makeKv(key: any, val: anythingElse) = new KeyVal<any, anythingElse> {
 
 There is an interface aliasing feature, so one could simply write:
 
-```rust,ignore
+```alan
 interface anythingElse = any
 ```
 

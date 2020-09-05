@@ -2,7 +2,7 @@
 
 Module-level constants allow the user to define fixed data that is shared across functions (or exported to be shared across modules). The syntax is simply:
 
-```rust,ignore
+```alan
 const varname: typename = constvalue
 const othervar = otherconstval
 ```
@@ -11,7 +11,7 @@ The `typename` is not required due to type inference, but can be added for clari
 
 For those coming from Javascript/Typescript, `const` in Alan is much more strict. A constant is truly constant, not just a variable that can't be reassigned with a new struct. This means the following is invalid:
 
-```rust,ignore
+```alan
 const pushedVals = new Array<int64> [ ]
 
 fn saveForLater(val: int64) {
