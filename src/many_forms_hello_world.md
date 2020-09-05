@@ -6,7 +6,7 @@ Alan is in the middle, requiring some concepts from the get-go that would be con
 
 ### `hello_world_1.ln`
 
-```rust,editable
+```alan,editable
 import @std/app
 
 on app.start {
@@ -25,7 +25,7 @@ Finally, "emit application exit zero" isn't super clear, but for those familiar 
 
 ### `hello_world_2.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 on start {
@@ -38,7 +38,7 @@ Almost identical to the first, but it pulls the pieces of the `app` namespace in
 
 ### `hello_world_3.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print as put, exit
 
 on start {
@@ -51,7 +51,7 @@ This example demonstrates the renaming syntax on import, so you can choose a nam
 
 ### `hello_world_4.ln`
 
-```rust,editable
+```alan,editable
 import @std/app as program
 
 on program.start {
@@ -64,7 +64,7 @@ Same as the previous, but the renaming is applied to the module name, rather tha
 
 ### `hello_world_5.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 const helloWorld: string = "Hello, World!"
@@ -79,7 +79,7 @@ This example demonstrates printing a variable instead of an inline constant.
 
 ### `hello_world_6.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, exit, print
 
 on start fn {
@@ -94,7 +94,7 @@ This example demonstrates how values can be combined together to produce the des
 
 ### `hello_world_7.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 on start {
@@ -107,7 +107,7 @@ This demonstrates the "method-style" function call syntax, which allows those wh
 
 ### `hello_world_8.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 fn main() {

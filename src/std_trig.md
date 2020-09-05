@@ -4,7 +4,7 @@ This standard library provides the constants [e](https://simple.wikipedia.org/wi
 
 All of the trigonometric functions are exported with both `float32` and `float64` support, and with both a short 3-5 character name common in textbooks and a fully-spelled out name. Eg, `sin` is the same as `sine` and `ahcc` is the same as `archacovercosine`. The meanings and uses of the trigonometric functions will not be covered in here as the Wikipedia links in the first paragraph provide a far better and in-depth explanation, including some [great visual diagrams](https://upload.wikimedia.org/wikipedia/commons/9/9d/Circle-trig6.svg) that can elucidate things quickly for those already familiar with the classic `sin`, `cos`, and `tan`. Instead, below will be a listing of the signatures of everything exported by the library.
 
-```rust
+```alan
 e: float64
 pi: float64
 tau: float64

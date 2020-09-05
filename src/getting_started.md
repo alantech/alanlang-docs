@@ -20,7 +20,7 @@ cargo install alan-runtime
 
 After installation, first create a file named `hello_world.ln` and then write the following within it:
 
-```rust,editable
+```alan,editable
 import @std/app
 
 on app.start {

@@ -4,7 +4,7 @@ These examples are still relatively simple (they fit in a single file) but they 
 
 ### `math.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 on start fn {
@@ -30,7 +30,7 @@ on start fn {
 This example shows multiple math operations and their results, with the last statement demonstrating the order of operations effectively inverting the computational flow of that statement.
 
 ### `object_literals.ln`
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 type MyType {
@@ -83,7 +83,7 @@ on start {
 This example demonstrates the three (so far) object literal syntaxes and sub-value accessor syntaxes.
 
 ### `if.ln`
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 fn bar() {
@@ -153,7 +153,7 @@ This example demonstrates conditionals (if statements) and shows that the condit
 <!-- TODO: Restore these once we figure out how to do multi-file examples in mdbook and our browser-transpiled compiler
 ### `datetime.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import print
 
 export type Year {
@@ -356,7 +356,7 @@ This more complex example defines a simplistic DateTime type and associated type
 
 ### `test_datetime.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, exit
 
 from ./datetime import DateTime, print, #, -, :, @, +
@@ -372,7 +372,7 @@ This file uses the `datetime.ln` file to very concisely define a time in ISO for
 
 ### `method.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 from ./datetime import DateTime, print, #, -, :, @, +
@@ -400,7 +400,7 @@ This example introduces method syntax, and shows multiple variants of the same s
 
 ### `string.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 on start fn {
@@ -440,7 +440,7 @@ This example exercises many string manipulation mechanisms and alternate syntaxe
 
 ### `box.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 // Generic types don't need to be capitalized, but it tends to look nicer
@@ -486,7 +486,7 @@ This example uses generics to define a Box type and how to work with it at a bas
 
 ### `loop.ln`
 
-```rust,editable
+```alan,editable
 from @std/app import start, print, exit
 
 event loop: int64
@@ -512,7 +512,7 @@ This is slow and intentionally awkward because this is an escape hatch to Turing
 <!-- TODO: Should we even have an http server example in here? We can't run it. Also this syntax is very wrong
 ### `http.ln`
 
-```rust,editable
+```alan,editable
 import @std/http
 
 on http.port(8080) fn (socket: http.Socket) {
