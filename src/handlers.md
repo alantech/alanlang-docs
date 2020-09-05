@@ -10,13 +10,13 @@ Furthermore, function calls within the handler run may trigger multiple simultan
 
 The event handler syntax is relatively simple:
 
-```rust,ignore
+```alan
 on eventName function
 ```
 
 where `eventName` is the name of the event to register a handler for and `function` is either the name of a function, or an in-line defined function, eg:
 
-```rust,ignore
+```alan
 on event fn namedHandler(argument: eventType) {
   ...
 }
@@ -24,7 +24,7 @@ on event fn namedHandler(argument: eventType) {
 
 for a fully-named in-line defined function with an event payload. Without a payload, the argument list can be dropped:
 
-```rust,ignore
+```alan
 on event fn namedHandler {
   ...
 }
@@ -32,7 +32,7 @@ on event fn namedHandler {
 
 In both cases, the name is also optional because it is being registered immediately:
 
-```rust,ignore
+```alan
 on event fn (argument: eventType) {
   ...
 }
@@ -40,7 +40,7 @@ on event fn (argument: eventType) {
 
 or
 
-```rust,ignore
+```alan
 on event fn {
   ...
 }
@@ -48,7 +48,7 @@ on event fn {
 
 The latter purely-side-effect-only function can also omit the `fn` if desired as it is unambiguous in this context:
 
-```rust,ignore
+```alan
 on event {
   ...
 }

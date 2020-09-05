@@ -245,13 +245,13 @@
 <script type="text/javascript">
     window.BigInt = window.BigInt || function() {}
 </script>
+
+<script src="{{ path_to_root }}clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{{ path_to_root }}highlight.js" type="text/javascript" charset="utf-8"></script>
 <!-- Custom JS scripts -->
 {{#each additional_js}}
     <script type="text/javascript" src="{{ ../path_to_root }}{{this}}"></script>
 {{/each}}
-
-<script src="{{ path_to_root }}clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="{{ path_to_root }}highlight.js" type="text/javascript" charset="utf-8"></script>
 <script src="{{ path_to_root }}book.js" type="text/javascript" charset="utf-8"></script>
 
 </body>

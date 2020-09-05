@@ -4,19 +4,19 @@ Currently very bare, only a single `print` function that takes all of the basic 
 
 The formal declarations:
 
-```rust,ignore
+```alan
 fn print(Stringifiable): void
 ```
 
-```rust,ignore
+```alan
 event start: void
 ```
 
-```rust,ignore
+```alan
 event exit: int8
 ```
 
-```rust,ignore
+```alan
 event stdout: string
 ```
 

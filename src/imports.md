@@ -24,7 +24,7 @@ The second form begins with an `@` and is a `named import`. It uses a more advan
 
 Once you've identified the module you want to import, now it's time to decide how you want to import it. There's the basic scoped import and the "plucking" unscoped import. These syntaxes are essentially lifted wholesale from Python:
 
-```rust,ignore
+```alan
 import @std/http
 import ./my/module as myModule
 from @std/app import start, print as println, exit

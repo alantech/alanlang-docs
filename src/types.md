@@ -12,20 +12,20 @@ The four "main" basic types (`int64`, `float64`, `bool` and `void`) have constan
 
 The integers have basic base-10 integer form as well as hexadecimal form. Binary and Octal forms are not implemented but that may change if there is demand for it.
 
-```rust,ignore
+```alan
 const base10 = 12345
 const base16 = 0xabcde
 ```
 
 The floating point numbers have only basic base-10 with a decimal point form, no scientific notation form yet, but that may change if there is demand for it.
 
-```rust,ignore
+```alan
 const floating = 1.2345
 ```
 
 Booleans are represented by the keywords `true` and `false`. `void` has no representation beyond `void`. It can't be assigned to, and is meant to represent functions that return nothing.
 
-```rust,ignore
+```alan
 const boolean = true
 const someVoid = void
 ```
@@ -38,7 +38,7 @@ Strings (`string`) are a bit beyond the basic type. From the perspective of the 
 
 Strings are defined by wrapping double or single quotes (`"` or `'`) around text. They work identically to Javascript strings, with the same sorts of C-style escape codes. Within the runtime, however, they are represented as Pascal strings with a 64-bit header, which makes certain operations faster than their C-string counterparts (particularly length checking, which is O(1)) but means 8 extra bytes are required for each string versus C-string's traditional 1 extra byte, so lots of small strings will consume more memory.
 
-```rust,ignore
+```alan
 const myString = "My string's string"
 const myOtherString = 'My other string\'s string'
 ```
@@ -49,7 +49,7 @@ Strings are also included in the root scope and never need to be explicitly defi
 
 User-defined types must be declared by the user and they follow the following syntax:
 
-```rust,ignore
+```alan
 type typename {
   propertyName: propertyType
   otherProperty: otherType
@@ -58,7 +58,7 @@ type typename {
 
 The syntax to construct a new instance of a user type is as follows:
 
-```rust,ignore
+```alan
 const myVal: typename = new typename {
   propertyName = propertyValue
   otherProperty = otherValue
@@ -67,7 +67,7 @@ const myVal: typename = new typename {
 
 The redundant `typename` in that example will also eventually be eliminated by type inference, reducing it to just:
 
-```rust,ignore
+```alan
 const myVal = new typename {
   propertyName = propertyValue
   otherProperty = otherValue
@@ -78,7 +78,7 @@ User-defined types have another interesting feature: they can be generic. That m
 
 Generic types look like this:
 
-```rust,ignore
+```alan
 type typename<A, B> {
   propertyName: A
   otherProperty: B
@@ -87,13 +87,13 @@ type typename<A, B> {
 
 Where later on you can "solidify" that type either by creating an alias with the types filled in:
 
-```rust,ignore
+```alan
 type typenameIntStr = typename<int64, string>
 ```
 
 or just declaring a variable that uses a "solidified" type:
 
-```rust,ignore
+```alan
 let myVar = new typename<bool, float64> {
   propertyName = true
   otherProperty = 0.0

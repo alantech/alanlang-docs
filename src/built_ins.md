@@ -32,19 +32,19 @@ The `int64` and `float64` types are special among the numeric types, as these ar
 
 There are a few built-in [interfaces](./interfaces.md) meant for working with several built-in types and functions.
 
-```rust,ignore
+```alan
 // An empty interface, it can match any value, but you can only accept it and pass it along to
 // something else. Useful for logical "glue" functions like `pair`, `cond`, `map`, `reduce`, etc.
 interface any {}
 ```
 
-```rust,ignore
+```alan
 // A second empty interface, useful to allow functions to declare that it accepts two arguments of
 // any kind and they don't need to match each other.
 interface anythingElse {}
 ```
 
-```rust,ignore
+```alan
 // An interface that restricts valid types to only those that can be converted into strings. Useful
 // for printing.
 interface Stringifiable {
@@ -52,7 +52,7 @@ interface Stringifiable {
 }
 ```
 
-```rust,ignore
+```alan
 // An interface that determines if a type is hashable and comparable. Used by HashMap for the keys.
 interface Hashable {
   toHash(Hashable): int64
@@ -66,7 +66,7 @@ The [function](./functions.md) signatures will be written in the form `functionN
 
 ##### Type Coersion
 
-```rust,ignore
+```alan
 // Converts the built-in basic types to 64-bit floats
 toFloat64(int8): float64
 toFloat64(int16): float64
@@ -78,7 +78,7 @@ toFloat64(bool): float64
 toFloat64(string): float64
 ```
 
-```rust,ignore
+```alan
 // Converts the built-in basic types to 32-bit floats
 toFloat32(int8): float32
 toFloat32(int16): float32
@@ -90,7 +90,7 @@ toFloat32(bool): float32
 toFloat32(string): float32
 ```
 
-```rust,ignore
+```alan
 // Converts the built-in basic types to 64-bit integers
 toInt64(int8): int64
 toInt64(int16): int64
@@ -102,7 +102,7 @@ toInt64(bool): int64
 toInt64(string): int64
 ```
 
-```rust,ignore
+```alan
 // Converts the built-in basic types to 32-bit integers
 toInt32(int8): int32
 toInt32(int16): int32
@@ -114,7 +114,7 @@ toInt32(bool): int32
 toInt32(string): int32
 ```
 
-```rust,ignore
+```alan
 // Converts the built-in basic types to 16-bit integers
 toInt16(int8): int16
 toInt16(int16): int16
@@ -126,7 +126,7 @@ toInt16(bool): int16
 toInt16(string): int16
 ```
 
-```rust,ignore
+```alan
 // Converts the built-in basic types to 8-bit integers
 toInt8(int8): int8
 toInt8(int16): int8
@@ -138,7 +138,7 @@ toInt8(bool): int8
 toInt8(string): int8
 ```
 
-```rust,ignore
+```alan
 // Converts the built-in basic types to booleans
 toBool(int8): bool
 toBool(int16): bool
@@ -150,7 +150,7 @@ toBool(bool): bool
 toBool(string): bool
 ```
 
-```rust,ignore
+```alan
 // Converts the built-in types to strings
 toString(int8): string
 toString(int16): string
@@ -168,7 +168,7 @@ These coersions will not fail. When converting down into an integer of a smaller
 
 ##### Arithmetic
 
-```rust,ignore
+```alan
 // Adds two numbers
 add(int8, int8): int8
 add(int16, int16): int16
@@ -178,7 +178,7 @@ add(float32, float32): float32
 add(float64, float64): float64
 ```
 
-```rust,ignore
+```alan
 // Subtracts two numbers
 sub(int8, int8): int8
 sub(int16, int16): int16
@@ -188,7 +188,7 @@ sub(float32, float32): float32
 sub(float64, float64): float64
 ```
 
-```rust,ignore
+```alan
 // Negates the number
 negate(int8, int8): int8
 negate(int16, int16): int16
@@ -198,7 +198,7 @@ negate(float32, float32): float32
 negate(float64, float64): float64
 ```
 
-```rust,ignore
+```alan
 // Returns the absolute value of the number
 abs(int8, int8): int8
 abs(int16, int16): int16
@@ -208,7 +208,7 @@ abs(float32, float32): float32
 abs(float64, float64): float64
 ```
 
-```rust,ignore
+```alan
 // Multiplies two numbers
 mul(int8, int8): int8
 mul(int16, int16): int16
@@ -218,7 +218,7 @@ mul(float32, float32): float32
 mul(float64, float64): float64
 ```
 
-```rust,ignore
+```alan
 // Divides two numbers
 div(int8, int8): int8
 div(int16, int16): int16
@@ -228,7 +228,7 @@ div(float32, float32): float32
 div(float64, float64): float64
 ```
 
-```rust,ignore
+```alan
 // Raises the first number to the power of the second number
 pow(int8, int8): int8
 pow(int16, int16): int16
@@ -238,7 +238,7 @@ pow(float32, float32): float32
 pow(float64, float64): float64
 ```
 
-```rust,ignore
+```alan
 // Returns the modulus (remainder) of an integer division
 mod(int8, int8): int8
 mod(int16, int16): int16
@@ -246,7 +246,7 @@ mod(int32, int32): int32
 mod(int64, int64): int64
 ```
 
-```rust,ignore
+```alan
 // Returns the square root of a number
 sqrt(float32): float32
 sqrt(float64): float64
@@ -254,7 +254,7 @@ sqrt(float64): float64
 
 ##### Logical and Bitwise
 
-```rust,ignore
+```alan
 // Return the logical or bitwise `and`
 and(int8, int8): int8
 and(int16, int16): int16
@@ -263,7 +263,7 @@ and(int64, int64): int64
 and(bool, bool): bool
 ```
 
-```rust,ignore
+```alan
 // Return the logical or bitwise `or`
 or(int8, int8): int8
 or(int16, int16): int16
@@ -272,7 +272,7 @@ or(int64, int64): int64
 or(bool, bool): bool
 ```
 
-```rust,ignore
+```alan
 // Return the logical or bitwise `xor`
 xor(int8, int8): int8
 xor(int16, int16): int16
@@ -281,7 +281,7 @@ xor(int64, int64): int64
 xor(bool, bool): bool
 ```
 
-```rust,ignore
+```alan
 // Return the logical or bitwise `not`
 not(int8): int8
 not(int16): int16
@@ -290,7 +290,7 @@ not(int64): int64
 not(bool): bool
 ```
 
-```rust,ignore
+```alan
 // Return the logical or bitwise `nand`
 nand(int8, int8): int8
 nand(int16, int16): int16
@@ -299,7 +299,7 @@ nand(int64, int64): int64
 nand(bool, bool): bool
 ```
 
-```rust,ignore
+```alan
 // Return the logical or bitwise `nor`
 nor(int8, int8): int8
 nor(int16, int16): int16
@@ -308,7 +308,7 @@ nor(int64, int64): int64
 nor(bool, bool): bool
 ```
 
-```rust,ignore
+```alan
 // Return the logical or bitwise `xnor`
 xnor(int8, int8): int8
 xnor(int16, int16): int16
@@ -319,7 +319,7 @@ xnor(bool, bool): bool
 
 ##### Comparators
 
-```rust,ignore
+```alan
 // Checks if the two values are equal
 eq(int8, int8): bool
 eq(int16, int16): bool
@@ -331,7 +331,7 @@ eq(string, string): bool
 eq(bool, bool): bool
 ```
 
-```rust,ignore
+```alan
 // Checks if the two values are not equal
 neq(int8, int8): bool
 neq(int16, int16): bool
@@ -343,7 +343,7 @@ neq(string, string): bool
 neq(bool, bool): bool
 ```
 
-```rust,ignore
+```alan
 // Checks if the first value is less than the second
 lt(int8, int8): bool
 lt(int16, int16): bool
@@ -354,7 +354,7 @@ lt(float64, float64): bool
 lt(string, string): bool
 ```
 
-```rust,ignore
+```alan
 // Checks if the first value is less than or equal to the second
 lte(int8, int8): bool
 lte(int16, int16): bool
@@ -365,7 +365,7 @@ lte(float64, float64): bool
 lte(string, string): bool
 ```
 
-```rust,ignore
+```alan
 // Checks if the first value is greater than the second
 gt(int8, int8): bool
 gt(int16, int16): bool
@@ -376,7 +376,7 @@ gt(float64, float64): bool
 gt(string, string): bool
 ```
 
-```rust,ignore
+```alan
 // Checks if the first value is greater than or equal to the second
 gte(int8, int8): bool
 gte(int16, int16): bool
@@ -389,7 +389,7 @@ gte(string, string): bool
 
 ##### Wait functions
 
-```rust,ignore
+```alan
 // Waits the specified number of milliseconds and then continues execution
 wait(int8): void
 wait(int16): void
@@ -399,17 +399,17 @@ wait(int64): void
 
 ##### String Manipulation
 
-```rust,ignore
+```alan
 // Concatenate two strings together
 concat(string, string): string
 ```
 
-```rust,ignore
+```alan
 // Splits the first string into an array of strings divided by the second delimiter string
 split(string, string): Array<string>
 ```
 
-```rust,ignore
+```alan
 // Repeats the contents of the string `n` times (so `repeat("hello", 1)` returns `"hello"`)
 repeat(string, int8): string
 repeat(string, int16): string
@@ -417,39 +417,39 @@ repeat(string, int32): string
 repeat(string, int64): string
 ```
 
-```rust,ignore
+```alan
 // Takes a string template and a HashMap of string keys to string values to substitute in
 template(string, HashMap<string, string>): string
 ```
 
-```rust,ignore
+```alan
 // Check if the first string matches the regular expression defined by the second string
 matches(string, string): bool
 ```
 
-```rust,ignore
+```alan
 // Returns the location of the second string within the first string as a Result, or errors
 index(string, string): Result<int64>
 ```
 
-```rust,ignore
+```alan
 // Returns the length of the string (as a byte array, not UTF codepoints)
 length(string): int64
 ```
 
-```rust,ignore
+```alan
 // Removes the whitespace on either end of the string
 trim(string): string
 ```
 
 ##### Array Manipulation
 
-```rust,ignore
+```alan
 // Concatenate two arrays into a new array containing the values of both
 concat(Array<any>, Array<any>): Array<any>
 ```
 
-```rust,ignore
+```alan
 // Create a new array with the contents of the original array repeated `n` times
 repeat(Array<any>, int8): Array<any>
 repeat(Array<any>, int16): Array<any>
@@ -457,7 +457,7 @@ repeat(Array<any>, int32): Array<any>
 repeat(Array<any>, int64): Array<any>
 ```
 
-```rust,ignore
+```alan
 // Find the index of the specified value in the array in a Result, or errors
 index(Array<any>, any): Result<int64>
 index(Array<int8>, int8): Result<int64>
@@ -469,7 +469,7 @@ index(Array<float64>, float64): Result<int64>
 index(Array<bool>, bool): Result<int64>
 ```
 
-```rust,ignore
+```alan
 // Returns true if the array has the specified value or false otherwise
 has(Array<any>, any): bool
 has(Array<int8>, int8): bool 
@@ -481,7 +481,7 @@ has(Array<float64>, float64): bool
 has(Array<bool>, bool): bool
 ```
 
-```rust,ignore
+```alan
 // Push a value into the array and return the updated array
 push(Array<any>, any): Array<any>
 push(Array<int8>, int8): Array<int8>
@@ -493,24 +493,24 @@ push(Array<float64>, float64): Array<float64>
 push(Array<bool>, bool): Array<bool>
 ```
 
-```rust,ignore
+```alan
 // Pop a value from an array and return that value wrapped in a result (or an error result)
 pop(Array<any>): Result<any>
 ```
 
-```rust,ignore
+```alan
 // Execute the provided side-effect function on each element of the array
 each(Array<any>, function): void // Parallel if possible and worthwhile
 eachLin(Array<any>, function): void // Forced linear execution
 ```
 
-```rust,ignore
+```alan
 // Execute the provided converter function on each element of the array and return a new array
 map(Array<any>, function): Array<anythingElse> // Parallel if possible and worthwhile
 mapLin(Array<any>, function): Array<anythingElse> // Forced linear execution
 ```
 
-```rust,ignore
+```alan
 // Execute the combining function on the array and return the new value
 // The two argument reduce functions reduce into the same type as the input, while the
 // three and four argument reduce functions reduce into a new type. The three argument reduce
@@ -524,37 +524,37 @@ reduce(Array<any>, function, anythingElse): anythingElse // Forced linear execut
 reducePar(Array<any>, function, function, anythingElse): anythingElse // Parallel if possible and worthwhile
 ```
 
-```rust,ignore
+```alan
 // Execute the filtering function on the array and return a new array with the allowed values
 filter(Array<any>, function): Array<any> // Parallel if possible and worthwhile
 ```
 
-```rust,ignore
+```alan
 // Execute the comparison function on the array and return the first element that passes the check,
 // or an error
 find(Array<any>, function): Result<any> // Parallel if possible and worthwhile
 findLin(Array<any>, function): Result<any> // Forced linear execution
 ```
 
-```rust,ignore
+```alan
 // Execute the comparison function on the array and return `true` if all elements pass the check
 every(Array<any>, function): bool // Parallel if possible and worthwhile
 everyLin(Array<any>, function): bool // Forced linear execution
 ```
 
-```rust,ignore
+```alan
 // Execute the comparison function on the array and return `true` if any element passes the check
 some(Array<any>, function): bool // Parallel if possible and worthwhile
 someLin(Array<any>, function): bool // Forced linear execution
 ```
 
-```rust,ignore
+```alan
 // Take an array of strings and merge them into one string separated by the separator string. The
 // inverse of the `split` function
 join(Array<string>, string): string
 ```
 
-```rust,ignore
+```alan
 // Override the value of an array element with a new value
 set(Array<any>, int64, any): Result<Array<any>>
 set(Array<int8>, int64, int8): Result<Array<int8>>
@@ -568,7 +568,7 @@ set(Array<bool>, int64, bool): Result<Array<bool>>
 
 ##### HashMap Manipulation
 
-```rust,ignore
+```alan
 // Converts a value into a hash using the [xxh64](https://cyan4973.github.io/xxHash/) algorithm.
 // No user code ever has to overload the `toHash` function with their own implementation, but it is
 // required that the `eq` function is for user-defined types to check for hash collisions.
@@ -581,68 +581,68 @@ toHash(float64): int64
 toHash(bool): int64
 ```
 
-```rust,ignore
+```alan
 // Takes a HashMap and returns an Array of KeyVal pairs
 keyVal(HashMap<Hashable, any>): Array<KeyVal<Hashable, any>>
 ```
 
-```rust,ignore
+```alan
 // Takes a HashMap and returns an Array of keys
 keys(HashMap<Hashable, any>): Array<Hashable>
 ```
 
-```rust,ignore
+```alan
 // Takes a HashMap and returns an Array of values
 values(HashMap<Hashable, any>: Array<any>
 ```
 
-```rust,ignore
+```alan
 // Takes a HashMap and returns the number of KeyVal pairs contained
 length(HashMap<Hashable, any>): int64
 ```
 
-```rust,ignore
+```alan
 // Sets a key-value pair in the HashMap and returns the HashMap for chaining
 set(HashMap<Hashable, any>, Hashable, any): HashMap<Hashable, any>
 ```
 
-```rust,ignore
+```alan
 // Gets the value for a given key or an error
 get(HashMap<Hashable,any>, Hashable): Result<any>
 ```
 
-```rust,ignore
+```alan
 // Creates a new HashMap object with the first key-val pair and a decently-sized set of defaults for
 // the indexing
 newHashMap(Hashable, any): HashMap<Hashable, any>
 ```
 
-```rust,ignore
+```alan
 // The inverse of `keyVal`, takes an `Array<KeyVal<Hashable, any>>` and reindexes it as HashMap
 toHashMap(Array<KeyVal<Hashable, any>>): HashMap<Hashable, any>
 ```
 
 ##### "Ternary" Functions
 
-```rust,ignore
+```alan
 // Takes two values of the same type and returns an array of those two values
 pair(any, any): Array<any>
 ```
 
-```rust,ignore
+```alan
 // Takes a boolean and an array of two values and returns the first value on `true` and the second
 // on `false`
 cond(bool, Array<any>): any
 ```
 
-```rust,ignore
+```alan
 // Takes a boolean and a function and conditionally executes that function if the bool is `true`
 cond(bool, function): void
 ```
 
 ##### Clone Functions
 
-```rust,ignore
+```alan
 // Explicitly duplicates the provided value and returns it, useful when you don't want to mutate
 // the original value
 clone(any): any
@@ -660,92 +660,92 @@ clone(string): string
 
 ##### Error, Maybe, Result, and Either Functions
 
-```rust,ignore
+```alan
 // Returns a non-error error object
 noerr(): Error
 ```
 
-```rust,ignore
+```alan
 // Wraps a given value into a Maybe type
 some(any): Maybe<any>
 ```
 
-```rust,ignore
+```alan
 // Creates an unassigned Maybe type
 none(): Maybe<void>
 ```
 
-```rust,ignore
+```alan
 // Determines if the Maybe has a value
 isSome(Maybe<any>): bool
 ```
 
-```rust,ignore
+```alan
 // Determines if the Maybe has no value
 isNone(Maybe<any>): bool
 ```
 
-```rust,ignore
+```alan
 // Returns the Maybe's value, or the default value if there is no value
 getOr(Maybe<any>, any): any
 ```
 
-```rust,ignore
+```alan
 // Creates a Result with a value
 ok(any): Result<any>
 ```
 
-```rust,ignore
+```alan
 // Creates a Result with an Error
 err(string): Result<any>
 ```
 
-```rust,ignore
+```alan
 // Checks if the Result has a value
 isOk(Result<any>): bool
 ```
 
-```rust,ignore
+```alan
 // Checks if the Result has an Error
 isErr(Result<any>): bool
 ```
 
-```rust,ignore
+```alan
 // Gets the Result's value or default if it is an Error
 getOr(Result<any>, any): any
 ```
 
-```rust,ignore
+```alan
 // Gets the Result's Error or default if it is a value
 getErr(Result<any>, Error): Error
 ```
 
-```rust,ignore
+```alan
 // Creates an Either with the main (first) type set
 main(any): Either<any, void>
 ```
 
-```rust,ignore
+```alan
 // Creates and Either with the alternative (second) type set
 alt(any): Either<void, any>
 ```
 
-```rust,ignore
+```alan
 // Checks if the Either's main type is set
 isMain(Either<any, anythingElse>): bool
 ```
 
-```rust,ignore
+```alan
 // Checks if the Either's alt type is set
 isAlt(Either<any, anythingElse>): bool
 ```
 
-```rust,ignore
+```alan
 // Gets the main type or the default if it is the alt type
 getMainOr(Either<any, anythingElse>, any): any
 ```
 
-```rust,ignore
+```alan
 // Gets the alt type or the default if it is the main type
 getAltOr(Either<any, anythingElse>, anythingElse): anythingElse
 ```

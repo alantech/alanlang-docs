@@ -6,13 +6,13 @@ Constants, types, functions, operators, events, and interfaces are exportable wh
 
 This can either be done in-line with the declaration of the item in question:
 
-```rust,ignore
+```alan
 export const foo: bool = true
 ```
 
 Or it can be done by referencing the name of the thing to be exported after it has been declared:
 
-```rust,ignore
+```alan
 type Foo {
   bar: string
   baz: bool

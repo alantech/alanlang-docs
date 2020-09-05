@@ -2,7 +2,7 @@
 
 Also very bare, only a single type `ExecRes`, and a function: `exec` with the signature:
 
-```rust,ignore
+```alan
 type ExecRes {
   exitCode: int64
   stdout: string
@@ -10,7 +10,7 @@ type ExecRes {
 }
 ```
 
-```rust,ignore
+```alan
 exec(string): ExecRes
 ```
 
