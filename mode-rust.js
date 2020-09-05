@@ -89,7 +89,7 @@ var RustHighlightRules = function() {
             regex: /[+\-\/*^.~`!@#$%&|:;<?=][+\-\/*^.~`!@#$%&|:;<>?=]*/
         }],
         "#booleans": [{
-            token: "string.other",
+            token: "constant.numeric",
             regex: /\b(?:true|false)\b/
         }],
         "#doubleQuoteStrings": [{
