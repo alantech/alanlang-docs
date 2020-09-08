@@ -4,7 +4,7 @@ The [Alan Standard Library](./standard_library.md), [AMM](./amm_language_referen
 
 The Alan runtime opcodes are identified with a 64-bit integer and have exactly 3 64-bit arguments. The 64-bit integers have been chosen to match a space-padded string of the name of the opcode (therefore allowing the opcodes to have names from 1-8 ASCII characters long). Most opcodes use the first two arguments as input addresses and the last argument as an output address, but some treat them as constants, event ids, or ignored values.
 
-The following table will specify the opcode name followed by the three arguments (arg0, arg1, arg2) with the kind of argument given (IN = Input Address, OUT = Output Address, CONST = Constant Value, EVENT = Event Name, NULL = Ignored) and then a short description of what that opcode does.
+The following table will specify the opcode name followed by the three arguments (arg0, arg1, arg2) with the kind of argument given (IN = Input Address, OUT = Output Address, CONST = Constant Value, EVENT = Event Name, NULL = Ignored) and then a short description of what that opcode does. A few opcodes will have an UNSAFE flag on them in their description. These opcodes can potentially crash the runtime if called incorrectly and rely on the compiler to use them wisely.
 
 <table>
   <thead>
