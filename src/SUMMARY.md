@@ -1,7 +1,7 @@
 # Summary
 
 - [Getting Started](./getting_started.md)
-- [About `alan`](./about_alan.md)
+- [About Alan](./about_alan.md)
 - [Language Reference](./language_reference.md)
   - [Syntax and File Structure](./file_structure.md)
     - [Implied Structure: Scope](./scope.md)
@@ -32,4 +32,8 @@
   - [The many forms of "Hello, World!"](./many_forms_hello_world.md)
   - [More advanced examples](./advanced_examples.md)
 - [Transpile to Javascript](./transpile_js.md)
-- [Contributing to `alan`](./contributing.md)
+- [Contributing to Alan](./contributing.md)
+- [Compiler Internals](./compiler_internals.md)
+  - [AMM Language Reference](./amm_language_reference.md)
+  - [AGA Language Reference](./aga_language_reference.md)
+  - [Alan Opcode Reference](./alan_opcode_reference.md)
