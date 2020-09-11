@@ -1,6 +1,8 @@
 #### Built-in Types
 
-The built-in types for Alan are included in the root scope and never need to be explicitly defined:
+The built-in types for Alan are included in the root scope and never need to be explicitly defined. Built-in types divide into three categories: basic types, strings, and special types.
+
+##### Basic Types
 
 * `void`
 * `int8`
@@ -10,23 +12,10 @@ The built-in types for Alan are included in the root scope and never need to be 
 * `float32` or `float`
 * `float64`
 * `bool`
-* `string`
-* `function`
-* `Array<V>`
-* `HashMap<K, V>`
-* `KeyVal<K, V>`
-* `Error`
-* `Maybe<T>`
-* `Result<T>`
-* `Either<T, U>`
-
-The `int64` and `float64` types are special among the numeric types, as these are the types that any numeric constant will be represented as, depending on whether or not it has a decimal. They have been given aliases of `int` and `float` respectively for that reason.
-
-Built-in types divide into a few categories: basic types, strings, and special types.
-
-##### Basic Types
 
 Basic types include integers (`int8`, `int16`, `int32`, and `int64`), floating point numbers (`float32` and `float64`), booleans (`bool`), and the `void` (no value) type. The numbers refer to the number of bits consumed by the basic type. There are currently no unsigned variants of the integer types, though that may change if there is demand for it.
+
+The `int64` and `float64` types are special among the numeric types, as these are the types that any numeric constant will be represented as, depending on whether or not it has a decimal. They have been given aliases of `int` and `float` respectively for that reason.
 
 The four "main" basic types (`int64`, `float64`, `bool` and `void`) have constant representations that you can easily type. The non-64-bit numeric types are considered specialized types and are discouraged (the runtime does not take advantage of the potential space optimizations they provide to keep the internal memory addressing system simpler), so constants for those types must be explicitly casted using the `to<Type>` functions discussed in the [Type Coersion](./type_coersion.md) section.
 
@@ -62,3 +51,25 @@ Strings are defined by wrapping double or single quotes (`"` or `'`) around text
 const myString = "My string's string"
 const myOtherString = 'My other string\'s string'
 ```
+
+##### Special Types
+
+* `function`
+* `Error`
+* `Maybe<T>`
+* `Result<T>`
+* `Either<T, U>`
+* `Array<V>`
+* `HashMap<K, V>`
+* `KeyVal<K, V>`
+
+Functions are covered in the [Functions](./functions.md) section. `Either<T, U>` is a special type that can hold two values. Other special types are built on top of it. `Maybe<T>` is equivalent to `Either<T, void>` and `Result<T>` is equivalent to `Either<T, Error>`. `Error` and `Result` are more extensively covered in the [Error Handling](../error_handling.md) section.
+
+A `HashMap<K, V>` creates a mapping from `K` to `V`. An `Array<V>` in Alan can hold more than one `V` at a time. Arrays can be defined with an explicit type or the compiler can infer the type for you:
+
+```alan
+const test = new Array<int> [ 1, 2, 3, 4, 5 ]
+const count = [1, 2, 3, 4, 5]
+```
+
+The sections that cover built-in functions for [Array Manipulation](./array_api.md) and [HashMap Manipulation](./hashmap_api.md) provide a better sense of how to manipulate the values stored in `Array<V>`, `HashMap<K, V>` and `KeyVal<K, V>`.
