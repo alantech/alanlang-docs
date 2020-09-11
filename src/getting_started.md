@@ -31,9 +31,7 @@ Expand-Archive -Path alan-windows.zip -DestinationPath C:\windows
 
 ### Source Installation
 
-If your operating system and/or CPU architecture do not match the above, you'll need a development environment to build Alan locally.
-
-You'll need:
+If you wish to contribute to Alan, or if your operating system and/or CPU architecture do not match the above, you'll need a development environment to build Alan locally:
 
 * git (any recent version should work)
 * Node.js >=10.20.1, <14.0.0
@@ -49,8 +47,6 @@ cd alan
 make
 sudo make install
 ```
-
-This may take a few hours.
 
 ## Writing a Hello, World! Example
 
