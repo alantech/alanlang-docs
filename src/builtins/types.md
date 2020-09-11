@@ -1,6 +1,6 @@
 #### Built-in Types
 
-The built-in types for Alan are:
+The built-in types for Alan are included in the root scope and never need to be explicitly defined:
 
 * `void`
 * `int8`
@@ -62,5 +62,3 @@ Strings are defined by wrapping double or single quotes (`"` or `'`) around text
 const myString = "My string's string"
 const myOtherString = 'My other string\'s string'
 ```
-
-Strings are also included in the root scope and never need to be explicitly defined.
