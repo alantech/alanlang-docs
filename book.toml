@@ -32,4 +32,4 @@ line-numbers = true
 
 [output.html.fold]
 enable = true
-level = 3
+level = 0
