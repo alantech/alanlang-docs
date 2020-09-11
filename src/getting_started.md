@@ -9,7 +9,7 @@ For users on Windows, MacOS, and Ubuntu Linux with x86-64 processors, you can [d
 For Linux:
 
 ```bash
-wget https://github.com/alantech/alan/releases/download/v0.1.6/alan-ubuntu.tar.gz
+wget https://github.com/alantech/alan/releases/download/v0.1.7/alan-ubuntu.tar.gz
 tar -xzf alan-ubuntu.tar.gz
 sudo mv alan /usr/local/bin/alan
 ```
@@ -17,8 +17,8 @@ sudo mv alan /usr/local/bin/alan
 For MacOS:
 
 ```bash
-curl -OL https://github.com/alantech/alan/releases/download/v0.1.6/alan-macos.tar.gz
-tar -xzf alan-ubuntu.tar.gz
+curl -OL https://github.com/alantech/alan/releases/download/v0.1.7/alan-macos.tar.gz
+tar -xzf alan-macos.tar.gz
 # sudo mkdir -p /usr/local/bin if the folder does not exist
 sudo mv alan /usr/local/bin/alan
 ```
@@ -26,7 +26,7 @@ sudo mv alan /usr/local/bin/alan
 For Windows:
 
 ```ps1
-Invoke-WebRequest -OutFile alan-windows.zip -Uri https://github.com/alantech/alan/releases/download/v0.1.6/alan-windows.zip
+Invoke-WebRequest -OutFile alan-windows.zip -Uri https://github.com/alantech/alan/releases/download/v0.1.7/alan-windows.zip
 Expand-Archive -Path alan-windows.zip -DestinationPath C:\windows
 ```
 
