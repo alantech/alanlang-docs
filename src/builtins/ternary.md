@@ -1,9 +1,13 @@
-##### "Ternary" Functions
+#### "Ternary" Functions
+
+##### pair
 
 ```alan
 // Takes two values of the same type and returns an array of those two values
 pair(any, any): Array<any>
 ```
+
+##### cond
 
 ```alan
 // Takes a boolean and an array of two values and returns the first value on `true` and the second

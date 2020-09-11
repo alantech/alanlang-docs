@@ -1,4 +1,6 @@
-##### Comparators
+#### Comparators
+
+##### eq
 
 ```alan
 // Checks if the two values are equal
@@ -12,6 +14,8 @@ eq(string, string): bool
 eq(bool, bool): bool
 ```
 
+##### neq
+
 ```alan
 // Checks if the two values are not equal
 neq(int8, int8): bool
@@ -24,6 +28,8 @@ neq(string, string): bool
 neq(bool, bool): bool
 ```
 
+##### lt
+
 ```alan
 // Checks if the first value is less than the second
 lt(int8, int8): bool
@@ -34,6 +40,8 @@ lt(float32, float32): bool
 lt(float64, float64): bool
 lt(string, string): bool
 ```
+
+##### lte
 
 ```alan
 // Checks if the first value is less than or equal to the second
@@ -46,6 +54,8 @@ lte(float64, float64): bool
 lte(string, string): bool
 ```
 
+##### gt
+
 ```alan
 // Checks if the first value is greater than the second
 gt(int8, int8): bool
@@ -56,6 +66,8 @@ gt(float32, float32): bool
 gt(float64, float64): bool
 gt(string, string): bool
 ```
+
+##### gte
 
 ```alan
 // Checks if the first value is greater than or equal to the second

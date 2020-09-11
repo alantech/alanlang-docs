@@ -34,7 +34,7 @@
     - [Array Manipulation](./builtins/array_api.md)
     - [HashMap Manipulation](./builtins/hashmap_api.md)
     - ["Ternary" Functions](./builtins/ternary.md)
-    - [Error, Maybe, Result, and Either Functions](./builtins/result_maybe.md)
+    - [Error, Maybe, Result, and Either](./builtins/result_maybe.md)
     - [Wait](./builtins/wait.md)
   - [Built-in Operators](./builtins/operators.md)
   - [Built-in Interfaces](./builtins/interfaces.md)

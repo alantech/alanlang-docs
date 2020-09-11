@@ -2,7 +2,7 @@
 
 Errors are unavoidable in software and life. Alan's error handling seeks to generate fault tolerant programs that will fail on you at compile time, instead of on your users in production. Alan requires you to acknowledge the possibility of an error and take some action before your code will compile. This tradeoff introduces some tedium, but it increases the overall quality and robustness of programs.
 
-Alan, like Rust, doesn’t have exceptions. Instead, it has the type `Result<T>` for you to return which is equivalent to `Either<T, Error>`. The language provides [built-in error handling functions](./builtins/result_maybe.md) to easily handle recoverable errors: 
+Alan, like Rust, doesn’t have exceptions. Instead, it has the type `Result<T>` for you to return which is equivalent to `Either<T, Error>`. The language provides [built-in error handling functions](./builtins/result_maybe.md#result-and-error-functions) to easily handle recoverable errors: 
 
 ```rust,editable
 from @std/app import start, print, exit
