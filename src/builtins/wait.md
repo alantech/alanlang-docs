@@ -1,4 +1,4 @@
-##### Wait functions
+##### Wait Functions
 
 ```alan
 // Waits the specified number of milliseconds and then continues execution

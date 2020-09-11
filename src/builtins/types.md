@@ -63,7 +63,7 @@ const myOtherString = 'My other string\'s string'
 * `HashMap<K, V>`
 * `KeyVal<K, V>`
 
-Functions are covered in the [Functions](./functions.md) section. `Either<T, U>` is a special type that can hold two values. Other special types are built on top of it. `Maybe<T>` is equivalent to `Either<T, void>` and `Result<T>` is equivalent to `Either<T, Error>`. `Error` and `Result` are more extensively covered in the [Error Handling](../error_handling.md) section.
+Functions are covered in the [Functions](../functions.md) section. `Either<T, U>` is a special type that can hold two values. Other special types are built on top of it. `Maybe<T>` is equivalent to `Either<T, void>` and `Result<T>` is equivalent to `Either<T, Error>`. `Error` and `Result` are more extensively covered in the [Error Handling](../error_handling.md) section.
 
 A `HashMap<K, V>` creates a mapping from `K` to `V`. An `Array<V>` in Alan can hold more than one `V` at a time. Arrays can be defined with an explicit type or the compiler can infer the type for you:
 

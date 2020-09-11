@@ -1,4 +1,6 @@
-##### Type Coersion
+#### Type Coersion
+
+##### toFloat64
 
 ```alan
 // Converts the built-in basic types to 64-bit floats
@@ -12,6 +14,8 @@ toFloat64(bool): float64
 toFloat64(string): float64
 ```
 
+##### toFloat32
+
 ```alan
 // Converts the built-in basic types to 32-bit floats
 toFloat32(int8): float32
@@ -23,6 +27,8 @@ toFloat32(float64): float32
 toFloat32(bool): float32
 toFloat32(string): float32
 ```
+
+##### toInt64
 
 ```alan
 // Converts the built-in basic types to 64-bit integers
@@ -36,6 +42,8 @@ toInt64(bool): int64
 toInt64(string): int64
 ```
 
+##### toInt32
+
 ```alan
 // Converts the built-in basic types to 32-bit integers
 toInt32(int8): int32
@@ -47,6 +55,8 @@ toInt32(float64): int32
 toInt32(bool): int32
 toInt32(string): int32
 ```
+
+##### toInt16
 
 ```alan
 // Converts the built-in basic types to 16-bit integers
@@ -60,6 +70,8 @@ toInt16(bool): int16
 toInt16(string): int16
 ```
 
+##### toInt8
+
 ```alan
 // Converts the built-in basic types to 8-bit integers
 toInt8(int8): int8
@@ -72,6 +84,8 @@ toInt8(bool): int8
 toInt8(string): int8
 ```
 
+##### toBool
+
 ```alan
 // Converts the built-in basic types to booleans
 toBool(int8): bool
@@ -83,6 +97,8 @@ toBool(float64): bool
 toBool(bool): bool
 toBool(string): bool
 ```
+
+##### toString
 
 ```alan
 // Converts the built-in types to strings

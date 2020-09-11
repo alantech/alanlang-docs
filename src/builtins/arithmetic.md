@@ -1,4 +1,6 @@
-##### Arithmetic
+#### Arithmetic
+
+##### add
 
 ```alan
 // Adds two numbers
@@ -10,6 +12,8 @@ add(float32, float32): float32
 add(float64, float64): float64
 ```
 
+##### sub
+
 ```alan
 // Subtracts two numbers
 sub(int8, int8): int8
@@ -19,6 +23,8 @@ sub(int64, int64): int64
 sub(float32, float32): float32
 sub(float64, float64): float64
 ```
+
+##### negate
 
 ```alan
 // Negates the number
@@ -30,6 +36,8 @@ negate(float32, float32): float32
 negate(float64, float64): float64
 ```
 
+##### abs
+
 ```alan
 // Returns the absolute value of the number
 abs(int8, int8): int8
@@ -39,6 +47,8 @@ abs(int64, int64): int64
 abs(float32, float32): float32
 abs(float64, float64): float64
 ```
+
+##### mul
 
 ```alan
 // Multiplies two numbers
@@ -50,6 +60,8 @@ mul(float32, float32): float32
 mul(float64, float64): float64
 ```
 
+##### div
+
 ```alan
 // Divides two numbers
 div(int8, int8): int8
@@ -59,6 +71,8 @@ div(int64, int64): int64
 div(float32, float32): float32
 div(float64, float64): float64
 ```
+
+##### pow
 
 ```alan
 // Raises the first number to the power of the second number
@@ -70,6 +84,8 @@ pow(float32, float32): float32
 pow(float64, float64): float64
 ```
 
+##### mod
+
 ```alan
 // Returns the modulus (remainder) of an integer division
 mod(int8, int8): int8
@@ -77,6 +93,8 @@ mod(int16, int16): int16
 mod(int32, int32): int32
 mod(int64, int64): int64
 ```
+
+##### sqrt
 
 ```alan
 // Returns the square root of a number
