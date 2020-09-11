@@ -6,26 +6,27 @@ This guide walks you through the steps needed to get the Alan compiler and runti
 
 For users on Windows, MacOS, and Ubuntu Linux with x86-64 processors, you can [download the Alan executable](https://github.com/alantech/alan/releases), extract it into your `$PATH`/`%PATH%` (eg `/usr/local/bin` on MacOS and Ubuntu, and `C:\Windows` on Windows if you don't want to add a new executable path to your environment variable), and you're ready to go!
 
-Example commands for Linux:
+For Linux:
 
 ```bash
-wget https://github.com/alantech/alan/releases/download/v0.1.6/alan-ubuntu.tar.gz
+wget https://github.com/alantech/alan/releases/download/v0.1.7/alan-ubuntu.tar.gz
 tar -xzf alan-ubuntu.tar.gz
 sudo mv alan /usr/local/bin/alan
 ```
 
-Example commands for MacOS:
+For MacOS:
 
 ```bash
-wget https://github.com/alantech/alan/releases/download/v0.1.6/alan-macos.tar.gz
+curl -OL https://github.com/alantech/alan/releases/download/v0.1.7/alan-macos.tar.gz
 tar -xzf alan-macos.tar.gz
-mv alan /usr/local/bin/alan
+# sudo mkdir -p /usr/local/bin if the folder does not exist
+sudo mv alan /usr/local/bin/alan
 ```
 
-Example commands for Windows:
+For Windows:
 
 ```ps1
-Invoke-WebRequest -OutFile alan-windows.zip -Uri https://github.com/alantech/alan/releases/download/v0.1.6/alan-windows.zip
+Invoke-WebRequest -OutFile alan-windows.zip -Uri https://github.com/alantech/alan/releases/download/v0.1.7/alan-windows.zip
 Expand-Archive -Path alan-windows.zip -DestinationPath C:\windows
 ```
 
