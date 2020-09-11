@@ -23,7 +23,7 @@ const myVal: typename = new typename {
 }
 ```
 
-The redundant `typename` in that example will also eventually be eliminated by type inference, reducing it to just:
+Or relying on type inference it is reduced to just:
 
 ```alan
 const myVal = new typename {

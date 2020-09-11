@@ -1,6 +1,6 @@
 # Foreword
 
-The Alan language reference is broken into three major sections: the [Syntax and File Structure](./file_structure.md) of the Alan source files that you as the developer would directly write, the [Module System](./modules.md) that Alan uses to link your various source files and dependencies together which influences how you structure and reason about your codebase, and the [Standard Library](./standard_library.md) that provides the building blocks necessary to be productive in the language and how they work.
+The Alan Language Reference is broken into three major sections: the [Syntax and File Structure](./file_structure.md) of the Alan source files that you as the developer would directly write, the [Module System](./modules.md) that Alan uses to link your various source files and dependencies together which influences how you structure and reason about your codebase, and the [Standard Library](./standard_library.md) that provides the building blocks necessary to be productive in the language and how they work.
 
 The examples will be given as code snippets for clarity. To see the grammar definitions, please review [the parser definition in the compiler](https://github.com/alantech/alan/blob/master/compiler/src/ln/Ln.g4) as that is guaranteed to be the correct grammar. The sole exception is the [List of Keywords and Reserved Symbols](./keywords.md) as a quick reference to what is disallowed as variable, function, or operator names.
 

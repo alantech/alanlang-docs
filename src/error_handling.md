@@ -32,7 +32,7 @@ on start {
   const oneZeroth = reciprocal(0.0)
   if oneZeroth.isErr() {
     // gets the Result's Error or default if it is a value
-    print(oneZeroth | 1.2345)
+    print(oneZeroth.getErr(noerr()))
   }
 
   emit exit 0

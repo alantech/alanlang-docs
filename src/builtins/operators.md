@@ -10,109 +10,109 @@ As [operators](../operators.md) in Alan are simply aliases for functions with a 
   </thead>
   <tbody>
     <tr>
-      <td><code>?</code></td><td>infix</td><td>0</td><td>cond</td>
+      <td><code>?</code></td><td>infix</td><td>0</td><td><a href="./terniary.md">cond</a></td>
     </tr>
     <tr>
-      <td><code>==</code></td><td>infix</td><td>1</td><td>eq</td>
+      <td><code>==</code></td><td>infix</td><td>1</td><td><a href="./comparators.md">eq</a></td>
     </tr>
     <tr>
-      <td><code>!=</code></td><td>infix</td><td>1</td><td>neq</td>
+      <td><code>!=</code></td><td>infix</td><td>1</td><td><a href="./comparators.md">neq</a></td>
     </tr>
     <tr>
-      <td><code><</code></td><td>infix</td><td>1</td><td>lt</td>
+      <td><code><</code></td><td>infix</td><td>1</td><td><a href="./comparators.md">lt</a></td>
     </tr>
     <tr>
-      <td><code><=</code></td><td>infix</td><td>1</td><td>lte</td>
+      <td><code><=</code></td><td>infix</td><td>1</td><td><a href="./comparators.md">lte</a></td>
     </tr>
     <tr>
-      <td><code>></code></td><td>infix</td><td>1</td><td>gt</td>
+      <td><code>></code></td><td>infix</td><td>1</td><td><a href="./comparators.md">gt</a></td>
     </tr>
     <tr>
-      <td><code>>=</code></td><td>infix</td><td>1</td><td>gte</td>
+      <td><code>>=</code></td><td>infix</td><td>1</td><td><a href="./comparators.md">gte</a></td>
     </tr>
     <tr>
-      <td><code>~</code></td><td>infix</td><td>1</td><td>matches</td>
+      <td><code>~</code></td><td>infix</td><td>1</td><td><a href="./string_api.md">matches</a></td>
     </tr>
     <tr>
-      <td><code>@</code></td><td>infix</td><td>1</td><td>index</td>
+      <td><code>+</code></td><td>infix</td><td>2</td><td><a href="./string_api.md">concat</a></td>
     </tr>
     <tr>
-      <td><code>-</code></td><td>prefix</td><td>1</td><td>negate</td>
+      <td><code>@</code></td><td>infix</td><td>1</td><td><a href="./array_api.md">index</a></td>
     </tr>
     <tr>
-      <td><code>+</code></td><td>infix</td><td>2</td><td>add</td>
+      <td><code>-</code></td><td>prefix</td><td>1</td><td><a href="./arithmetic.md">negate</a></td>
     </tr>
     <tr>
-      <td><code>+</code></td><td>infix</td><td>2</td><td>concat</td>
+      <td><code>+</code></td><td>infix</td><td>2</td><td><a href="./arithmetic.md">add</a></td>
     </tr>
     <tr>
-      <td><code>-</code></td><td>infix</td><td>2</td><td>sub</td>
+      <td><code>-</code></td><td>infix</td><td>2</td><td><a href="./arithmetic.md">sub</a></td>
     </tr>
     <tr>
-      <td><code>|</code></td><td>infix</td><td>2</td><td>or</td>
+      <td><code>*</code></td><td>infix</td><td>3</td><td><a href="./arithmetic.md">mul</a></td>
     </tr>
     <tr>
-      <td><code>||</code></td><td>infix</td><td>2</td><td>or</td>
+      <td><code>/</code></td><td>infix</td><td>3</td><td><a href="./arithmetic.md">div</a></td>
     </tr>
     <tr>
-      <td><code>^</code></td><td>infix</td><td>2</td><td>xor</td>
+      <td><code>%</code></td><td>infix</td><td>3</td><td><a href="./arithmetic.md">mod</a></td>
     </tr>
     <tr>
-      <td><code>!|</code></td><td>infix</td><td>2</td><td>nor</td>
+      <td><code>**</code></td><td>infix</td><td>4</td><td><a href="./arithmetic.md">pow</a></td>
     </tr>
     <tr>
-      <td><code>!^</code></td><td>infix</td><td>2</td><td>xnor</td>
+      <td><code>|</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md">or</a></td>
     </tr>
     <tr>
-      <td><code>|</code></td><td>infix</td><td>2</td><td>getOr</td>
+      <td><code>||</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md">or</a></td>
     </tr>
     <tr>
-      <td><code>||</code></td><td>infix</td><td>2</td><td>getOr</td>
+      <td><code>^</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md">xor</a></td>
     </tr>
     <tr>
-      <td><code>*</code></td><td>infix</td><td>3</td><td>mul</td>
+      <td><code>!|</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md">nor</a></td>
     </tr>
     <tr>
-      <td><code>*</code></td><td>infix</td><td>3</td><td>repeat</td>
+      <td><code>!^</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md">xnor</a></td>
     </tr>
     <tr>
-      <td><code>/</code></td><td>infix</td><td>3</td><td>div</td>
+      <td><code>|</code></td><td>infix</td><td>2</td><td><a href="./result_maybe.md">getOr</a></td>
     </tr>
     <tr>
-      <td><code>/</code></td><td>infix</td><td>3</td><td>split</td>
+      <td><code>||</code></td><td>infix</td><td>2</td><td><a href="./result_maybe.md">getOr</a></td>
     </tr>
     <tr>
-      <td><code>%</code></td><td>infix</td><td>3</td><td>mod</td>
+      <td><code>*</code></td><td>infix</td><td>3</td><td><a href="./array_api.md">repeat</a></td>
     </tr>
     <tr>
-      <td><code>%</code></td><td>infix</td><td>3</td><td>template</td>
+      <td><code>/</code></td><td>infix</td><td>3</td><td><a href="./string_api.md">repeat</a></td>
     </tr>
     <tr>
-      <td><code>&</code></td><td>infix</td><td>3</td><td>and</td>
+      <td><code>%</code></td><td>infix</td><td>3</td><td><a href="./string_api.md">template</a></td>
     </tr>
     <tr>
-      <td><code>&&</code></td><td>infix</td><td>3</td><td>and</td>
+      <td><code>&</code></td><td>infix</td><td>3</td><td><a href="./bitwise.md">and</a></td>
     </tr>
     <tr>
-      <td><code>!&</code></td><td>infix</td><td>3</td><td>nand</td>
+      <td><code>&&</code></td><td>infix</td><td>3</td><td><a href="./bitwise.md">and</a></td>
     </tr>
     <tr>
-      <td><code>**</code></td><td>infix</td><td>4</td><td>pow</td>
+      <td><code>!&</code></td><td>infix</td><td>3</td><td><a href="./bitwise.md">nand</a></td>
     </tr>
     <tr>
-      <td><code>!</code></td><td>prefix</td><td>4</td><td>not</td>
+      <td><code>!</code></td><td>prefix</td><td>4</td><td><a href="./bitwise.md">not</a></td>
     </tr>
     <tr>
-      <td><code>#</code></td><td>prefix</td><td>4</td><td>length</td>
+      <td><code>#</code></td><td>prefix</td><td>4</td><td><a href="./string_api.md">length</a></td>
     </tr>
     <tr>
-      <td><code>`</code></td><td>prefix</td><td>4</td><td>trim</td>
+      <td><code>`</code></td><td>prefix</td><td>4</td><td><a href="./string_api.md">trim</a></td>
     </tr>
     <tr>
-      <td><code>:</code></td><td>infix</td><td>5</td><td>pair</td>
+      <td><code>:</code></td><td>infix</td><td>5</td><td><a href="./terniary.md">pair</a></td>
     </tr>
     <tr>
-      <td><code>:</code></td><td>infix</td><td>6</td><td>push</td>
+      <td><code>:</code></td><td>infix</td><td>6</td><td><a href="./array_api.md">push</a></td>
     </tr>
   </tbody>
 </table>
