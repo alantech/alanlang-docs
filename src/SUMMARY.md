@@ -33,7 +33,7 @@
     - [String Manipulation](./builtins/string_api.md)
     - [Array Manipulation](./builtins/array_api.md)
     - [HashMap Manipulation](./builtins/hashmap_api.md)
-    - ["Terniary" Functions](./builtins/terniary.md)
+    - ["Ternary" Functions](./builtins/ternary.md)
     - [Error, Maybe, Result, and Either Functions](./builtins/result_maybe.md)
     - [Wait](./builtins/wait.md)
   - [Built-in Operators](./builtins/operators.md)
