@@ -1,6 +1,6 @@
 # About Alan
 
-Alan is a natively-parallel, statically-compiled, type-inferred language with a familiar syntax and many compile-time and run-time safety guarantees.
+Alan is a implicitly-parallel, statically-compiled, event-based, type-inferred language with a familiar syntax and many compile-time and run-time safety guarantees.
 
 * The compiler can determine which array operations are safely parallelizable and automatically distributes them across a threadpool.
 * The runtime can determine which operations are IO operations and automatically `async/await` them, as well as automatically batch IO operations that can be executed in parallel safely.

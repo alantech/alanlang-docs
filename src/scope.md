@@ -4,7 +4,7 @@ Scoping is a concept common in many programming languages, it is a way to determ
 
 Module-based languages tend to have two scopes per module, the private module-level scope and the public export scope. Java allows only a single exported element per file (but multiple files per module, remember) declared `public` while private elements are simply left undeclared. Node.js, Python, etc all have this two scope set for each module.
 
-Alan continues that tradition here for ease of use, and like many of the languages does have a wholly-internal root scope that built-in types, functions, etc are defined in that all scopes eventually inherit from. The [Built-ins](./built_ins.md) section is documenttion of this root scope and what it automatically brings to every module.
+Alan continues that tradition here for ease of use, and like many of the languages does have a wholly-internal root scope that built-in types, functions, etc are defined in that all scopes eventually inherit from. The [Built-ins](./builtins/built_ins.md) section is documentation of this root scope and what it automatically brings to every module.
 
 <!-- TODO: Add some diagrams of scope as different nested sets via Venn diagrams. -->
 

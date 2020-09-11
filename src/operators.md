@@ -2,7 +2,7 @@
 
 In Alan, operators are just a special form of function.
 
-All operators are made up of only the symbols: ``+, -, /, *, ^, ., ~, `, !, @, #, $, %, &, |, :, ;, <, >, ?, =`` (excluding the commas used to separate them from each other, they are reserved for list separators only). See the [built-in operators here](./built_ins.md#built-in-operators)
+All operators are made up of only the symbols: ``+, -, /, *, ^, ., ~, `, !, @, #, $, %, &, |, :, ;, <, >, ?, =`` (excluding the commas used to separate them from each other, they are reserved for list separators only). See the [built-in operators here](./builtins/operators.md)
 
 Operators have operator precedence to determine how they are implicitly grouped by parenthesis.
 
@@ -42,5 +42,5 @@ infix precedence <precedenceNumber> functionName as <operatorSymbol>
 
 where `<operatorSymbol>` is the symbol for the operator, `<precedenceNumber>` is an `int8` number, and `functionName` is the function being mapped to the operator. Only functions with two arguments will be considered.
 
-The example earlier of the function calls `3.add(2).mul(5).mod(3)` or `mod(mul(add(3, 2), 5), 3)` can be written with operators as `(3 + 2) * 5 % 3` or `5 * (3 + 2) % 5`, where the parenthesis break the operator precedence to allow addition to come first. See the built-in operators section in the [Built-Ins](./built_ins.md) section for the complete list of operators and their precedence.
+The example earlier of the function calls `3.add(2).mul(5).mod(3)` or `mod(mul(add(3, 2), 5), 3)` can be written with operators as `(3 + 2) * 5 % 3` or `5 * (3 + 2) % 5`, where the parenthesis break the operator precedence to allow addition to come first. See the [built-in operators](./builtins/operators.md) section for the complete list of operators and their precedence.
 
