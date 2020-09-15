@@ -22,11 +22,9 @@ Infix:
 argument1 <operator> argument2
 ```
 
-Infix operators can also be declared to be commutative or associative (or neither). This can allow certain built-in functions to automatically determine how much parallelism is safe with the provided operator.
-
 The syntax to define a prefix operator looks like this:
 
-```
+```alan
 prefix functionName as <operatorSymbol> precedence <precedenceNumber>
 prefix precedence <precedenceNumber> functionName as <operatorSymbol>
 ```
@@ -35,7 +33,7 @@ where `<operatorSymbol>` is some combination of the symbols listed above (with a
 
 The syntax to define infix operators is similar, and looks like this:
 
-```
+```alan
 infix functionName as <operatorSymbol> precedence <precedenceNumber>
 infix precedence <precedenceNumber> functionName as <operatorSymbol>
 ```
