@@ -5,7 +5,6 @@ description = "Alan Interactive Documentation"
 
 [output.html]
 theme = "theme"
-git-repository-url = "https://github.com/alantech"
 default-theme = "solarized-light"
 preferred-dark-theme = "solarized-dark"
 additional-css = [
