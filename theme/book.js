@@ -38,16 +38,20 @@ function playpen_text(playpen) {
         result_block.innerText += args[0]
         realLog.apply(realLog, args)
       }
+      const r = require('alan-runtime')
+      const realExitop = r.exitop
+      r.exitop = () => {
+        realExitop()
+        console.log = realLog
+        r.exitop = realExitop
+      }
       try {
-        const r = require('alan-runtime')
-        r.exitop() // Force trigger cleanup logic
         const js = alanCompiler('ln', 'js', text)
         result_block.innerText = ""
         eval(js)
       } catch (e) {
         result_block.innerText = e.message;
-      } finally {
-        console.log = realLog
+        r.exitop() // FOrce trigger cleanup logic
       }
     }, 10)
   }
