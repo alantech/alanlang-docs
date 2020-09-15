@@ -482,9 +482,23 @@ on start fn {
 }
 ```
 
-This example uses generics to define a Box type and how to work with it at a basic assignment level.
-
 ### `loop.ln`
+
+```rust,editable
+from @std/app import start, print, exit
+
+on start {
+  const count = [1, 2, 3, 4, 5]
+  const byTwos = count.map(fn (n: int64): int64 = n * 2)
+  count.map(fn (n: int64) = toString(n)).join(', ').print()
+  byTwos.map(fn (n: int64) = toString(n)).join(', ').print()
+  emit exit 0
+}
+```
+
+Alan does not allow arbitrary loops or recursion, but you can still loop over data. This example shows the primary way to do iteration in Alan using the functional [array api](./builtins/array_api.md) which can be parallelized by the AVM. We have an [RFC](https://github.com/alantech/alan/blob/main/rfcs/007%20-%20Sequential%20Algorithms%20RFC.md) to provide more controlled built-in functions to express recursive and iterative algorithms that the compiler and runtime can reason about to provide automatic parallelization when possible, or to force handling a recursion error instead of crashing on a stack overflow.
+
+### `weird_loop.ln`
 
 ```rust,editable
 from @std/app import start, print, exit
@@ -505,7 +519,7 @@ on start {
 }
 ```
 
-This example defines a custom event type and then uses it to implement a recursive function that prints to 10 and then quits. It also usesif statements to accomplish this.
+This example defines a custom event type and then uses it to implement a recursive function that prints to 10 and then quits. It also uses if statements to accomplish this.
 
 This is slow and intentionally awkward because this is an escape hatch to Turing-completeness and not the intended primary use case, as Alan's execution planner will not be able to properly optimize the parallelization of this approach (it is by definition a sequential operation, though the body of the recursive function may be parallelized). It shouldn't be necessary to accomplish your needs in the language, but it is there.
 
