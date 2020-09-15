@@ -482,6 +482,8 @@ on start fn {
 }
 ```
 
+This example uses generics to define a Box type and how to work with it at a basic assignment level.
+
 ### `loop.ln`
 
 ```rust,editable
