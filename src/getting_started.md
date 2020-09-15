@@ -1,6 +1,9 @@
 # Getting Started
 
-This guide walks you through the steps needed to get the Alan compiler and runtimes on your local machine. To work on Alan itself, see [Contributing to Alan](./contributing.md). To learn more about Alan, see [Why we created Alan](https://alan-lang.org/why_alan.html).
+This guide walks you through the steps needed to get the Alan compiler and VM on your local machine. You can also:
+- Read through some idiomatic [Alan examples](./advanced_examples.md)
+- Read more about [Why we created Alan](https://alan-lang.org/why_alan.html)
+- [Contribute to Alan](./contributing.md)
 
 ## Installation
 
@@ -62,27 +65,18 @@ on app.start {
 }
 ```
 
-Now run:
+Now compile the code to produce an AGC binary and then run it which prints `Hello, World!`:
 
 ```bash
 alan compile hello_world.ln hello_world.agc
-```
-
-This will produce an AGC binary that can be run like this:
-
-```bash
 alan run hello_world.agc
 ```
-
-which prints `Hello, World!`.
 
 You can also run the source file directly:
 
 ```bash
 alan hello_world.ln
 ```
-
-which will internally compile the code then run it, but you have to pay the compilation costs on each run.
 
 ## Syntax Highlighting
 
