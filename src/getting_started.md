@@ -1,7 +1,7 @@
 # Getting Started
 
 This guide walks you through the steps needed to get the Alan compiler and VM on your local machine. You can also:
-- Read through some idiomatic [Alan examples](./advanced_examples.md)
+- Read, edit and run any of the idiomatic [Alan examples](./advanced_examples.md)
 - Read more about [Why we created Alan](https://alan-lang.org/why_alan.html)
 - [Contribute to Alan](./contributing.md)
 
@@ -77,6 +77,7 @@ You can also run the source file directly:
 ```bash
 alan hello_world.ln
 ```
+which will internally compile the code then run it, but you have to pay the compilation costs on each run.
 
 ## Syntax Highlighting
 
