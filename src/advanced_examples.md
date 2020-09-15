@@ -498,7 +498,7 @@ on start {
 }
 ```
 
-Alan does not allow arbitrary loops or recursion, but you can still loop over data. This example shows the primary way to do iteration in Alan using the functional [array api](./builtins/array_api.md) which can be parallelized by the AVM. We have an [RFC](https://github.com/alantech/alan/blob/main/rfcs/007%20-%20Sequential%20Algorithms%20RFC.md) to provide more controlled built-in functions to express recursive and iterative algorithms that the compiler and runtime can reason about to provide automatic parallelization when possible, or to force handling a recursion error instead of crashing on a stack overflow.
+Alan does not allow arbitrary loops or recursion, but you can still loop over data. This example shows the primary way to do iteration in Alan using the functional [array api](./builtins/array_api.md) which can be parallelized by the AVM.
 
 ### `weird_loop.ln`
 
@@ -523,7 +523,9 @@ on start {
 
 This example defines a custom event type and then uses it to implement a recursive function that prints to 10 and then quits. It also uses if statements to accomplish this.
 
-This is slow and intentionally awkward because this is an escape hatch to Turing-completeness and not the intended primary use case, as Alan's execution planner will not be able to properly optimize the parallelization of this approach (it is by definition a sequential operation, though the body of the recursive function may be parallelized). It shouldn't be necessary to accomplish your needs in the language, but it is there.
+This is slow and intentionally awkward because this is an escape hatch to Turing-completeness and not the intended primary use case, as Alan's execution planner will not be able to properly optimize the parallelization of this approach (it is by definition a sequential operation, though the body of the recursive function may be parallelized). It shouldn't be necessary to accomplish your needs in the language, but it is there at the moment.
+
+We have a [Sequential Algorithms RFC](https://github.com/alantech/alan/blob/main/rfcs/007%20-%20Sequential%20Algorithms%20RFC.md) as a better escape hatch to Turing-completeness that is meant to replace this example and make it a compile-time error. An event handler emitting to the same event it handles, or any sort of chain of event emission that leads back to the first event is also a source of infinite loop problems, but without this RFC several kinds of programs are completely unwriteable in Alan, so we left it in for now until we can close that off.
 
 <!-- TODO: Should we even have an http server example in here? We can't run it. Also this syntax is very wrong
 ### `http.ln`
