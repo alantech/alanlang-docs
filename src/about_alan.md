@@ -11,7 +11,7 @@ Alan is an implicitly-parallel, statically-compiled, event-based, type-inferred 
 
 To accomplish this, Alan makes one single, significant trade-off versus other programming languages: Functions in Alan are all acyclic directed graphs. No arbitrary loops or recursion are allowed.
 
-This does not mean that you can't loop over data or write recursive algorithms, just that they are provided through [controlled built-in functions](./advanced_examples.md#loopln) that the compiler and runtime can reason about to provide automatic parallelization when possible, or to force handling a recursion error instead of crashing on a stack overflow.
+This does not mean that you can't loop over data or write recursive algorithms, just that they are provided through [controlled built-in functions](./sequential_algorithms.md) that the compiler and runtime can reason about to provide automatic parallelization when possible, or to force handling a recursion error instead of crashing on a stack overflow.
 
 This means that the code that you write in Alan is not *quite* Turing-complete[^1]. But we believe that we have cut "close enough" to Turing-completeness and provided enough controlled mechanisms to fill the gaps that the advantages in having predictable functions outweigh the few places where Alan's syntax is slightly more awkward than its peers'.This allows the runtime to be able to judge when parallelization makes sense based on the data to be processed and the complexity of the code to be executed.
 

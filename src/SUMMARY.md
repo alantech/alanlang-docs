@@ -45,6 +45,7 @@
   - [@std/trig](./std_trig.md)
 - [Examples with Explanations](./examples_with_explanations.md)
   - [The many forms of "Hello, World!"](./many_forms_hello_world.md)
+  - [Sequential Algorithms](./sequential_algorithms.md)
   - [More advanced examples](./advanced_examples.md)
 - [Transpile to Javascript](./transpile_js.md)
 - [Contributing to Alan](./contributing.md)
