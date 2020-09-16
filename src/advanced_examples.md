@@ -2,6 +2,22 @@
 
 These examples are still relatively simple (they fit in a single file) but they demonstrate more concepts that cannot be easily shown in just a "Hello, World!" application.
 
+### `loop.ln`
+
+```rust,editable
+from @std/app import start, print, exit
+
+on start {
+  const count = [1, 2, 3, 4, 5]
+  const byTwos = count.map(fn (n: int64): int64 = n * 2)
+  count.map(fn (n: int64) = toString(n)).join(', ').print()
+  byTwos.map(fn (n: int64) = toString(n)).join(', ').print()
+  emit exit 0
+}
+```
+
+Alan does not allow arbitrary loops or recursion, but you can still loop over data. This example shows the primary way to do iteration in Alan using the functional [array api](./builtins/array_api.md) which can be parallelized by the AVM. However when absolutely necessary, Alan offers a controlled way of [expressing algorithms that are inherently sequential](./std_seq.md).
+
 ### `math.ln`
 
 ```rust,editable

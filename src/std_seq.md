@@ -1,22 +1,27 @@
-## Expressing Sequential Algorithms in Alan
+## @std/seq to express Sequential Algorithms in Alan
 
-Alan does not allow arbitrary, or classical, loops or recursion. However, there are algorithms people need to write that are inherently sequential, and often non-deterministic on the number of steps needed to take, such as with numeric approximation algorithms like Newton-Raphson, or anything written as a recursive function call. Most of the problems developers need to solve do not require this linearity, but for when it really is required, we are reintroducing this power in a controlled manner that still allows the AVM to be able to plan around these algorithms and provide the guarantee of termination. This grammar was [designed (and only partially implemented so far)](https://github.com/alantech/alan/blob/main/rfcs/007%20-%20Sequential%20Algorithms%20RFC.md) to *not* feel like classical control flow in order to nudge developers to find better, more deterministic and more parallelizable mechanisms, instead.
+Alan does not allow arbitrary, or classical, loops or recursion and [the preferred way to do iteration is with arrays](./advanced_examples.md#loopln). However, there are algorithms people need to write that are inherently sequential, and often non-deterministic on the number of steps needed to take, such as with numeric approximation algorithms like Newton-Raphson, or anything written as a recursive function call. Most of the problems developers need to solve do not require this linearity, but for when it really is required, we are reintroducing this power in a controlled manner that still allows the AVM to be able to plan around these algorithms and provide the guarantee of termination. The syntax `@std/seq` provides was [designed (and only partially implemented so far)](https://github.com/alantech/alan/blob/main/rfcs/007%20-%20Sequential%20Algorithms%20RFC.md) to *not* feel like classical control flow in order to nudge developers to find better, more deterministic and more parallelizable mechanisms, instead.
 
-### `array_loop.ln`
+Here are the function signatures of the sequential functions that `@std/seq` will provide:
 
-```rust,editable
-from @std/app import start, print, exit
+```ln
+fn next(seq: Seq): Result<int64>
+fn each(seq: Seq, func: function): void
+fn while(seq: Seq, condFn: function, bodyFn: function): void
+fn doWhile(seq: Seq, bodyFn: function): void
+fn recurse(seq: Seq, recursiveFn: function, arg: any): anythingElse
+```
 
-on start {
-  const count = [1, 2, 3, 4, 5]
-  const byTwos = count.map(fn (n: int64): int64 = n * 2)
-  count.map(fn (n: int64) = toString(n)).join(', ').print()
-  byTwos.map(fn (n: int64) = toString(n)).join(', ').print()
-  emit exit 0
+### `Seq` type
+
+`@std/seq` provides functions for accomplishing many different sequential patterns that depend on a special, built-in `Seq` type with opaque internals to avoid manipulation after construction:
+
+```alan
+type Seq {
+  counter: int64
+  limit: int64
 }
 ```
-This example shows the preferred way to do iteration in Alan using the functional [array api](./builtins/array_api.md) which can be parallelized by the AVM. The remaining examples can't be parallelized by the AVM, but they are guaranteed to terminate.
-
 
 ### `next_loop.ln`
 
