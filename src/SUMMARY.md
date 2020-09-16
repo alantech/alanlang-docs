@@ -40,6 +40,7 @@
   - [Built-in Interfaces](./builtins/interfaces.md)
 - [Standard Library](./standard_library.md)
   - [@std/app](./std_app.md)
+  - [@std/seq](./std_seq.md)
   - [@std/cmd](./std_cmd.md)
   - [@std/deps](./std_deps.md)
   - [@std/trig](./std_trig.md)
