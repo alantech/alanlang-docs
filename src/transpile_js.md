@@ -4,15 +4,9 @@ Run Alan in the browser or Node.js.
 
 ## Prerequisites
 
-For `alan-compile` and `alan-js-runtime` Node.js is required, with a minimum version of 10.20.1.
+For `alan-js-runtime` Node.js is required, with a minimum version of 10.20.1.
 
 ## Installation
-
-To install `alan-compile`, run:
-
-```bash
-npm i -g alan-compile
-```
 
 To install `alan-js-runtime`, run:
 
@@ -36,7 +30,7 @@ on app.start {
 Next run:
 
 ```bash
-alan-compile hello_world.ln hello_world.js
+alan compile hello_world.ln hello_world.js
 ```
 
 This will produce a JS file that depends on the `alan-js-runtime`. If it is globally installed, you can simply run:
