@@ -116,7 +116,7 @@ from @std/seq import seq, Self, recurse
 on start {
   print(seq(100).recurse(fn fibonacci(self: Self, i: int64): Result<int64> {
     if i < 2 {
-      return some(1)
+      return ok(1)
     } else {
       const prev = self.recurse(i - 1)
       const prevPrev = self.recurse(i - 2)
@@ -126,7 +126,7 @@ on start {
       if prevPrev.isErr() {
         return prevPrev
       }
-      return some((prev || 1) + (prevPrev || 1))
+      return ok((prev || 1) + (prevPrev || 1))
     }
   }, 8))
   emit exit 0
