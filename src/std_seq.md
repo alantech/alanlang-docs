@@ -133,8 +133,6 @@ on start {
 }
 ```
 
-**Note: this example runs in the browser, but `recurse` not fully implemented in the AVM yet**
-
 `recurse` allows recursive functions to be defined in `alan`. This is impossible in `alan`'s grammar, so what is done is special trickery to make it possible. The `recursiveFn` has the following function signature:
 
 ```alan
