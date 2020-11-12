@@ -9,7 +9,7 @@ fn next(seq: Seq): Result<int64>
 fn each(seq: Seq, func: function): void
 fn while(seq: Seq, condFn: function, bodyFn: function): void
 fn doWhile(seq: Seq, bodyFn: function): void
-fn recurse(seq: Seq, recursiveFn: function, arg: any): anythingElse
+fn recurse(seq: Seq, recursiveFn: function, arg: any): Result<anythingElse>
 ```
 
 ### `Seq` type
