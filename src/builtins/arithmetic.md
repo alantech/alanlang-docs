@@ -101,3 +101,29 @@ mod(int64, int64): int64
 sqrt(float32): float32
 sqrt(float64): float64
 ```
+
+##### min
+
+```alan
+// Returns the smallest of two numbers
+min(int8, int8): int8
+min(int16, int16): int16
+min(int32, int32): int32
+min(int64, int64): int64
+min(float32, float32): float32
+min(float64, float64): float64
+min(string, string): string
+```
+
+##### max
+
+```alan
+// Returns the largest of two numbers
+max(int8, int8): int8
+max(int16, int16): int16
+max(int32, int32): int32
+max(int64, int64): int64
+max(float32, float32): float32
+max(float64, float64): float64
+max(string, string): string
+```
