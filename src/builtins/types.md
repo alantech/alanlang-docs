@@ -9,8 +9,8 @@ The built-in types for Alan are included in the root scope and never need to be 
 * `int16`
 * `int32`
 * `int64` or `int`
-* `float32` or `float`
-* `float64`
+* `float32`
+* `float64` or `float`
 * `bool`
 
 Basic types include integers (`int8`, `int16`, `int32`, and `int64`), floating point numbers (`float32` and `float64`), booleans (`bool`), and the `void` (no value) type. The numbers refer to the number of bits consumed by the basic type. There are currently no unsigned variants of the integer types, though that may change if there is demand for it.
