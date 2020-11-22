@@ -1,4 +1,4 @@
-#### Type Coersion
+#### Type Coercion
 
 ##### toFloat64
 
@@ -114,4 +114,4 @@ toString(Error): string
 toString(Result<Stringifiable>): string
 ```
 
-These coersions will not fail. When converting down into an integer of a smaller bitsize, numbers larger than that integer's `INT_MAX` are pegged at `INT_MAX`, smaller than `INT_MIN` pegged at `INT_MIN` and `NaN` or strings that aren't actually integers are converted to `0`. This may be changed to a `Result` type that requires a user-defined default value on failure. `Result` types wrapping a type that can also be converted to a string directly, with either the string version of the result, or the error message.
+These coercions will not fail. When converting down into an integer of a smaller bitsize, numbers larger than that integer's `INT_MAX` are pegged at `INT_MAX`, smaller than `INT_MIN` pegged at `INT_MIN` and `NaN` or strings that aren't actually integers are converted to `0`. This may be changed to a `Result` type that requires a user-defined default value on failure. `Result` types wrapping a type that can also be converted to a string directly, with either the string version of the result, or the error message.

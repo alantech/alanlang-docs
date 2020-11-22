@@ -17,7 +17,7 @@ Basic types include integers (`int8`, `int16`, `int32`, and `int64`), floating p
 
 The `int64` and `float64` types are special among the numeric types, as these are the types that any numeric constant will be represented as, depending on whether or not it has a decimal. They have been given aliases of `int` and `float` respectively for that reason.
 
-The four "main" basic types (`int64`, `float64`, `bool` and `void`) have constant representations that you can easily type. The non-64-bit numeric types are considered specialized types and are discouraged (the runtime does not take advantage of the potential space optimizations they provide to keep the internal memory addressing system simpler), so constants for those types must be explicitly casted using the `to<Type>` functions discussed in the [Type Coersion](./type_coersion.md) section.
+The four "main" basic types (`int64`, `float64`, `bool` and `void`) have constant representations that you can easily type. The non-64-bit numeric types are considered specialized types and are discouraged (the runtime does not take advantage of the potential space optimizations they provide to keep the internal memory addressing system simpler), so constants for those types must be explicitly casted using the `to<Type>` functions discussed in the [Type Coercion](./type_coercion.md) section.
 
 The integers have basic base-10 integer form as well as hexadecimal form. Binary and Octal forms are not implemented but that may change if there is demand for it.
 
