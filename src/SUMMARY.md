@@ -26,7 +26,7 @@
 - [Built-ins](./builtins/built_ins.md)
   - [Built-in Types](./builtins/types.md)
   - [Built-in Functions](./builtins/functions.md)
-    - [Type Coersion](./builtins/type_coersion.md)
+    - [Type Coercion](./builtins/type_coercion.md)
     - [Arithmetic](./builtins/arithmetic.md)
     - [Logical and Bitwise](./builtins/bitwise.md)
     - [Comparators](./builtins/comparators.md)

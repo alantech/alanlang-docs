@@ -13,7 +13,7 @@ const varname: typename = constantOrFunctionCallOrExpression
 const varname = constantOrFunctionCallOrExpression
 ```
 
-The typename is optional as it can be inferred from the value being assigned. Providing the type can be useful to make sure your code is doing what you expected, though, and not using an unexpected type. By default all numeric constants are automatically the highest definition version possible. (`int64` or `float64`) Explicitly setting a smaller bit size for the constant *will not* coerce the constant automatically, you must explicitly declare the down coersion, eg:
+The typename is optional as it can be inferred from the value being assigned. Providing the type can be useful to make sure your code is doing what you expected, though, and not using an unexpected type. By default all numeric constants are automatically the highest definition version possible. (`int64` or `float64`) Explicitly setting a smaller bit size for the constant *will not* coerce the constant automatically, you must explicitly declare the down coercion, eg:
 
 ```alan
 const someI32: int32 = 5.toInt32()
