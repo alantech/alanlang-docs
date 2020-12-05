@@ -25,6 +25,7 @@ The following keywords cannot be used in [variable](./statements.md#variable-dec
 The following symbols cannot be used when defining [operators](./operators.md):
 
 * ,
+* ;
 * {
 * }
 * (

@@ -9,8 +9,8 @@ User-defined types must be declared by the user and they follow the following sy
 
 ```alan
 type typename {
-  propertyName: propertyType
-  otherProperty: otherType
+  propertyName: propertyType,
+  otherProperty: otherType,
 }
 ```
 
@@ -18,8 +18,8 @@ The syntax to construct a new instance of a user type is as follows:
 
 ```alan
 const myVal: typename = new typename {
-  propertyName = propertyValue
-  otherProperty = otherValue
+  propertyName: propertyValue,
+  otherProperty: otherValue,
 }
 ```
 
@@ -27,8 +27,8 @@ Or relying on type inference it is reduced to just:
 
 ```alan
 const myVal = new typename {
-  propertyName = propertyValue
-  otherProperty = otherValue
+  propertyName: propertyValue,
+  otherProperty: otherValue
 }
 ```
 
@@ -38,7 +38,7 @@ Generic types look like this:
 
 ```alan
 type typename<A, B> {
-  propertyName: A
+  propertyName: A,
   otherProperty: B
 }
 ```
@@ -53,8 +53,8 @@ or just declaring a variable that uses a "solidified" type:
 
 ```alan
 let myVar = new typename<bool, float64> {
-  propertyName = true
-  otherProperty = 0.0
+  propertyName: true,
+  otherProperty: 0.0
 }
 ```
 

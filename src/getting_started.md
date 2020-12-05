@@ -60,8 +60,8 @@ After installation, first create a file named `hello_world.ln` and then write th
 import @std/app
 
 on app.start {
-  app.print("Hello, World!")
-  emit app.exit 0
+  app.print("Hello, World!");
+  emit app.exit 0;
 }
 ```
 

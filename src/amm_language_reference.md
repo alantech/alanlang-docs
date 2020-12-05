@@ -15,7 +15,7 @@ Static constants must *all* be declared in the root scope at the top of the file
 <!-- using ```alan works, but would be nicer to be able to use a ```amm in these examples -->
 
 ```alan
-const foo: string = "bar"
+const foo: string = "bar";
 ```
 
 Constants output from function calls may *only* be housed within event handlers or closures and not declared in the root scope. These also must have the type data included.
@@ -25,7 +25,7 @@ Constants output from function calls may *only* be housed within event handlers 
 As with Alan, let variables may only be declared within event handlers or closure functions and never the root scope. They function identically with the type definition requirement.
 
 ```alan
-let a: int64 = 3
+let a: int64 = 3;
 ```
 
 ### Let variable reassignment
@@ -33,7 +33,7 @@ let a: int64 = 3
 Let variable reassignment is also identical to Alan, happening with event handlers or closure functions and may cross scope boundaries.
 
 ```alan
-a = a + 3
+a = a + 3;
 ```
 
 ### Events (and loose typing)
@@ -71,7 +71,7 @@ You can't actually declare functions not associated with an event in Alan--. All
 
 ```alan
 on _start fn (): void {
-  const val = addi64(a, a)
+  const val = addi64(a, a);
   ...
 ```
 
@@ -85,12 +85,12 @@ The following simple Alan source example:
 import @std/app
 
 on app.start {
-  let exitCode = 0
+  let exitCode = 0;
   if 1 == 0 {
-    exitCode = 1
+    exitCode = 1;
   }
-  app.print("Exit Code: " + exitCode.toString())
-  emit app.exit exitCode
+  app.print("Exit Code: " + exitCode.toString());
+  emit app.exit exitCode;
 }
 ```
 

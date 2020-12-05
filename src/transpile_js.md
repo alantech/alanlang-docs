@@ -22,8 +22,8 @@ Once everything is installed, first create a file named `hello_world.ln` and the
 import @std/app
 
 on app.start {
-  app.print("Hello, World!")
-  emit app.exit 0
+  app.print("Hello, World!");
+  emit app.exit 0;
 }
 ```
 

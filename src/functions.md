@@ -35,10 +35,10 @@ fn functionName {
 }
 
 // If the function is a single statement that is returned, it can be written with a shorthand syntax
-fn addOne(i: int64) = i + 1
+fn addOne(i: int64) = i + 1;
 
 // This syntax can be annotated with the return type, but that is unlikely to improve clarity
-fn subtractOne(i: int64): int64 = i - 1
+fn subtractOne(i: int64): int64 = i - 1;
 
 // Anonymous functions can only be used as an assignable value either to a variable
 const anonymousFunction = fn (firstArg: argType, secondArg: anotherType): returnType {
@@ -46,7 +46,7 @@ const anonymousFunction = fn (firstArg: argType, secondArg: anotherType): return
 }
 
 // Or being passed into a higher-order function
-const doubled = someArray.map(fn (val: int64) = val * 2)
+const doubled = someArray.map(fn (val: int64) = val * 2);
 
 // In situations where a function takes no arguments and it is unambiguous, the function can be
 // represented solely with the curly braces

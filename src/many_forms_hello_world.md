@@ -10,8 +10,8 @@ Alan is in the middle, requiring some concepts from the get-go that would be con
 import @std/app
 
 on app.start {
-  app.print("Hello, World!")
-  emit app.exit 0
+  app.print("Hello, World!");
+  emit app.exit 0;
 }
 ```
 
@@ -29,8 +29,8 @@ Finally, "emit application exit zero" isn't super clear, but for those familiar 
 from @std/app import start, print, exit
 
 on start {
-  print("Hello, World!")
-  emit exit 0
+  print("Hello, World!");
+  emit exit 0;
 }
 ```
 
@@ -42,8 +42,8 @@ Almost identical to the first, but it pulls the pieces of the `app` namespace in
 from @std/app import start, print as put, exit
 
 on start {
-  put("Hello, World!")
-  emit exit 0
+  put("Hello, World!");
+  emit exit 0;
 }
 ```
 
@@ -55,8 +55,8 @@ This example demonstrates the renaming syntax on import, so you can choose a nam
 import @std/app as program
 
 on program.start {
-  program.print("Hello, World!")
-  emit program.exit 0
+  program.print("Hello, World!");
+  emit program.exit 0;
 }
 ```
 
@@ -67,11 +67,11 @@ Same as the previous, but the renaming is applied to the module name, rather tha
 ```rust,editable
 from @std/app import start, print, exit
 
-const helloWorld: string = "Hello, World!"
+const helloWorld: string = "Hello, World!";
 
 on start {
-  print(helloWorld)
-  emit exit 0
+  print(helloWorld);
+  emit exit 0;
 }
 ```
 
@@ -83,10 +83,10 @@ This example demonstrates printing a variable instead of an inline constant.
 from @std/app import start, exit, print
 
 on start fn {
-  const hello: string = "Hello"
-  const world: string = "World"
-  print(hello + ", " + world + "!"))
-  emit exit 0
+  const hello: string = "Hello";
+  const world: string = "World";
+  print(hello + ", " + world + "!"));
+  emit exit 0;
 }
 ```
 
@@ -98,8 +98,8 @@ This example demonstrates how values can be combined together to produce the des
 from @std/app import start, print, exit
 
 on start {
-  "Hello, World!".print()
-  emit exit 0
+  "Hello, World!".print();
+  emit exit 0;
 }
 ```
 
@@ -111,8 +111,8 @@ This demonstrates the "method-style" function call syntax, which allows those wh
 from @std/app import start, print, exit
 
 fn main() {
-  "Hello, World!".print()
-  emit exit 0
+  "Hello, World!".print();
+  emit exit 0;
 }
 
 on start main

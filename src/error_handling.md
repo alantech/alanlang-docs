@@ -11,31 +11,31 @@ from @std/app import start, print, exit
 fn reciprocal(val: float64): Result<float64> {
   if val == 0.0 {
     // creates a Result with an Error from a string
-    return err('Divide by zero error!')
+    return err('Divide by zero error!');
   } else {
     // creates a Result with a value
-    return ok(1.0 / val)
+    return ok(1.0 / val);
   }
 }
 
 on start {
-  const oneFifth = reciprocal(5.0)
+  const oneFifth = reciprocal(5.0);
   // checks if the Result has a value
   if oneFifth.isOk() {
     // gets the Result's value or default if it is an Error
-    print(oneFifth.getOr(0.0))
+    print(oneFifth.getOr(0.0));
     // getOr can be expressed with an | operator
-    print(oneFifth | 0.0)
+    print(oneFifth | 0.0);
   }
 
   // checks if the Result has an error
-  const oneZeroth = reciprocal(0.0)
+  const oneZeroth = reciprocal(0.0);
   if oneZeroth.isErr() {
     // gets the Result's Error or default if it is a value
-    print(oneZeroth.getErr(noerr()))
+    print(oneZeroth.getErr(noerr()));
   }
 
-  emit exit 0
+  emit exit 0;
 }
 ```
 

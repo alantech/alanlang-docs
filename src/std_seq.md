@@ -18,8 +18,8 @@ fn recurse(seq: Seq, recursiveFn: function, arg: any): Result<anythingElse>
 
 ```alan
 type Seq {
-  counter: int64
-  limit: int64
+  counter: int64,
+  limit: int64,
 }
 ```
 
@@ -29,11 +29,11 @@ type Seq {
 from @std/app import start, print, exit
 from @std/seq import seq, next
 on start {
-  let s = seq(2)
-  print(s.next())
-  print(s.next())
-  print(s.next())
-  emit exit 0
+  let s = seq(2);
+  print(s.next());
+  print(s.next());
+  print(s.next());
+  emit exit 0;
 }
 ```
 
@@ -45,9 +45,9 @@ on start {
 from @std/app import start, print, exit
 from @std/seq import seq, each
 on start {
-  let s = seq(3)
-  s.each(fn (i: int64) = print(i))
-  emit exit 0
+  let s = seq(3);
+  s.each(fn (i: int64) = print(i));
+  emit exit 0;
 }
 ```
 
@@ -64,15 +64,13 @@ fn func(i: int64): void
 from @std/app import start, print, exit
 from @std/seq import seq, while
 on start {
-  let s = seq(100)
-  let sum = 0
-  // TODO: Still need type inference working for one-liner closures
-  // https://github.com/alantech/alan/issues/193
-  s.while(fn (): bool = sum < 10, fn {
-    sum = sum + 1
-  })
-  print(sum)
-  emit exit 0
+  let s = seq(100);
+  let sum = 0;
+  s.while(fn = sum < 10, fn {
+    sum = sum + 1;
+  });
+  print(sum);
+  emit exit 0;
 }
 ```
 
@@ -89,16 +87,15 @@ fn bodyFn(): void
 from @std/app import start, print, exit
 from @std/seq import seq, doWhile
 on start {
-  let s = seq(100)
-  let sum = 0
-  // TODO: Still need type inference working for one-liner closures
-  // https://github.com/alantech/alan/issues/193
+  let s = seq(100);
+  let sum = 0;
+  // TODO: Still need type inference working for multi-line closures
   s.doWhile(fn (): bool {
-    sum = sum + 1
-    return sum < 10
-  })
-  print(sum)
-  emit exit 0
+    sum = sum + 1;
+    return sum < 10;
+  });
+  print(sum);
+  emit exit 0;
 }
 ```
 
@@ -116,20 +113,20 @@ from @std/seq import seq, Self, recurse
 on start {
   print(seq(100).recurse(fn fibonacci(self: Self, i: int64): Result<int64> {
     if i < 2 {
-      return ok(1)
+      return ok(1);
     } else {
-      const prev = self.recurse(i - 1)
-      const prevPrev = self.recurse(i - 2)
+      const prev = self.recurse(i - 1);
+      const prevPrev = self.recurse(i - 2);
       if prev.isErr() {
-        return prev
+        return prev;
       }
       if prevPrev.isErr() {
-        return prevPrev
+        return prevPrev;
       }
-      return ok((prev || 1) + (prevPrev || 1))
+      return ok((prev || 1) + (prevPrev || 1));
     }
-  }, 8))
-  emit exit 0
+  }, 8));
+  emit exit 0;
 }
 ```
 
@@ -142,7 +139,8 @@ fn recursiveFn(self: Self, arg: any): Result<anythingElse>
 The `Self` type is a special type that the recursive function can use to trigger a controlled recursive call, like so:
 
 ```alan
-const recursiveResult = self.recurse(someNewArg)
+const recursiveResult = self.recurse(someNewArg);
 ```
 
 `Self` is another opaque type that the AVM can use to keep track of the function to be called recursively and how deep the recursion has gone so far. The `recursiveFn` *must* wrap its value in a `Result` type because `alan` may interject and bubble up an error of the recursion limit is reached.
+

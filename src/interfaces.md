@@ -4,12 +4,12 @@ In order to make generic types more useful, there must be a way to declare what 
 
 ```alan
 interface interfaceName {
-  functionname (concreteType, interfaceName): concreteType
-  function2 (interfaceName, interfaceName): interfaceName
-  interfaceName <operatorSymbol> interfaceName: interfaceName
-  <operatorSymbol2> interfaceName: concreteType
-  requiredPropertyName: concreteType
-  requiredPropertyName2: concreteType
+  functionname (concreteType, interfaceName): concreteType,
+  function2 (interfaceName, interfaceName): interfaceName,
+  interfaceName <operatorSymbol> interfaceName: interfaceName,
+  <operatorSymbol2> interfaceName: concreteType,
+  requiredPropertyName: concreteType,
+  requiredPropertyName2: concreteType,
 }
 ```
 
@@ -25,8 +25,8 @@ This means writing a constructor function to make a `KeyVal` object like so:
 
 ```alan
 fn makeKV(key: any, val: any) = new KeyVal<any, any> {
-  key = key
-  val = val
+  key: key,
+  val: val,
 }
 ```
 
@@ -41,8 +41,8 @@ That both would match *any* type given to them, you can then use them in the `Ke
 
 ```alan
 fn makeKv(key: any, val: anythingElse) = new KeyVal<any, anythingElse> {
-  key = key
-  val = val
+  key: key,
+  val: val
 }
 ```
 

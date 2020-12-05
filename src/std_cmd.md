@@ -4,9 +4,9 @@ Also very bare, only a single type `ExecRes`, and a function: `exec` with the si
 
 ```alan
 type ExecRes {
-  exitCode: int64
-  stdout: string
-  stderr: string
+  exitCode: int64,
+  stdout: string,
+  stderr: string,
 }
 ```
 
