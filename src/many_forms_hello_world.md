@@ -85,7 +85,7 @@ from @std/app import start, exit, print
 on start fn {
   const hello: string = "Hello";
   const world: string = "World";
-  print(hello + ", " + world + "!"));
+  print(hello + ", " + world + "!");
   emit exit 0;
 }
 ```

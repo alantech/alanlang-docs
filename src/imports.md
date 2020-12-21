@@ -36,7 +36,7 @@ The exported items are accessible with the conventional dot notation, like `modu
 
 Sometimes the automatically-generated import name is going to collide with another module, or sometimes you just don't think it's a descriptive name, so you have the option to rename it within your module using the `as newName` syntax.
 
-If you write `from ./some/module import var1, var2, ...` you will pull the exported variable directly out of the export scope and place it within your module scope with that name, and you also have the option to ue the `as newName` syntax on any of these imports, as well.
+If you write `from ./some/module import var1, var2, ...` you will pull the exported variable directly out of the export scope and place it within your module scope with that name, and you also have the option to use the `as newName` syntax on any of these imports, as well.
 
 That's it.
 

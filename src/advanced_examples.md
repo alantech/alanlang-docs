@@ -487,7 +487,7 @@ on start fn {
   print(stringBoxBox.val.val);
 
   // The following is a compile time error, uncomment to see!
-  // stringBox.val = 8
+  // stringBox.val = 8;
 
   emit exit 0;
 }

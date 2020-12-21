@@ -28,24 +28,24 @@ sub(float64, float64): float64
 
 ```alan
 // Negates the number
-negate(int8, int8): int8
-negate(int16, int16): int16
-negate(int32, int32): int32
-negate(int64, int64): int64
-negate(float32, float32): float32
-negate(float64, float64): float64
+negate(int8): int8
+negate(int16): int16
+negate(int32): int32
+negate(int64): int64
+negate(float32): float32
+negate(float64): float64
 ```
 
 ##### abs
 
 ```alan
 // Returns the absolute value of the number
-abs(int8, int8): int8
-abs(int16, int16): int16
-abs(int32, int32): int32
-abs(int64, int64): int64
-abs(float32, float32): float32
-abs(float64, float64): float64
+abs(int8): int8
+abs(int16): int16
+abs(int32): int32
+abs(int64): int64
+abs(float32): float32
+abs(float64): float64
 ```
 
 ##### mul
