@@ -17,12 +17,12 @@ fn functionName(firstArgument: argumentType, secondArgument: anotherType) {
   ...statements...
 }
 
-// This s a named function that does not return a value, so it has a return type of void
+// This is a named function that does not return a value, so it has a return type of void
 fn functionName (firstArgument: argumentType, secondArgument: anotherType): void {
   ...statements...
 }
 
-// If you have a named function with no return arguments but want to annotate the return type
+// If you have a named function with no arguments but want to annotate the return type
 // you must include empty parens when defining it
 fn functionName (): returnType {
   ... statements...

@@ -142,5 +142,5 @@ The `Self` type is a special type that the recursive function can use to trigger
 const recursiveResult = self.recurse(someNewArg);
 ```
 
-`Self` is another opaque type that the AVM can use to keep track of the function to be called recursively and how deep the recursion has gone so far. The `recursiveFn` *must* wrap its value in a `Result` type because `alan` may interject and bubble up an error of the recursion limit is reached.
+`Self` is another opaque type that the AVM can use to keep track of the function to be called recursively and how deep the recursion has gone so far. The `recursiveFn` *must* wrap its value in a `Result` type because `alan` may interject and bubble up an error if the recursion limit is reached.
 

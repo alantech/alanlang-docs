@@ -40,5 +40,5 @@ infix precedence <precedenceNumber> functionName as <operatorSymbol>
 
 where `<operatorSymbol>` is the symbol for the operator, `<precedenceNumber>` is an `int8` number, and `functionName` is the function being mapped to the operator. Only functions with two arguments will be considered.
 
-The example earlier of the function calls `3.add(2).mul(5).mod(3)` or `mod(mul(add(3, 2), 5), 3)` can be written with operators as `(3 + 2) * 5 % 3` or `5 * (3 + 2) % 5`, where the parenthesis break the operator precedence to allow addition to come first. See the [built-in operators](./builtins/operators.md) section for the complete list of operators and their precedence.
+The example earlier of the function calls `3.add(2).mul(5).mod(3)` or `mod(mul(add(3, 2), 5), 3)` can be written with operators as `(3 + 2) * 5 % 3` or `5 * (3 + 2) % 3`, where the parenthesis break the operator precedence to allow addition to come first. See the [built-in operators](./builtins/operators.md) section for the complete list of operators and their precedence.
 
