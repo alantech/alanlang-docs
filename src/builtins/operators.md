@@ -64,7 +64,7 @@ As [operators](../operators.md) in Alan are simply aliases for functions with a 
       <td><code>|</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md#or">or</a></td>
     </tr>
     <tr>
-      <td><code>||</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md#or">or</a></td>
+      <td><code>||</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md#boolor">boolor</a></td>
     </tr>
     <tr>
       <td><code>^</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md#xor">xor</a></td>
@@ -76,16 +76,13 @@ As [operators](../operators.md) in Alan are simply aliases for functions with a 
       <td><code>!^</code></td><td>infix</td><td>2</td><td><a href="./bitwise.md#xnor">xnor</a></td>
     </tr>
     <tr>
-      <td><code>|</code></td><td>infix</td><td>2</td><td><a href="./result_maybe.md#getOr">getOr</a></td>
-    </tr>
-    <tr>
       <td><code>||</code></td><td>infix</td><td>2</td><td><a href="./result_maybe.md#getOr">getOr</a></td>
     </tr>
     <tr>
       <td><code>*</code></td><td>infix</td><td>3</td><td><a href="./array_api.md#repeat">repeat</a></td>
     </tr>
     <tr>
-      <td><code>/</code></td><td>infix</td><td>3</td><td><a href="./string_api.md#repeat">repeat</a></td>
+      <td><code>/</code></td><td>infix</td><td>3</td><td><a href="./string_api.md#split">split</a></td>
     </tr>
     <tr>
       <td><code>%</code></td><td>infix</td><td>3</td><td><a href="./string_api.md#template">template</a></td>

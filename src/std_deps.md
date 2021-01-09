@@ -4,6 +4,10 @@ This library provides code to manage the dependencies of an Alan project.
 
 It exports one event, `install` that scripts managing dependencies should use instead of `start`.
 
+```alan
+event install: void
+```
+
 It also exports two functions `add`, and `commit` with the following signature:
 
 ```

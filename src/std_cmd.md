@@ -1,6 +1,6 @@
 ### @std/cmd
 
-Also very bare, only a single type `ExecRes`, and a function: `exec` with the signature:
+Currently very bare, only a single type `ExecRes`, and a function: `exec` with the signature:
 
 ```alan
 type ExecRes {

@@ -24,7 +24,7 @@ Any type that exists in the language can be assigned. Simple constants are simpl
 ```alan
 const simpleConstant: bool = true;
 const simpleConstant2 = "simple";
-const expressionResult: int64 = 3 + 5 * 2 + fnCall2(3, 1);
+const expressionResult: int64 = 3 + 5 * 2 + fnCall2(3, 1) || 0;
 const fnResult: someType = functioncall(3, 5);
 const userTypeLiteral = new UserType {
   key: "val",
