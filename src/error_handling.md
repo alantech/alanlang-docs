@@ -14,7 +14,7 @@ fn reciprocal(val: float64): Result<float64> {
     return err('Divide by zero error!');
   } else {
     // creates a Result with a value
-    return ok(1.0 / val);
+    return 1.0 / val;
   }
 }
 
@@ -24,8 +24,8 @@ on start {
   if oneFifth.isOk() {
     // gets the Result's value or default if it is an Error
     print(oneFifth.getOr(0.0));
-    // getOr can be expressed with an | operator
-    print(oneFifth | 0.0);
+    // getOr can be expressed with an || operator
+    print(oneFifth || 0.0);
   }
 
   // checks if the Result has an error

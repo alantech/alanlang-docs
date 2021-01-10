@@ -1,17 +1,17 @@
 #### Type Coercion
 
-##### toFloat or toFloat64
+##### toFloat64
 
 ```alan
-// Converts the built-in basic types to 64-bit floats which are the default numeric float type
-toFloat(int8): float     // toFloat64(int8): float64
-toFloat(int16): float    // toFloat64(int16): float64
-toFloat(int32): float    // toFloat64(int32): float64
-toFloat(int64): float    // toFloat64(int64): float64
-toFloat(float32): float  // toFloat64(float32): float64
-toFloat(float): float    // toFloat64(float64): float64
-toFloat(bool): float     // toFloat64(bool): float64
-toFloat(string): float   // toFloat64(string): float64
+// Converts the built-in basic types to 64-bit floats
+toFloat64(int8): float64
+toFloat64(int16): float64
+toFloat64(int32): float64
+toFloat64(int64): float64
+toFloat64(float32): float64
+toFloat64(float64): float64
+toFloat64(bool): float64
+toFloat64(string): float64
 ```
 
 ##### toFloat32
@@ -28,18 +28,26 @@ toFloat32(bool): float32
 toFloat32(string): float32
 ```
 
-##### toInt or toInt64
+#### toFloat
 
 ```alan
-// Converts the built-in basic types to 64-bit integers which are the default numeric int type
-toInt(int8): int         // toInt64(int8): int64
-toInt(int16): int        // toInt64(int16): int64
-toInt(int32): int        // toInt64(int32): int64
-toInt(int): int          // toInt64(int64): int64
-toInt(float32): int      // toInt64(float32): int64
-toInt(float64): int      // toInt64(float64): int64
-toInt(bool): int         // toInt64(bool): int64
-toInt(string): int       // toInt64(string): int64
+// Converts to the `float` type, which is an alias for `float64`
+// `canFloat64` is an interface that catches any type with a `toFloat64` function
+toFloat(canFloat64): float
+```
+
+##### toInt64
+
+```alan
+// Converts the built-in basic types to 64-bit integers
+toInt64(int8): int64
+toInt64(int16): int64
+toInt64(int32): int64
+toInt64(int64): int64
+toInt64(float32): int64
+toInt64(float64): int64
+toInt64(bool): int64
+toInt64(string): int64
 ```
 
 ##### toInt32
@@ -82,6 +90,14 @@ toInt8(float32): int8
 toInt8(float64): int8
 toInt8(bool): int8
 toInt8(string): int8
+```
+
+#### toInt
+
+```alan
+// Converts to the `int` type, which is an alias for `int64`
+// `canInt64` is an interface that catches any type with a `toInt64` function
+toInt(canInt64): int
 ```
 
 ##### toBool

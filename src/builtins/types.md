@@ -22,21 +22,21 @@ The four "main" basic types (`int64`, `float64`, `bool` and `void`) have constan
 The integers have basic base-10 integer form as well as hexadecimal form. Binary and Octal forms are not implemented but that may change if there is demand for it.
 
 ```alan
-const base10 = 12345
-const base16 = 0xabcde
+const base10 = 12345;
+const base16 = 0xabcde;
 ```
 
 The floating point numbers have only basic base-10 with a decimal point form, no scientific notation form yet, but that may change if there is demand for it.
 
 ```alan
-const floating = 1.2345
+const floating = 1.2345;
 ```
 
 Booleans are represented by the keywords `true` and `false`. `void` has no representation beyond `void`. It can't be assigned to, and is meant to represent functions that return nothing.
 
 ```alan
-const boolean = true
-const someVoid = void
+const boolean = true;
+const someVoid = void;
 ```
 
 The basic types are included in the root scope and never need to be explicitly defined, they always exist.
@@ -48,8 +48,8 @@ Strings (`string`) are a bit beyond the basic type. From the perspective of the 
 Strings are defined by wrapping double or single quotes (`"` or `'`) around text. They work identically to Javascript strings, with the same sorts of C-style escape codes. Within the runtime, however, they are represented as Pascal strings with a 64-bit header, which makes certain operations faster than their C-string counterparts (particularly length checking, which is O(1)) but means 8 extra bytes are required for each string versus C-string's traditional 1 extra byte, so lots of small strings will consume more memory.
 
 ```alan
-const myString = "My string's string"
-const myOtherString = 'My other string\'s string'
+const myString = "My string's string";
+const myOtherString = 'My other string\'s string';
 ```
 
 ##### Special Types
@@ -68,8 +68,8 @@ Functions are covered in the [Functions](../functions.md) section. `Either<T, U>
 A `HashMap<K, V>` creates a mapping from `K` to `V`. An `Array<V>` in Alan can hold more than one `V` at a time. Arrays can be defined with an explicit type or the compiler can infer the type for you:
 
 ```alan
-const test = new Array<int> [ 1, 2, 3, 4, 5 ]
-const count = [1, 2, 3, 4, 5]
+const test = new Array<int> [ 1, 2, 3, 4, 5 ];
+const count = [1, 2, 3, 4, 5];
 ```
 
 The sections that cover built-in functions for [Array Manipulation](./array_api.md) and [HashMap Manipulation](./hashmap_api.md) provide a better sense of how to manipulate the values stored in `Array<V>`, `HashMap<K, V>` and `KeyVal<K, V>`.

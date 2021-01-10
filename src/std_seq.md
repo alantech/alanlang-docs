@@ -67,7 +67,7 @@ on start {
   let s = seq(100);
   let sum = 0;
   s.while(fn = sum < 10, fn {
-    sum = sum + 1;
+    sum = sum + 1 || 0;
   });
   print(sum);
   emit exit 0;
@@ -91,7 +91,7 @@ on start {
   let sum = 0;
   // TODO: Still need type inference working for multi-line closures
   s.doWhile(fn (): bool {
-    sum = sum + 1;
+    sum = sum + 1 || 0;
     return sum < 10;
   });
   print(sum);
