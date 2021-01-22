@@ -10,6 +10,8 @@ Alan's compiler is a multi-stage compiler written mostly in Typescript at the mo
    JS      AGA (Alan Graphcode Assembler, dependency graph code in a text format)
             |
            AGC (Alan Graphcode, binary format for the runtime)
+            |
+           AGZ (Alan Graphcode GZipped, compressed binary format for the runtime)
 ```
 
 **LN** is the high level language meant to be easily accessible, like a cleaned-up Typescript/JS. Automatic memory management, automatic IO concurrency, automatic event-level and array-level CPU parallelism (two tracks in the runtime right now), and a strict type system but with interfaces for defining generic functions that we believe we can write [100% automatic type inference with without the compiler requiring a fallback to an explicit type](https://github.com/alantech/alan/blob/main/rfcs/006%20-%20Automatic%20Argument%20Interfaces%20RFC.md).
@@ -23,6 +25,8 @@ The transpiled Javascript doesn't have any of the benefits of the language in te
 **AGA** looks very similar to assembly, but with annotation on events, closures, and the dependency graph that the Alan Runtime uses to reorganize for concurrency and parallelism benefits.
 
 **AGC** is the binary version of *AGA* and is a near direct translation of the text to a 64-bit little-endian integer packed array, with keywords being given numeric values that are clearly interpretable as 8 UTF-8/ASCII characters.
+
+**AGZ** is a gzipped *AGC* file that can also be loaded directly by the AVM.
 
 The compiler contains as a set of AST generators for the various input formats ([ln](https://github.com/alantech/alan/tree/main/compiler/src/ln.ts), [amm](https://github.com/alantech/alan/blob/main/compiler/src/amm.ts), [aga](https://github.com/alantech/alan/blob/main/compiler/src/aga.ts)). The grammars are defined using our homegrown [lp](https://github.com/alantech/alan/blob/main/compiler/src/lp.ts) recursive descent parser.
 
@@ -40,4 +44,8 @@ The next stage of the compiler takes the AMM and converts it either into AGA or 
 
 ## AGA to AGC
 
-If targeting to AGC, the final stage of the compiler converts the AGA to AGC with a very straightforward parse and re-emit into 64-bit integers appended to an array and then written to disk. This format doesn't work in the browser due to depending on Node.js's Buffer API, which no browser shim supports, yet, but thankfully that is not needed to build runnable code in the browser!
+If targeting to AGC, this stage of the compiler converts the AGA to AGC with a very straightforward parse and re-emit into 64-bit integers appended to an array and then written to disk. This format doesn't work in the browser due to depending on Node.js's Buffer API, which no browser shim supports, yet, but thankfully that is not needed to build runnable code in the browser!
+
+## AGC to AGZ
+
+If the final output target is AGZ, the final stage of the compiler takes the AGC binary, compresses it, and writes out the compressed data. This stage depends on Node.js' built-in zlib bindings so it also does not work in the browser, but is also not necessary there.

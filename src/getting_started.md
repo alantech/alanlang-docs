@@ -38,8 +38,8 @@ Expand-Archive -Path alan-windows.zip -DestinationPath C:\windows
 If you wish to contribute to Alan, or if your operating system and/or CPU architecture do not match the above, you'll need a development environment to build Alan locally:
 
 * git (any recent version should work)
-* Node.js >=10.20.1, <14.0.0
-* Rust >=1.41.1
+* Node.js >=10.20.1
+* Rust >=1.45.0
 * A complete C toolchain (gcc, clang, msvc)
 
 Once those are installed, simply:
@@ -71,11 +71,19 @@ alan compile hello_world.ln hello_world.agc
 alan run hello_world.agc
 ```
 
+If your binary output size is very large and you don't mind the slight increase in startup time, you can also compile to AGZ for a gzipped version of the binary that can also be run directly:
+
+```bash
+alan compile hello_world.ln hello_world.agz
+alan run hello_world.agz
+```
+
 You can also run the source file directly:
 
 ```bash
 alan hello_world.ln
 ```
+
 which will internally compile the code then run it, but you have to pay the compilation costs on each run.
 
 ## Syntax Highlighting
