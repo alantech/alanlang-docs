@@ -9,10 +9,12 @@ Here you’ll find short answers to “How do I….?” types of questions. Thes
 TODO proposal
 
   - Concurrently handle and make http requests without Futures or Promises (hint: do nothing!)
-  - Process large amounts of Array data in parallel without a framework (hint: do nothing!)
+  - Process large amounts of Array data in parallel (hint: do nothing!)
   - Define mutable variables outside and inside event handlers
-  - Implement sequential algorithms that can't use arrays (TODO call out algorithm)
-  - Define custom event types (TODO find a good event-based use case)
+  - Implement sequential algorithm that can't use arrays
+    - Algorithm can be Newton-Raphson's method applied to numerically calculate a derivative or some other numerical approximation
+  - Recalculate an expensive global stat on each HTTP requests without slowing down response times
+    - Showcase custom events and @std/datastore
   - Handle math errors gracefully
   - Deploy an HTTP server to multiple cloud providers
   - Export a project
