@@ -1,10 +1,12 @@
-# Foreword
+# Topic Guides
 
-The Alan Language Reference is broken into three major sections: the [Syntax and File Structure](./file_structure.md) of the Alan source files that you as the developer would directly write, the [Module System](./modules.md) that Alan uses to link your various source files and dependencies together which influences how you structure and reason about your codebase, and the [Built-ins](./builtins/built_ins.md) that provide the building blocks necessary to be productive in the language and how they work.
+There are three major Alan Language Topics: 
 
-The examples will be given as code snippets for clarity. To see the grammar definitions, please review [the parser definition in the compiler](https://github.com/alantech/alan/blob/master/compiler/src/ln/Ln.g4) as that is guaranteed to be the correct grammar. The sole exception is the [List of Keywords and Reserved Symbols](./keywords.md) as a quick reference to what is disallowed as variable, function, or operator names.
+- A general overview [about Alan](./about-alan.md)
+- The [Syntax and File Structure](./file_structure.md) of the Alan source files that you as the developer would directly write
+- The [Module System](./modules.md) that Alan uses to link your various source files and dependencies together which influences how you structure and reason about your codebase.
 
-However, this reference assumes this isn't your first introduction to programming. With the exception of the [Module System](./modules.md), as that brings in something new, there won't be any explanations for *why* something is useful or *when* to use one particular construct versus another. There are many excellent Intro to Programming tutorials out there that have been refined for years for more popular programming languages, and we as the authors of Alan would recommend that you learn to program with one of these well-thought-out tutorials:
+The explanation to these topics assumes this isn't your first introduction to programming. With the exception of the [Module System](./modules.md), as that brings in something new, there won't be any explanations for *why* something is useful or *when* to use one particular construct versus another. There are many excellent Intro to Programming tutorials out there that have been refined for years for more popular programming languages, and we as the authors of Alan would recommend that you learn to program with one of these well-thought-out tutorials:
 
 * Structure and Interpretation of Computer Programs, a classic that is available in both [Python](https://wizardforcel.gitbooks.io/sicp-in-python/content/index.html) and [Scheme](https://mitpress.mit.edu/sites/default/files/sicp/index.html). Using both at the same time is great for separating the concepts from the specific syntax of any given language.
 * [Why's Poignant Guide to Ruby](https://poignant.guide/) is excellent for those who want a more conversational style or have had problems with the "Professorial" style of other intro to programming books.

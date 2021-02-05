@@ -54,58 +54,18 @@ This example demonstrates the renaming syntax on import, so you can choose a nam
 ```rust,editable
 import @std/app as program
 
+const helloWorld: string = "Hello, World!";
+
 on program.start {
-  program.print("Hello, World!");
+  program.print(helloWorld);
   emit program.exit 0;
 }
 ```
 
 Same as the previous, but the renaming is applied to the module name, rather than its contents.
+This example also demonstrates printing a variable instead of an inline constant.
 
 ### `hello_world_5.ln`
-
-```rust,editable
-from @std/app import start, print, exit
-
-const helloWorld: string = "Hello, World!";
-
-on start {
-  print(helloWorld);
-  emit exit 0;
-}
-```
-
-This example demonstrates printing a variable instead of an inline constant.
-
-### `hello_world_6.ln`
-
-```rust,editable
-from @std/app import start, exit, print
-
-on start fn {
-  const hello: string = "Hello";
-  const world: string = "World";
-  print(hello + ", " + world + "!");
-  emit exit 0;
-}
-```
-
-This example demonstrates how values can be combined together to produce the desired result.
-
-### `hello_world_7.ln`
-
-```rust,editable
-from @std/app import start, print, exit
-
-on start {
-  "Hello, World!".print();
-  emit exit 0;
-}
-```
-
-This demonstrates the "method-style" function call syntax, which allows those who prefer OO development to have that style (though it could be misleading that it implies everything is an object, when it's really syntactic sugar, but...)
-
-### `hello_world_8.ln`
 
 ```rust,editable
 from @std/app import start, print, exit
@@ -115,8 +75,8 @@ fn main() {
   emit exit 0;
 }
 
-on start main
+on start main;
 ```
 
-This example demonstrates that the functions passed to an event handler don't have to be inline declared.
+This demonstrates the "method-style" function call syntax, which allows those who prefer OO development to have that style (though it could be misleading that it implies everything is an object, when it's really syntactic sugar, but...). It also demonstrates that the functions passed to an event handler don't have to be inline declared.
 
