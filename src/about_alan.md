@@ -3,8 +3,8 @@
 Alan is an implicitly-parallel, statically-compiled, event-based, type-inferred language with a familiar syntax and many compile-time and run-time safety guarantees.
 
 * The compiler can determine which array operations are safely parallelizable and automatically distributes them across a threadpool.
-* The Rust AVM can determine which operations are IO operations and automatically `async/await` them, as well as automatically batch IO operations that can be executed in parallel safely.
-* The Rust AVM has automatic memory management without a GC made possible by the language scoping semantics.
+* The AVM can determine which operations are IO operations and will `await` them accordingly without the need for Futures or Promises, as well as automatically batch IO operations that can be executed in parallel safely.
+* The AVM has automatic memory management without a GC made possible by the language scoping semantics.
 * The type system enforces safe code to prevent most runtime errors (out-of-memory being a notable exception).
 * The module system has a built-in mocking mechanism (with no runtime performance penalty) that can be used for fine-grained permissioning of access to the standard library for third-party libraries.
 * Aggressive function inlining and dead-code removal to make sure unused code isn't even available in the output to potentially exploit.
