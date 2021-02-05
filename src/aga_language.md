@@ -1,6 +1,6 @@
-## AGA Language Reference
+## AGA Language as an intermediate representation of Alan
 
-Alan Graphcode Assembler is a text representation of the Runtime's VM binary format.
+Alan Graphcode Assembler is a text representation of the Alan's VM binary format, AGC.
 
 The syntax looks like assembly, perl, graphviz, rust, and python were put in a blender. As the cyclomatic complexity of an assembler (syntactically) is low, the various symbols within AGA borrowed from the above four are meant to produce a "dense-but-legible" syntax.
 
