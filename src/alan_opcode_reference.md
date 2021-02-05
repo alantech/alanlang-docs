@@ -1,4 +1,4 @@
-## Alan VM Opcode Reference
+## Alan Opcode Reference
 
 The [Alan Standard Library](./standard_library.md), [AMM](./amm_language.md), and [AGA](./aga_language.md) formats all make extensive use of opcodes defined within the Alan VM to do useful work.
 
