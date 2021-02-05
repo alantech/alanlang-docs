@@ -1,4 +1,4 @@
-## AMM Language Reference
+## AMM Language as an intermediate representation of Alan
 
 Alan-- is an intentionally strict subset of Alan's grammar as an intermediate stage for compilation. It defines a relatively simple scope-based syntax that happens to be a perfectly suitable subset for converting to a variety of different languages, including conversion towards assembly-like languages (AGA) or other scope-based languages like Javascript.
 

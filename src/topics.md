@@ -1,10 +1,11 @@
 # Topic Guides
 
-There are three major Alan Language Topics: 
+There are four major Alan Language Topics: 
 
-- A general overview [about Alan](./about-alan.md)
+- A general overview [about Alan](./about_alan.md)
 - The [Syntax and File Structure](./file_structure.md) of the Alan source files that you as the developer would directly write
 - The [Module System](./modules.md) that Alan uses to link your various source files and dependencies together which influences how you structure and reason about your codebase.
+- The [Compiler Internals](./compiler_internals.md) explains how Alan code is compiled into a custom bytecode format for the Alan VM, or transpiled to Javascript.
 
 The explanation to these topics assumes this isn't your first introduction to programming. With the exception of the [Module System](./modules.md), as that brings in something new, there won't be any explanations for *why* something is useful or *when* to use one particular construct versus another. There are many excellent Intro to Programming tutorials out there that have been refined for years for more popular programming languages, and we as the authors of Alan would recommend that you learn to program with one of these well-thought-out tutorials:
 
