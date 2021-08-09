@@ -2514,12 +2514,12 @@ exports.resolveDependency = (modulePath, dependency) => {
             if (typeof dirPath === 'string' && typeof filePath === 'string') {
                 console.error(dirPath + ' and ' + filePath + ' both exist. Using ' + dirPath);
             }
-            if (typeof filePath === 'string') {
-                importPath = filePath;
-                break;
-            }
             if (typeof dirPath === 'string') {
                 importPath = dirPath;
+                break;
+            }
+            if (typeof filePath === 'string') {
+                importPath = filePath;
                 break;
             }
             if (pathRoot === '/' || /[A-Z]:\\/.test(pathRoot)) {
@@ -2546,12 +2546,12 @@ exports.resolveDependency = (modulePath, dependency) => {
                     if (typeof dirPath === 'string' && typeof filePath === 'string') {
                         console.error(dirPath + ' and ' + filePath + ' both exist. Using ' + dirPath);
                     }
-                    if (typeof filePath === 'string') {
-                        importPath = filePath;
-                        break;
-                    }
                     if (typeof dirPath === 'string') {
                         importPath = dirPath;
+                        break;
+                    }
+                    if (typeof filePath === 'string') {
+                        importPath = filePath;
                         break;
                     }
                     if (pathRoot === '/' || /[A-Z]:\\/.test(pathRoot)) {
