@@ -2762,32 +2762,29 @@ exports.default = Constant;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Type_1 = require("./Type");
-let Event = /** @class */ (() => {
-    class Event {
-        constructor(name, type, builtIn) {
-            (this.name = name), (this.type = type);
-            this.builtIn = builtIn;
-            this.handlers = [];
-            Event.allEvents.push(this);
-        }
-        toString() {
-            return `event ${this.name}: ${this.type.typename}`;
-        }
-        static fromAst(eventAst, scope) {
-            const name = eventAst.get('variable').t;
-            const type = scope.deepGet(eventAst.get('fulltypename').t);
-            if (!type) {
-                throw new Error('Could not find specified type: ' + eventAst.get('fulltypename').t);
-            }
-            else if (!(type instanceof Type_1.default)) {
-                throw new Error(eventAst.get('fulltypename').t + ' is not a type');
-            }
-            return new Event(name, type, false);
-        }
+class Event {
+    constructor(name, type, builtIn) {
+        (this.name = name), (this.type = type);
+        this.builtIn = builtIn;
+        this.handlers = [];
+        Event.allEvents.push(this);
     }
-    Event.allEvents = [];
-    return Event;
-})();
+    toString() {
+        return `event ${this.name}: ${this.type.typename}`;
+    }
+    static fromAst(eventAst, scope) {
+        const name = eventAst.get('variable').t;
+        const type = scope.deepGet(eventAst.get('fulltypename').t);
+        if (!type) {
+            throw new Error('Could not find specified type: ' + eventAst.get('fulltypename').t);
+        }
+        else if (!(type instanceof Type_1.default)) {
+            throw new Error(eventAst.get('fulltypename').t + ' is not a type');
+        }
+        return new Event(name, type, false);
+    }
+}
+Event.allEvents = [];
 exports.default = Event;
 
 },{"./Type":18}],12:[function(require,module,exports){
@@ -4192,7 +4189,7 @@ ${assignablesAst.t}`;
 }
 exports.default = Microstatement;
 
-},{"./Ast":9,"./Constant":10,"./Event":11,"./Operator":14,"./Scope":15,"./Statement":16,"./StatementType":17,"./Type":18,"./UserFunction":19,"./opcodes":21,"uuid":70}],13:[function(require,module,exports){
+},{"./Ast":9,"./Constant":10,"./Event":11,"./Operator":14,"./Scope":15,"./Statement":16,"./StatementType":17,"./Type":18,"./UserFunction":19,"./opcodes":21,"uuid":69}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Ast = require("./Ast");
@@ -5161,486 +5158,483 @@ class Interface {
     }
 }
 exports.Interface = Interface;
-let Type = /** @class */ (() => {
-    class Type {
-        constructor(typename, builtIn = false, isGenericStandin = false, properties = {}, generics = {}, originalType = null, iface = null, alias = null) {
-            this.typename = typename;
-            this.builtIn = builtIn;
-            this.isGenericStandin = isGenericStandin;
-            this.properties = properties;
-            this.generics = generics;
-            this.originalType = originalType;
-            this.iface = iface;
-            this.alias = alias;
-        }
-        toString() {
-            if (this.iface != null)
-                return '// Interfaces TBD';
-            let outString = 'type ' + this.typename;
-            if (this.alias != null) {
-                outString += ' = ' + this.alias.typename;
-                return outString;
-            }
-            if (this.generics.length > 0) {
-                outString += '<' + Object.keys(this.generics).join(', ') + '>';
-            }
-            outString += '{\n';
-            for (const propName of Object.keys(this.properties)) {
-                outString +=
-                    '  ' + propName + ': ' + this.properties[propName].typename + '\n';
-            }
-            outString += '}\n';
+class Type {
+    constructor(typename, builtIn = false, isGenericStandin = false, properties = {}, generics = {}, originalType = null, iface = null, alias = null) {
+        this.typename = typename;
+        this.builtIn = builtIn;
+        this.isGenericStandin = isGenericStandin;
+        this.properties = properties;
+        this.generics = generics;
+        this.originalType = originalType;
+        this.iface = iface;
+        this.alias = alias;
+    }
+    toString() {
+        if (this.iface != null)
+            return '// Interfaces TBD';
+        let outString = 'type ' + this.typename;
+        if (this.alias != null) {
+            outString += ' = ' + this.alias.typename;
             return outString;
         }
-        static fromAst(typeAst, scope) {
-            const type = new Type(typeAst.get('fulltypename').get('typename').t);
-            const genScope = new Scope_1.default();
-            const typeScope = new Scope_1.default(scope);
-            typeScope.secondaryPar = genScope;
-            if (typeAst.get('fulltypename').has('opttypegenerics')) {
-                const genericsAst = typeAst
-                    .get('fulltypename')
-                    .get('opttypegenerics')
-                    .get('generics');
-                const generics = [];
-                generics.push(genericsAst.get('fulltypename').t);
-                genericsAst
-                    .get('cdr')
-                    .getAll()
-                    .forEach((r) => {
-                    generics.push(r.get('fulltypename').t);
-                });
-                for (let i = 0; i < generics.length; i++) {
-                    type.generics[generics[i]] = i;
-                    genScope.put(generics[i], new Type(generics[i], true, true));
-                }
+        if (this.generics.length > 0) {
+            outString += '<' + Object.keys(this.generics).join(', ') + '>';
+        }
+        outString += '{\n';
+        for (const propName of Object.keys(this.properties)) {
+            outString +=
+                '  ' + propName + ': ' + this.properties[propName].typename + '\n';
+        }
+        outString += '}\n';
+        return outString;
+    }
+    static fromAst(typeAst, scope) {
+        const type = new Type(typeAst.get('fulltypename').get('typename').t);
+        const genScope = new Scope_1.default();
+        const typeScope = new Scope_1.default(scope);
+        typeScope.secondaryPar = genScope;
+        if (typeAst.get('fulltypename').has('opttypegenerics')) {
+            const genericsAst = typeAst
+                .get('fulltypename')
+                .get('opttypegenerics')
+                .get('generics');
+            const generics = [];
+            generics.push(genericsAst.get('fulltypename').t);
+            genericsAst
+                .get('cdr')
+                .getAll()
+                .forEach((r) => {
+                generics.push(r.get('fulltypename').t);
+            });
+            for (let i = 0; i < generics.length; i++) {
+                type.generics[generics[i]] = i;
+                genScope.put(generics[i], new Type(generics[i], true, true));
             }
-            if (typeAst.get('typedef').has('typebody')) {
-                const typelist = typeAst.get('typedef').get('typebody').get('typelist');
-                const lines = [];
-                lines.push(typelist.get('typeline'));
-                typelist
-                    .get('cdr')
-                    .getAll()
-                    .forEach((r) => {
-                    lines.push(r.get('typeline'));
-                });
-                for (const lineAst of lines) {
-                    const propertyName = lineAst.get('variable').t;
-                    const typeName = lineAst.get('fulltypename').t.trim();
-                    const property = typeScope.deepGet(typeName);
-                    if (!property || !(property instanceof Type)) {
-                        // Potentially a type that depends on the type generics of this type
-                        const baseTypeName = lineAst.get('fulltypename').get('typename').t;
-                        const genericsList = [];
-                        if (lineAst.get('fulltypename').has('opttypegenerics')) {
-                            const innerGenerics = lineAst
-                                .get('fulltypename')
+        }
+        if (typeAst.get('typedef').has('typebody')) {
+            const typelist = typeAst.get('typedef').get('typebody').get('typelist');
+            const lines = [];
+            lines.push(typelist.get('typeline'));
+            typelist
+                .get('cdr')
+                .getAll()
+                .forEach((r) => {
+                lines.push(r.get('typeline'));
+            });
+            for (const lineAst of lines) {
+                const propertyName = lineAst.get('variable').t;
+                const typeName = lineAst.get('fulltypename').t.trim();
+                const property = typeScope.deepGet(typeName);
+                if (!property || !(property instanceof Type)) {
+                    // Potentially a type that depends on the type generics of this type
+                    const baseTypeName = lineAst.get('fulltypename').get('typename').t;
+                    const genericsList = [];
+                    if (lineAst.get('fulltypename').has('opttypegenerics')) {
+                        const innerGenerics = lineAst
+                            .get('fulltypename')
+                            .get('opttypegenerics')
+                            .get('generics');
+                        genericsList.push(innerGenerics.get('fulltypename'));
+                        innerGenerics
+                            .get('cdr')
+                            .getAll()
+                            .forEach((r) => {
+                            genericsList.push(r.get('fulltypename'));
+                        });
+                    }
+                    const innerGenerics = [...genericsList];
+                    const genericsQueue = [];
+                    while (genericsList.length > 0) {
+                        const generic = genericsList.shift();
+                        genericsQueue.push(generic);
+                        if (generic.has('opttypegenerics')) {
+                            const innerInnerGenerics = generic
                                 .get('opttypegenerics')
                                 .get('generics');
-                            genericsList.push(innerGenerics.get('fulltypename'));
-                            innerGenerics
+                            genericsList.push(innerInnerGenerics.get('fulltypename'));
+                            innerInnerGenerics
                                 .get('cdr')
                                 .getAll()
                                 .forEach((r) => {
                                 genericsList.push(r.get('fulltypename'));
                             });
                         }
-                        const innerGenerics = [...genericsList];
-                        const genericsQueue = [];
-                        while (genericsList.length > 0) {
-                            const generic = genericsList.shift();
-                            genericsQueue.push(generic);
+                    }
+                    while (genericsQueue.length > 0) {
+                        const generic = genericsQueue.pop();
+                        const innerType = typeScope.deepGet(generic.t);
+                        if (!innerType) {
+                            const innerBaseTypeName = generic.get('typename').t;
+                            const innerBaseType = typeScope.deepGet(innerBaseTypeName);
+                            if (!innerBaseType) {
+                                throw new Error(`Cannot find type ${innerBaseTypeName} while defining ${type}`);
+                            }
+                            const innerBaseGenerics = [];
                             if (generic.has('opttypegenerics')) {
                                 const innerInnerGenerics = generic
                                     .get('opttypegenerics')
                                     .get('generics');
-                                genericsList.push(innerInnerGenerics.get('fulltypename'));
+                                innerBaseGenerics.push(innerInnerGenerics.get('fulltypename').t);
                                 innerInnerGenerics
                                     .get('cdr')
                                     .getAll()
                                     .forEach((r) => {
-                                    genericsList.push(r.get('fulltypename'));
+                                    innerBaseGenerics.push(r.get('fulltypename').t);
                                 });
                             }
+                            innerBaseType.solidify(innerBaseGenerics, typeScope);
                         }
-                        while (genericsQueue.length > 0) {
-                            const generic = genericsQueue.pop();
-                            const innerType = typeScope.deepGet(generic.t);
-                            if (!innerType) {
-                                const innerBaseTypeName = generic.get('typename').t;
-                                const innerBaseType = typeScope.deepGet(innerBaseTypeName);
-                                if (!innerBaseType) {
-                                    throw new Error(`Cannot find type ${innerBaseTypeName} while defining ${type}`);
-                                }
-                                const innerBaseGenerics = [];
-                                if (generic.has('opttypegenerics')) {
-                                    const innerInnerGenerics = generic
-                                        .get('opttypegenerics')
-                                        .get('generics');
-                                    innerBaseGenerics.push(innerInnerGenerics.get('fulltypename').t);
-                                    innerInnerGenerics
-                                        .get('cdr')
-                                        .getAll()
-                                        .forEach((r) => {
-                                        innerBaseGenerics.push(r.get('fulltypename').t);
-                                    });
-                                }
-                                innerBaseType.solidify(innerBaseGenerics, typeScope);
-                            }
-                        }
-                        const baseType = scope.deepGet(baseTypeName);
-                        if (!baseType || !(baseType instanceof Type)) {
-                            throw new Error(lineAst.get('fulltypename').t + ' is not a type');
-                        }
-                        type.properties[propertyName] = baseType.solidify(innerGenerics.map((r) => r.t), typeScope);
                     }
-                    else {
-                        type.properties[propertyName] = property;
+                    const baseType = scope.deepGet(baseTypeName);
+                    if (!baseType || !(baseType instanceof Type)) {
+                        throw new Error(lineAst.get('fulltypename').t + ' is not a type');
                     }
+                    type.properties[propertyName] = baseType.solidify(innerGenerics.map((r) => r.t), typeScope);
+                }
+                else {
+                    type.properties[propertyName] = property;
                 }
             }
-            if (typeAst.get('typedef').has('typealias')) {
-                const otherType = scope.deepGet(typeAst
+        }
+        if (typeAst.get('typedef').has('typealias')) {
+            const otherType = scope.deepGet(typeAst
+                .get('typedef')
+                .get('typealias')
+                .get('fulltypename')
+                .get('typename').t);
+            if (!otherType) {
+                throw new Error('Type ' +
+                    typeAst.get('typedef').get('typealias').get('fulltypename').t +
+                    ' not defined');
+            }
+            if (!(otherType instanceof Type)) {
+                throw new Error(typeAst.get('typedef').get('typealias').get('fulltypename').t +
+                    ' is not a valid type');
+            }
+            let fulltypename = otherType;
+            if (Object.keys(fulltypename.generics).length > 0 &&
+                typeAst
                     .get('typedef')
                     .get('typealias')
                     .get('fulltypename')
-                    .get('typename').t);
-                if (!otherType) {
-                    throw new Error('Type ' +
-                        typeAst.get('typedef').get('typealias').get('fulltypename').t +
-                        ' not defined');
-                }
-                if (!(otherType instanceof Type)) {
-                    throw new Error(typeAst.get('typedef').get('typealias').get('fulltypename').t +
-                        ' is not a valid type');
-                }
-                let fulltypename = otherType;
-                if (Object.keys(fulltypename.generics).length > 0 &&
-                    typeAst
-                        .get('typedef')
-                        .get('typealias')
-                        .get('fulltypename')
-                        .has('opttypegenerics')) {
-                    const solidTypes = [];
-                    const innerTypeGenerics = typeAst
-                        .get('typedef')
-                        .get('typealias')
-                        .get('fulltypename')
+                    .has('opttypegenerics')) {
+                const solidTypes = [];
+                const innerTypeGenerics = typeAst
+                    .get('typedef')
+                    .get('typealias')
+                    .get('fulltypename')
+                    .get('opttypegenerics')
+                    .get('generics');
+                solidTypes.push(innerTypeGenerics.get('fulltypename').t);
+                innerTypeGenerics
+                    .get('cdr')
+                    .getAll()
+                    .forEach((r) => {
+                    solidTypes.push(r.get('fulltypename').t);
+                });
+                fulltypename = fulltypename.solidify(solidTypes, scope);
+            }
+            // For simplification of the type aliasing functionality, the other type is attached as
+            // an alias. The module construction will, if present, perfer the alias over the actual
+            // type, to make sure built-in types that are aliased continue to work. This means that
+            // `type varA == type varB` will work if `varA` is assigned to an alias and `varB` to the
+            // orignal type. I can see the argument either way on this, but the simplicity of this
+            // approach is why I will go with this for now.
+            type.alias = fulltypename;
+        }
+        scope.put(type.typename, type);
+        return type;
+    }
+    solidify(genericReplacements, scope) {
+        const genericTypes = Object.keys(this.generics).map((t) => new Type(t, true, true));
+        const replacementTypes = [];
+        for (const typename of genericReplacements) {
+            const typebox = scope.deepGet(typename);
+            if (!typebox || !(typebox instanceof Type)) {
+                const fulltypename = Ast_1.fulltypenameAstFromString(typename);
+                if (fulltypename.has('opttypegenerics')) {
+                    const basename = fulltypename.get('typename').t;
+                    const generics = [];
+                    generics.push(fulltypename
                         .get('opttypegenerics')
-                        .get('generics');
-                    solidTypes.push(innerTypeGenerics.get('fulltypename').t);
-                    innerTypeGenerics
+                        .get('generics')
+                        .get('fulltypename').t);
+                    fulltypename
+                        .get('opttypegenerics')
+                        .get('generics')
                         .get('cdr')
                         .getAll()
                         .forEach((r) => {
-                        solidTypes.push(r.get('fulltypename').t);
+                        generics.push(r.get('fulltypename').t);
                     });
-                    fulltypename = fulltypename.solidify(solidTypes, scope);
-                }
-                // For simplification of the type aliasing functionality, the other type is attached as
-                // an alias. The module construction will, if present, perfer the alias over the actual
-                // type, to make sure built-in types that are aliased continue to work. This means that
-                // `type varA == type varB` will work if `varA` is assigned to an alias and `varB` to the
-                // orignal type. I can see the argument either way on this, but the simplicity of this
-                // approach is why I will go with this for now.
-                type.alias = fulltypename;
-            }
-            scope.put(type.typename, type);
-            return type;
-        }
-        solidify(genericReplacements, scope) {
-            const genericTypes = Object.keys(this.generics).map((t) => new Type(t, true, true));
-            const replacementTypes = [];
-            for (const typename of genericReplacements) {
-                const typebox = scope.deepGet(typename);
-                if (!typebox || !(typebox instanceof Type)) {
-                    const fulltypename = Ast_1.fulltypenameAstFromString(typename);
-                    if (fulltypename.has('opttypegenerics')) {
-                        const basename = fulltypename.get('typename').t;
-                        const generics = [];
-                        generics.push(fulltypename
-                            .get('opttypegenerics')
-                            .get('generics')
-                            .get('fulltypename').t);
-                        fulltypename
-                            .get('opttypegenerics')
-                            .get('generics')
-                            .get('cdr')
-                            .getAll()
-                            .forEach((r) => {
-                            generics.push(r.get('fulltypename').t);
-                        });
-                        const baseType = scope.deepGet(basename);
-                        if (!baseType || !(baseType instanceof Type)) {
-                            throw new Error(basename + ' type not found');
-                        }
-                        else {
-                            const newtype = baseType.solidify(generics, scope);
-                            replacementTypes.push(newtype);
-                        }
+                    const baseType = scope.deepGet(basename);
+                    if (!baseType || !(baseType instanceof Type)) {
+                        throw new Error(basename + ' type not found');
                     }
                     else {
-                        throw new Error(typename + ' type not found');
+                        const newtype = baseType.solidify(generics, scope);
+                        replacementTypes.push(newtype);
                     }
                 }
                 else {
-                    replacementTypes.push(typebox);
+                    throw new Error(typename + ' type not found');
                 }
-            }
-            const genericMap = new Map();
-            genericTypes.forEach((g, i) => genericMap.set(g, replacementTypes[i]));
-            const solidifiedName = this.typename + '<' + genericReplacements.join(', ') + '>';
-            const solidified = new Type(solidifiedName, this.builtIn);
-            solidified.originalType = this;
-            for (const propKey of Object.keys(this.properties)) {
-                const propValue = this.properties[propKey];
-                const newPropValue = propValue.realize(genericMap, scope);
-                solidified.properties[propKey] = newPropValue;
-            }
-            scope.put(solidifiedName, solidified);
-            return solidified;
-        }
-        typeApplies(otherType, scope, interfaceMap = new Map()) {
-            if (this.typename === otherType.typename)
-                return true;
-            if (this.iface) {
-                const applies = this.iface.typeApplies(otherType, scope);
-                if (applies) {
-                    interfaceMap.set(this, otherType);
-                }
-                return applies;
-            }
-            if (!this.originalType ||
-                !otherType.originalType ||
-                this.originalType.typename !== otherType.originalType.typename)
-                return false;
-            const typeAst = Ast_1.fulltypenameAstFromString(this.typename);
-            const otherTypeAst = Ast_1.fulltypenameAstFromString(otherType.typename);
-            let generics = [];
-            if (typeAst.has('opttypegenerics')) {
-                generics.push(typeAst.get('opttypegenerics').get('generics').get('fulltypename').t);
-                typeAst
-                    .get('opttypegenerics')
-                    .get('generics')
-                    .get('cdr')
-                    .getAll()
-                    .forEach((r) => {
-                    generics.push(r.get('fulltypename').t);
-                });
-            }
-            generics = generics.map((g) => scope.deepGet(g) ||
-                Type.fromStringWithMap(g, interfaceMap, scope) ||
-                new Type('-bogus-', false, true));
-            let otherGenerics = [];
-            if (otherTypeAst.has('opttypegenerics')) {
-                otherGenerics.push(otherTypeAst.get('opttypegenerics').get('generics').get('fulltypename')
-                    .t);
-                otherTypeAst
-                    .get('opttypegenerics')
-                    .get('generics')
-                    .get('cdr')
-                    .getAll()
-                    .forEach((r) => {
-                    otherGenerics.push(r.get('fulltypename').t);
-                });
-            }
-            otherGenerics = otherGenerics.map((g) => scope.deepGet(g) ||
-                Type.fromStringWithMap(g, interfaceMap, scope) ||
-                new Type('-bogus-', false, true));
-            return generics.every((t, i) => t.typeApplies(otherGenerics[i], scope, interfaceMap));
-        }
-        hasInterfaceType() {
-            if (this.iface)
-                return true;
-            return Object.values(this.properties).some((t) => t.hasInterfaceType());
-        }
-        // There has to be a more elegant way to tackle this
-        static fromStringWithMap(typestr, interfaceMap, scope) {
-            const typeAst = Ast_1.fulltypenameAstFromString(typestr);
-            const baseName = typeAst.get('typename').t;
-            const baseType = scope.deepGet(baseName);
-            if (typeAst.has('opttypegenerics')) {
-                const genericNames = [];
-                genericNames.push(typeAst.get('opttypegenerics').get('generics').get('fulltypename').t);
-                typeAst
-                    .get('opttypegenerics')
-                    .get('generics')
-                    .get('cdr')
-                    .getAll()
-                    .forEach((r) => {
-                    genericNames.push(r.get('fulltypename').t);
-                });
-                const generics = genericNames.map((t) => {
-                    const interfaceMapping = [...interfaceMap.entries()].find((e) => e[0].typename === t.trim());
-                    if (interfaceMapping)
-                        return interfaceMapping[1];
-                    const innerType = Type.fromStringWithMap(t, interfaceMap, scope);
-                    return innerType;
-                });
-                return baseType.solidify(generics
-                    .map((g) => interfaceMap.get(g) || g)
-                    .map((t) => t.typename), scope);
             }
             else {
-                return interfaceMap.get(baseType) || baseType;
+                replacementTypes.push(typebox);
             }
         }
-        realize(interfaceMap, scope) {
-            if (this.isGenericStandin)
-                return [...interfaceMap.entries()].find((e) => e[0].typename === this.typename)[1];
-            if (!this.iface && !this.originalType)
-                return this;
-            if (this.iface)
-                return interfaceMap.get(this) || this;
-            const self = new Type(this.typename, this.builtIn, this.isGenericStandin, { ...this.properties }, { ...this.generics }, this.originalType, this.iface, this.alias);
-            const newProps = Object.values(self.properties).map((t) => t.realize(interfaceMap, scope));
-            Object.keys(self.properties).forEach((k, i) => {
-                self.properties[k] = newProps[i];
-            });
-            const newType = Type.fromStringWithMap(self.typename, interfaceMap, scope);
-            return newType;
+        const genericMap = new Map();
+        genericTypes.forEach((g, i) => genericMap.set(g, replacementTypes[i]));
+        const solidifiedName = this.typename + '<' + genericReplacements.join(', ') + '>';
+        const solidified = new Type(solidifiedName, this.builtIn);
+        solidified.originalType = this;
+        for (const propKey of Object.keys(this.properties)) {
+            const propValue = this.properties[propKey];
+            const newPropValue = propValue.realize(genericMap, scope);
+            solidified.properties[propKey] = newPropValue;
         }
-        // This is only necessary for the numeric types. TODO: Can we eliminate it?
-        castable(otherType) {
-            const intTypes = ['int8', 'int16', 'int32', 'int64'];
-            const floatTypes = ['float32', 'float64'];
-            if (intTypes.includes(this.typename) &&
-                intTypes.includes(otherType.typename))
-                return true;
-            if (floatTypes.includes(this.typename) &&
-                floatTypes.includes(otherType.typename))
-                return true;
-            if (floatTypes.includes(this.typename) &&
-                intTypes.includes(otherType.typename))
-                return true;
+        scope.put(solidifiedName, solidified);
+        return solidified;
+    }
+    typeApplies(otherType, scope, interfaceMap = new Map()) {
+        if (this.typename === otherType.typename)
+            return true;
+        if (this.iface) {
+            const applies = this.iface.typeApplies(otherType, scope);
+            if (applies) {
+                interfaceMap.set(this, otherType);
+            }
+            return applies;
+        }
+        if (!this.originalType ||
+            !otherType.originalType ||
+            this.originalType.typename !== otherType.originalType.typename)
             return false;
+        const typeAst = Ast_1.fulltypenameAstFromString(this.typename);
+        const otherTypeAst = Ast_1.fulltypenameAstFromString(otherType.typename);
+        let generics = [];
+        if (typeAst.has('opttypegenerics')) {
+            generics.push(typeAst.get('opttypegenerics').get('generics').get('fulltypename').t);
+            typeAst
+                .get('opttypegenerics')
+                .get('generics')
+                .get('cdr')
+                .getAll()
+                .forEach((r) => {
+                generics.push(r.get('fulltypename').t);
+            });
+        }
+        generics = generics.map((g) => scope.deepGet(g) ||
+            Type.fromStringWithMap(g, interfaceMap, scope) ||
+            new Type('-bogus-', false, true));
+        let otherGenerics = [];
+        if (otherTypeAst.has('opttypegenerics')) {
+            otherGenerics.push(otherTypeAst.get('opttypegenerics').get('generics').get('fulltypename')
+                .t);
+            otherTypeAst
+                .get('opttypegenerics')
+                .get('generics')
+                .get('cdr')
+                .getAll()
+                .forEach((r) => {
+                otherGenerics.push(r.get('fulltypename').t);
+            });
+        }
+        otherGenerics = otherGenerics.map((g) => scope.deepGet(g) ||
+            Type.fromStringWithMap(g, interfaceMap, scope) ||
+            new Type('-bogus-', false, true));
+        return generics.every((t, i) => t.typeApplies(otherGenerics[i], scope, interfaceMap));
+    }
+    hasInterfaceType() {
+        if (this.iface)
+            return true;
+        return Object.values(this.properties).some((t) => t.hasInterfaceType());
+    }
+    // There has to be a more elegant way to tackle this
+    static fromStringWithMap(typestr, interfaceMap, scope) {
+        const typeAst = Ast_1.fulltypenameAstFromString(typestr);
+        const baseName = typeAst.get('typename').t;
+        const baseType = scope.deepGet(baseName);
+        if (typeAst.has('opttypegenerics')) {
+            const genericNames = [];
+            genericNames.push(typeAst.get('opttypegenerics').get('generics').get('fulltypename').t);
+            typeAst
+                .get('opttypegenerics')
+                .get('generics')
+                .get('cdr')
+                .getAll()
+                .forEach((r) => {
+                genericNames.push(r.get('fulltypename').t);
+            });
+            const generics = genericNames.map((t) => {
+                const interfaceMapping = [...interfaceMap.entries()].find((e) => e[0].typename === t.trim());
+                if (interfaceMapping)
+                    return interfaceMapping[1];
+                const innerType = Type.fromStringWithMap(t, interfaceMap, scope);
+                return innerType;
+            });
+            return baseType.solidify(generics
+                .map((g) => interfaceMap.get(g) || g)
+                .map((t) => t.typename), scope);
+        }
+        else {
+            return interfaceMap.get(baseType) || baseType;
         }
     }
-    Type.builtinTypes = {
-        void: new Type('void', true),
-        int8: new Type('int8', true),
-        int16: new Type('int16', true),
-        int32: new Type('int32', true),
-        int64: new Type('int64', true),
-        float32: new Type('float32', true),
-        float64: new Type('float64', true),
-        bool: new Type('bool', true),
-        string: new Type('string', true),
-        Error: new Type('Error', true, false, {
+    realize(interfaceMap, scope) {
+        if (this.isGenericStandin)
+            return [...interfaceMap.entries()].find((e) => e[0].typename === this.typename)[1];
+        if (!this.iface && !this.originalType)
+            return this;
+        if (this.iface)
+            return interfaceMap.get(this) || this;
+        const self = new Type(this.typename, this.builtIn, this.isGenericStandin, { ...this.properties }, { ...this.generics }, this.originalType, this.iface, this.alias);
+        const newProps = Object.values(self.properties).map((t) => t.realize(interfaceMap, scope));
+        Object.keys(self.properties).forEach((k, i) => {
+            self.properties[k] = newProps[i];
+        });
+        const newType = Type.fromStringWithMap(self.typename, interfaceMap, scope);
+        return newType;
+    }
+    // This is only necessary for the numeric types. TODO: Can we eliminate it?
+    castable(otherType) {
+        const intTypes = ['int8', 'int16', 'int32', 'int64'];
+        const floatTypes = ['float32', 'float64'];
+        if (intTypes.includes(this.typename) &&
+            intTypes.includes(otherType.typename))
+            return true;
+        if (floatTypes.includes(this.typename) &&
+            floatTypes.includes(otherType.typename))
+            return true;
+        if (floatTypes.includes(this.typename) &&
+            intTypes.includes(otherType.typename))
+            return true;
+        return false;
+    }
+}
+exports.Type = Type;
+Type.builtinTypes = {
+    void: new Type('void', true),
+    int8: new Type('int8', true),
+    int16: new Type('int16', true),
+    int32: new Type('int32', true),
+    int64: new Type('int64', true),
+    float32: new Type('float32', true),
+    float64: new Type('float64', true),
+    bool: new Type('bool', true),
+    string: new Type('string', true),
+    Error: new Type('Error', true, false, {
+        msg: new Type('string', true, true),
+    }),
+    Maybe: new Type('Maybe', true, false, {
+        value: new Type('T', true, true),
+    }, {
+        T: 0,
+    }),
+    Result: new Type('Result', true, false, {
+        value: new Type('T', true, true),
+        error: new Type('Error', true, false, {
             msg: new Type('string', true, true),
         }),
-        Maybe: new Type('Maybe', true, false, {
-            value: new Type('T', true, true),
+    }, {
+        T: 0,
+    }),
+    Either: new Type('Either', true, false, {
+        main: new Type('T', true, true),
+        alt: new Type('U', true, true),
+    }, {
+        T: 0,
+        U: 1,
+    }),
+    Array: new Type('Array', true, false, {
+        records: new Type('V', true, true),
+    }, {
+        V: 0,
+    }),
+    ExecRes: new Type('ExecRes', false, false, {
+        exitCode: new Type('int64', true),
+        stdout: new Type('string', true),
+        stderr: new Type('string', true),
+    }),
+    InitialReduce: new Type('InitialReduce', false, false, {
+        arr: new Type('Array<T>', true, false, {
+            records: new Type('T', true, true),
         }, {
             T: 0,
         }),
-        Result: new Type('Result', true, false, {
-            value: new Type('T', true, true),
-            error: new Type('Error', true, false, {
-                msg: new Type('string', true, true),
-            }),
-        }, {
-            T: 0,
-        }),
-        Either: new Type('Either', true, false, {
-            main: new Type('T', true, true),
-            alt: new Type('U', true, true),
-        }, {
-            T: 0,
-            U: 1,
-        }),
-        Array: new Type('Array', true, false, {
-            records: new Type('V', true, true),
-        }, {
-            V: 0,
-        }),
-        ExecRes: new Type('ExecRes', false, false, {
-            exitCode: new Type('int64', true),
-            stdout: new Type('string', true),
-            stderr: new Type('string', true),
-        }),
-        InitialReduce: new Type('InitialReduce', false, false, {
-            arr: new Type('Array<T>', true, false, {
-                records: new Type('T', true, true),
-            }, {
-                T: 0,
-            }),
-            initial: new Type('U', true, true),
-        }, {
-            T: 0,
-            U: 1,
-        }),
-        KeyVal: new Type('KeyVal', false, false, {
-            key: new Type('K', true, true),
-            val: new Type('V', true, true),
-        }, {
-            K: 0,
-            V: 1,
-        }),
-        // Placeholders to be replaced through weirdness with opcodes.ts as the self-referential piece
-        // does not play well with `static`
-        InternalRequest: new Type('InternalRequest', true, false, {
-            method: new Type('string', true),
-            url: new Type('string', true),
-            headers: new Type('headers', true),
-            body: new Type('string', true),
-            connId: new Type('int64', true),
-        }),
-        InternalResponse: new Type('InternalResponse', true, false, {
-            status: new Type('int64', true),
-            headers: new Type('headers', true),
-            body: new Type('string', true),
-            connId: new Type('int64', true),
-        }),
-        Seq: new Type('Seq', true, false, {
+        initial: new Type('U', true, true),
+    }, {
+        T: 0,
+        U: 1,
+    }),
+    KeyVal: new Type('KeyVal', false, false, {
+        key: new Type('K', true, true),
+        val: new Type('V', true, true),
+    }, {
+        K: 0,
+        V: 1,
+    }),
+    // Placeholders to be replaced through weirdness with opcodes.ts as the self-referential piece
+    // does not play well with `static`
+    InternalRequest: new Type('InternalRequest', true, false, {
+        method: new Type('string', true),
+        url: new Type('string', true),
+        headers: new Type('headers', true),
+        body: new Type('string', true),
+        connId: new Type('int64', true),
+    }),
+    InternalResponse: new Type('InternalResponse', true, false, {
+        status: new Type('int64', true),
+        headers: new Type('headers', true),
+        body: new Type('string', true),
+        connId: new Type('int64', true),
+    }),
+    Seq: new Type('Seq', true, false, {
+        counter: new Type('int64', true, true),
+        limit: new Type('int64', true, true),
+    }),
+    Self: new Type('Self', true, false, {
+        seq: new Type('Seq', true, false, {
             counter: new Type('int64', true, true),
             limit: new Type('int64', true, true),
         }),
-        Self: new Type('Self', true, false, {
-            seq: new Type('Seq', true, false, {
-                counter: new Type('int64', true, true),
-                limit: new Type('int64', true, true),
-            }),
-            recurseFn: new Type('function', true),
-        }),
-        TcpChannel: new Type('TcpChannel', true),
-        TcpContext: new Type('TcpContext', true, false, {
-            context: new Type('C', true, true),
-            channel: new Type('TcpChannel', true),
-        }, {
-            C: 0,
-        }),
-        Chunk: new Type('Chunk', true),
-        NsRef: new Type('NsRef', true, false, {
-            ns: new Type('string', true),
-            key: new Type('string', true),
-        }),
-        NsMut: new Type('NsMut', true, false, {
-            ns: new Type('string', true),
-            key: new Type('string', true),
-        }),
-        With: new Type('With', false, false, {
-            nskey: new Type('N', true, true),
-            with: new Type('T', true, true),
-        }, {
-            N: 0,
-            T: 1,
-        }),
-        function: new Type('function', true),
-        operator: new Type('operator', true),
-        Event: new Type('Event', true, false, {
-            type: new Type('E', true, true),
-        }, {
-            E: 0,
-        }),
-        type: new Type('type', true),
-        scope: new Type('scope', true),
-        microstatement: new Type('microstatement', true),
-    };
-    return Type;
-})();
-exports.Type = Type;
+        recurseFn: new Type('function', true),
+    }),
+    TcpChannel: new Type('TcpChannel', true),
+    TcpContext: new Type('TcpContext', true, false, {
+        context: new Type('C', true, true),
+        channel: new Type('TcpChannel', true),
+    }, {
+        C: 0,
+    }),
+    Chunk: new Type('Chunk', true),
+    NsRef: new Type('NsRef', true, false, {
+        ns: new Type('string', true),
+        key: new Type('string', true),
+    }),
+    NsMut: new Type('NsMut', true, false, {
+        ns: new Type('string', true),
+        key: new Type('string', true),
+    }),
+    With: new Type('With', false, false, {
+        nskey: new Type('N', true, true),
+        with: new Type('T', true, true),
+    }, {
+        N: 0,
+        T: 1,
+    }),
+    function: new Type('function', true),
+    operator: new Type('operator', true),
+    Event: new Type('Event', true, false, {
+        type: new Type('E', true, true),
+    }, {
+        E: 0,
+    }),
+    type: new Type('type', true),
+    scope: new Type('scope', true),
+    microstatement: new Type('microstatement', true),
+};
 exports.default = Type;
 
 },{"./Ast":9,"./Operator":14,"./Scope":15}],19:[function(require,module,exports){
@@ -6498,7 +6492,7 @@ ${statements[i].statementAst.t.trim()} on line ${statements[i].statementAst.line
 }
 exports.default = UserFunction;
 
-},{"./Ast":9,"./Microstatement":12,"./Scope":15,"./Statement":16,"./StatementType":17,"./Type":18,"uuid":70}],20:[function(require,module,exports){
+},{"./Ast":9,"./Microstatement":12,"./Scope":15,"./Statement":16,"./StatementType":17,"./Type":18,"uuid":69}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fromString = exports.fromFile = void 0;
@@ -6755,7 +6749,7 @@ const ammFromModuleAsts = (moduleAsts) => {
 exports.fromFile = (filename) => ammFromModuleAsts(moduleAstsFromFile(filename));
 exports.fromString = (str) => ammFromModuleAsts(moduleAstsFromString(str));
 
-},{"./Ast":9,"./Event":11,"./Microstatement":12,"./Module":13,"./StatementType":17,"./Std":1,"./UserFunction":19,"fs":26,"uuid":70}],21:[function(require,module,exports){
+},{"./Ast":9,"./Event":11,"./Microstatement":12,"./Module":13,"./StatementType":17,"./Std":1,"./UserFunction":19,"fs":26,"uuid":69}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid_1 = require("uuid");
@@ -7791,7 +7785,7 @@ addopcodes({
 });
 exports.default = opcodeModule;
 
-},{"./Ast":9,"./Event":11,"./Microstatement":12,"./Module":13,"./Scope":15,"./StatementType":17,"./Type":18,"./UserFunction":19,"uuid":70}],22:[function(require,module,exports){
+},{"./Ast":9,"./Event":11,"./Microstatement":12,"./Module":13,"./Scope":15,"./StatementType":17,"./Type":18,"./UserFunction":19,"uuid":69}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RangeSet = exports.CharSet = exports.NamedOr = exports.NamedAnd = exports.LeftSubset = exports.ExclusiveOr = exports.Or = exports.And = exports.OneOrMore = exports.ZeroOrMore = exports.ZeroOrOne = exports.Not = exports.Token = exports.NulLP = exports.lpError = exports.LPError = exports.LP = void 0;
@@ -8791,9 +8785,7 @@ function fromByteArray (uint8) {
 
   // go through the array every three bytes, we'll deal with trailing stuff later
   for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(
-      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
-    ))
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
   }
 
   // pad the end with zeros, but make sure to not forget the extra bytes
@@ -8822,7 +8814,7 @@ function fromByteArray (uint8) {
 },{}],26:[function(require,module,exports){
 arguments[4][25][0].apply(exports,arguments)
 },{"dup":25}],27:[function(require,module,exports){
-(function (global){
+(function (global){(function (){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
 
@@ -9357,9 +9349,9 @@ arguments[4][25][0].apply(exports,arguments)
 
 }(this));
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],28:[function(require,module,exports){
-(function (Buffer){
+(function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -11138,7 +11130,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-}).call(this,require("buffer").Buffer)
+}).call(this)}).call(this,require("buffer").Buffer)
 },{"base64-js":24,"buffer":28,"ieee754":35}],29:[function(require,module,exports){
 module.exports = {
   "100": "Continue",
@@ -11732,9 +11724,11 @@ var irrelevant = (function (exports) {
   exports.Response = Response;
   exports.fetch = fetch;
 
+  Object.defineProperty(exports, '__esModule', { value: true });
+
   return exports;
 
-}({}));
+})({});
 })(typeof self !== 'undefined' ? self : this);
 
 },{}],31:[function(require,module,exports){
@@ -13369,6 +13363,7 @@ function functionBindPolyfill(context) {
 }
 
 },{}],35:[function(require,module,exports){
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -13484,7 +13479,7 @@ if (typeof Object.create === 'function') {
 }
 
 },{}],37:[function(require,module,exports){
-(function (process){
+(function (process){(function (){
 // .dirname, .basename, and .extname methods are extracted from Node.js v8.11.1,
 // backported and transplited with Babel, with backwards-compat fixes
 
@@ -13788,7 +13783,7 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-}).call(this,require('_process'))
+}).call(this)}).call(this,require('_process'))
 },{"_process":38}],38:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
@@ -14222,7 +14217,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 }
 
 },{"buffer":28}],43:[function(require,module,exports){
-(function (global){
+(function (global){(function (){
 var ClientRequest = require('./lib/request')
 var response = require('./lib/response')
 var extend = require('xtend')
@@ -14308,9 +14303,9 @@ http.METHODS = [
 	'UNLOCK',
 	'UNSUBSCRIBE'
 ]
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/request":45,"./lib/response":46,"builtin-status-codes":29,"url":63,"xtend":79}],44:[function(require,module,exports){
-(function (global){
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./lib/request":45,"./lib/response":46,"builtin-status-codes":29,"url":63,"xtend":84}],44:[function(require,module,exports){
+(function (global){(function (){
 exports.fetch = isFunction(global.fetch) && isFunction(global.ReadableStream)
 
 exports.writableStream = isFunction(global.WritableStream)
@@ -14371,9 +14366,9 @@ function isFunction (value) {
 
 xhr = null // Help gc
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],45:[function(require,module,exports){
-(function (process,global,Buffer){
+(function (process,global,Buffer){(function (){
 var capability = require('./capability')
 var inherits = require('inherits')
 var response = require('./response')
@@ -14430,6 +14425,8 @@ var ClientRequest = module.exports = function (opts) {
 	}
 	self._mode = decideMode(preferBinary, useFetch)
 	self._fetchTimer = null
+	self._socketTimeout = null
+	self._socketTimer = null
 
 	self.on('finish', function () {
 		self._onFinish()
@@ -14471,6 +14468,10 @@ ClientRequest.prototype._onFinish = function () {
 	if (self._destroyed)
 		return
 	var opts = self._opts
+
+	if ('timeout' in opts && opts.timeout !== 0) {
+		self.setTimeout(opts.timeout)
+	}
 
 	var headersObj = self._headers
 	var body = null
@@ -14519,9 +14520,10 @@ ClientRequest.prototype._onFinish = function () {
 			signal: signal
 		}).then(function (response) {
 			self._fetchResponse = response
+			self._resetTimers(false)
 			self._connect()
 		}, function (reason) {
-			global.clearTimeout(self._fetchTimer)
+			self._resetTimers(true)
 			if (!self._destroyed)
 				self.emit('error', reason)
 		})
@@ -14577,6 +14579,7 @@ ClientRequest.prototype._onFinish = function () {
 		xhr.onerror = function () {
 			if (self._destroyed)
 				return
+			self._resetTimers(true)
 			self.emit('error', new Error('XHR error'))
 		}
 
@@ -14608,13 +14611,15 @@ function statusValid (xhr) {
 ClientRequest.prototype._onXHRProgress = function () {
 	var self = this
 
+	self._resetTimers(false)
+
 	if (!statusValid(self._xhr) || self._destroyed)
 		return
 
 	if (!self._response)
 		self._connect()
 
-	self._response._onXHRProgress()
+	self._response._onXHRProgress(self._resetTimers.bind(self))
 }
 
 ClientRequest.prototype._connect = function () {
@@ -14623,7 +14628,7 @@ ClientRequest.prototype._connect = function () {
 	if (self._destroyed)
 		return
 
-	self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode, self._fetchTimer)
+	self._response = new IncomingMessage(self._xhr, self._fetchResponse, self._mode, self._resetTimers.bind(self))
 	self._response.on('error', function(err) {
 		self.emit('error', err)
 	})
@@ -14638,16 +14643,35 @@ ClientRequest.prototype._write = function (chunk, encoding, cb) {
 	cb()
 }
 
-ClientRequest.prototype.abort = ClientRequest.prototype.destroy = function () {
+ClientRequest.prototype._resetTimers = function (done) {
+	var self = this
+
+	global.clearTimeout(self._socketTimer)
+	self._socketTimer = null
+
+	if (done) {
+		global.clearTimeout(self._fetchTimer)
+		self._fetchTimer = null
+	} else if (self._socketTimeout) {
+		self._socketTimer = global.setTimeout(function () {
+			self.emit('timeout')
+		}, self._socketTimeout)
+	}
+}
+
+ClientRequest.prototype.abort = ClientRequest.prototype.destroy = function (err) {
 	var self = this
 	self._destroyed = true
-	global.clearTimeout(self._fetchTimer)
+	self._resetTimers(true)
 	if (self._response)
 		self._response._destroyed = true
 	if (self._xhr)
 		self._xhr.abort()
 	else if (self._fetchAbortController)
 		self._fetchAbortController.abort()
+
+	if (err)
+		self.emit('error', err)
 }
 
 ClientRequest.prototype.end = function (data, encoding, cb) {
@@ -14660,8 +14684,17 @@ ClientRequest.prototype.end = function (data, encoding, cb) {
 	stream.Writable.prototype.end.call(self, data, encoding, cb)
 }
 
+ClientRequest.prototype.setTimeout = function (timeout, cb) {
+	var self = this
+
+	if (cb)
+		self.once('timeout', cb)
+
+	self._socketTimeout = timeout
+	self._resetTimers(false)
+}
+
 ClientRequest.prototype.flushHeaders = function () {}
-ClientRequest.prototype.setTimeout = function () {}
 ClientRequest.prototype.setNoDelay = function () {}
 ClientRequest.prototype.setSocketKeepAlive = function () {}
 
@@ -14689,9 +14722,9 @@ var unsafeHeaders = [
 	'via'
 ]
 
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
 },{"./capability":44,"./response":46,"_process":38,"buffer":28,"inherits":36,"readable-stream":61}],46:[function(require,module,exports){
-(function (process,global,Buffer){
+(function (process,global,Buffer){(function (){
 var capability = require('./capability')
 var inherits = require('inherits')
 var stream = require('readable-stream')
@@ -14704,7 +14737,7 @@ var rStates = exports.readyStates = {
 	DONE: 4
 }
 
-var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode, fetchTimer) {
+var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode, resetTimers) {
 	var self = this
 	stream.Readable.call(self)
 
@@ -14737,6 +14770,7 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode, f
 		if (capability.writableStream) {
 			var writable = new WritableStream({
 				write: function (chunk) {
+					resetTimers(false)
 					return new Promise(function (resolve, reject) {
 						if (self._destroyed) {
 							reject()
@@ -14748,11 +14782,12 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode, f
 					})
 				},
 				close: function () {
-					global.clearTimeout(fetchTimer)
+					resetTimers(true)
 					if (!self._destroyed)
 						self.push(null)
 				},
 				abort: function (err) {
+					resetTimers(true)
 					if (!self._destroyed)
 						self.emit('error', err)
 				}
@@ -14760,7 +14795,7 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode, f
 
 			try {
 				response.body.pipeTo(writable).catch(function (err) {
-					global.clearTimeout(fetchTimer)
+					resetTimers(true)
 					if (!self._destroyed)
 						self.emit('error', err)
 				})
@@ -14773,15 +14808,15 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode, f
 			reader.read().then(function (result) {
 				if (self._destroyed)
 					return
+				resetTimers(result.done)
 				if (result.done) {
-					global.clearTimeout(fetchTimer)
 					self.push(null)
 					return
 				}
 				self.push(Buffer.from(result.value))
 				read()
 			}).catch(function (err) {
-				global.clearTimeout(fetchTimer)
+				resetTimers(true)
 				if (!self._destroyed)
 					self.emit('error', err)
 			})
@@ -14840,7 +14875,7 @@ IncomingMessage.prototype._read = function () {
 	}
 }
 
-IncomingMessage.prototype._onXHRProgress = function () {
+IncomingMessage.prototype._onXHRProgress = function (resetTimers) {
 	var self = this
 
 	var xhr = self._xhr
@@ -14887,6 +14922,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 				}
 			}
 			reader.onload = function () {
+				resetTimers(true)
 				self.push(null)
 			}
 			// reader.onerror = ??? // TODO: this
@@ -14896,11 +14932,12 @@ IncomingMessage.prototype._onXHRProgress = function () {
 
 	// The ms-stream case handles end separately in reader.onload()
 	if (self._xhr.readyState === rStates.DONE && self._mode !== 'ms-stream') {
+		resetTimers(true)
 		self.push(null)
 	}
 }
 
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
 },{"./capability":44,"_process":38,"buffer":28,"inherits":36,"readable-stream":61}],47:[function(require,module,exports){
 'use strict';
 
@@ -15031,7 +15068,7 @@ createErrorType('ERR_STREAM_UNSHIFT_AFTER_END_EVENT', 'stream.unshift() after en
 module.exports.codes = codes;
 
 },{}],48:[function(require,module,exports){
-(function (process){
+(function (process){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -15171,7 +15208,7 @@ Object.defineProperty(Duplex.prototype, 'destroyed', {
     this._writableState.destroyed = value;
   }
 });
-}).call(this,require('_process'))
+}).call(this)}).call(this,require('_process'))
 },{"./_stream_readable":50,"./_stream_writable":52,"_process":38,"inherits":36}],49:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -15213,7 +15250,7 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
 },{"./_stream_transform":51,"inherits":36}],50:[function(require,module,exports){
-(function (process,global){
+(function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -16338,7 +16375,7 @@ function indexOf(xs, x) {
 
   return -1;
 }
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../errors":47,"./_stream_duplex":48,"./internal/streams/async_iterator":53,"./internal/streams/buffer_list":54,"./internal/streams/destroy":55,"./internal/streams/from":57,"./internal/streams/state":59,"./internal/streams/stream":60,"_process":38,"buffer":28,"events":34,"inherits":36,"string_decoder/":62,"util":25}],51:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -16542,7 +16579,7 @@ function done(stream, er, data) {
   return stream.push(null);
 }
 },{"../errors":47,"./_stream_duplex":48,"inherits":36}],52:[function(require,module,exports){
-(function (process,global){
+(function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -17240,9 +17277,9 @@ Writable.prototype._undestroy = destroyImpl.undestroy;
 Writable.prototype._destroy = function (err, cb) {
   cb(err);
 };
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../errors":47,"./_stream_duplex":48,"./internal/streams/destroy":55,"./internal/streams/state":59,"./internal/streams/stream":60,"_process":38,"buffer":28,"inherits":36,"util-deprecate":65}],53:[function(require,module,exports){
-(function (process){
+(function (process){(function (){
 'use strict';
 
 var _Object$setPrototypeO;
@@ -17450,7 +17487,7 @@ var createReadableStreamAsyncIterator = function createReadableStreamAsyncIterat
 };
 
 module.exports = createReadableStreamAsyncIterator;
-}).call(this,require('_process'))
+}).call(this)}).call(this,require('_process'))
 },{"./end-of-stream":56,"_process":38}],54:[function(require,module,exports){
 'use strict';
 
@@ -17663,7 +17700,7 @@ function () {
   return BufferList;
 }();
 },{"buffer":28,"util":25}],55:[function(require,module,exports){
-(function (process){
+(function (process){(function (){
 'use strict'; // undocumented cb() API, needed for core, not for public API
 
 function destroy(err, cb) {
@@ -17769,7 +17806,7 @@ module.exports = {
   undestroy: undestroy,
   errorOrDestroy: errorOrDestroy
 };
-}).call(this,require('_process'))
+}).call(this)}).call(this,require('_process'))
 },{"_process":38}],56:[function(require,module,exports){
 // Ported from https://github.com/mafintosh/end-of-stream with
 // permission from the author, Mathias Buus (@mafintosh).
@@ -19070,7 +19107,7 @@ module.exports = {
 };
 
 },{}],65:[function(require,module,exports){
-(function (global){
+(function (global){(function (){
 
 /**
  * Module exports.
@@ -19139,7 +19176,7 @@ function config (name) {
   return String(val).toLowerCase() === 'true';
 }
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],66:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
@@ -19173,7 +19210,7 @@ module.exports = function isBuffer(arg) {
     && typeof arg.readUInt8 === 'function';
 }
 },{}],68:[function(require,module,exports){
-(function (process,global){
+(function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -19761,36 +19798,8 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./support/isBuffer":67,"_process":38,"inherits":66}],69:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-const byteToHex = [];
-
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 0x100).toString(16).substr(1));
-}
-
-function bytesToUuid(buf, offset) {
-  const i = offset || 0;
-  const bth = byteToHex; // Note: Be careful editing this code!  It's been tuned for performance
-  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-
-  return (bth[buf[i + 0]] + bth[buf[i + 1]] + bth[buf[i + 2]] + bth[buf[i + 3]] + '-' + bth[buf[i + 4]] + bth[buf[i + 5]] + '-' + bth[buf[i + 6]] + bth[buf[i + 7]] + '-' + bth[buf[i + 8]] + bth[buf[i + 9]] + '-' + bth[buf[i + 10]] + bth[buf[i + 11]] + bth[buf[i + 12]] + bth[buf[i + 13]] + bth[buf[i + 14]] + bth[buf[i + 15]]).toLowerCase();
-}
-
-var _default = bytesToUuid;
-exports.default = _default;
-},{}],70:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -19820,6 +19829,36 @@ Object.defineProperty(exports, "v5", {
     return _v4.default;
   }
 });
+Object.defineProperty(exports, "NIL", {
+  enumerable: true,
+  get: function () {
+    return _nil.default;
+  }
+});
+Object.defineProperty(exports, "version", {
+  enumerable: true,
+  get: function () {
+    return _version.default;
+  }
+});
+Object.defineProperty(exports, "validate", {
+  enumerable: true,
+  get: function () {
+    return _validate.default;
+  }
+});
+Object.defineProperty(exports, "stringify", {
+  enumerable: true,
+  get: function () {
+    return _stringify.default;
+  }
+});
+Object.defineProperty(exports, "parse", {
+  enumerable: true,
+  get: function () {
+    return _parse.default;
+  }
+});
 
 var _v = _interopRequireDefault(require("./v1.js"));
 
@@ -19829,8 +19868,18 @@ var _v3 = _interopRequireDefault(require("./v4.js"));
 
 var _v4 = _interopRequireDefault(require("./v5.js"));
 
+var _nil = _interopRequireDefault(require("./nil.js"));
+
+var _version = _interopRequireDefault(require("./version.js"));
+
+var _validate = _interopRequireDefault(require("./validate.js"));
+
+var _stringify = _interopRequireDefault(require("./stringify.js"));
+
+var _parse = _interopRequireDefault(require("./parse.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./v1.js":74,"./v3.js":75,"./v4.js":77,"./v5.js":78}],71:[function(require,module,exports){
+},{"./nil.js":71,"./parse.js":72,"./stringify.js":76,"./v1.js":77,"./v3.js":78,"./v4.js":80,"./v5.js":81,"./validate.js":82,"./version.js":83}],70:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20054,7 +20103,71 @@ function md5ii(a, b, c, d, x, s, t) {
 
 var _default = md5;
 exports.default = _default;
+},{}],71:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = '00000000-0000-0000-0000-000000000000';
+exports.default = _default;
 },{}],72:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _validate = _interopRequireDefault(require("./validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function parse(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  let v;
+  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
+
+  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
+  arr[1] = v >>> 16 & 0xff;
+  arr[2] = v >>> 8 & 0xff;
+  arr[3] = v & 0xff; // Parse ........-####-....-....-............
+
+  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
+  arr[5] = v & 0xff; // Parse ........-....-####-....-............
+
+  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
+  arr[7] = v & 0xff; // Parse ........-....-....-####-............
+
+  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
+  arr[9] = v & 0xff; // Parse ........-....-....-....-############
+  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
+
+  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
+  arr[11] = v / 0x100000000 & 0xff;
+  arr[12] = v >>> 24 & 0xff;
+  arr[13] = v >>> 16 & 0xff;
+  arr[14] = v >>> 8 & 0xff;
+  arr[15] = v & 0xff;
+  return arr;
+}
+
+var _default = parse;
+exports.default = _default;
+},{"./validate.js":82}],73:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+exports.default = _default;
+},{}],74:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20064,19 +20177,24 @@ exports.default = rng;
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
 // require the crypto API and do not support built-in fallback to lower quality random number
 // generators (like Math.random()).
-// getRandomValues needs to be invoked in a context where "this" is a Crypto implementation. Also,
-// find the complete implementation of crypto (msCrypto) on IE11.
-const getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto) || typeof msCrypto !== 'undefined' && typeof msCrypto.getRandomValues === 'function' && msCrypto.getRandomValues.bind(msCrypto);
+let getRandomValues;
 const rnds8 = new Uint8Array(16);
 
 function rng() {
+  // lazy load so that environments that need to polyfill have a chance to do so
   if (!getRandomValues) {
-    throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation. Also,
+    // find the complete implementation of crypto (msCrypto) on IE11.
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto) || typeof msCrypto !== 'undefined' && typeof msCrypto.getRandomValues === 'function' && msCrypto.getRandomValues.bind(msCrypto);
+
+    if (!getRandomValues) {
+      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    }
   }
 
   return getRandomValues(rnds8);
 }
-},{}],73:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20118,6 +20236,9 @@ function sha1(bytes) {
     for (let i = 0; i < msg.length; ++i) {
       bytes.push(msg.charCodeAt(i));
     }
+  } else if (!Array.isArray(bytes)) {
+    // Convert Array-like to Array
+    bytes = Array.prototype.slice.call(bytes);
   }
 
   bytes.push(0x80);
@@ -20178,7 +20299,47 @@ function sha1(bytes) {
 
 var _default = sha1;
 exports.default = _default;
-},{}],74:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _validate = _interopRequireDefault(require("./validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Convert array of 16 byte values to UUID string format of the form:
+ * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+ */
+const byteToHex = [];
+
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).substr(1));
+}
+
+function stringify(arr, offset = 0) {
+  // Note: Be careful editing this code!  It's been tuned for performance
+  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
+  const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase(); // Consistency check for valid UUID.  If this throws, it's likely due to one
+  // of the following:
+  // - One or more input array values don't map to a hex octet (leading to
+  // "undefined" in the uuid)
+  // - Invalid input values for the RFC `version` or `variant` fields
+
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Stringified UUID is invalid');
+  }
+
+  return uuid;
+}
+
+var _default = stringify;
+exports.default = _default;
+},{"./validate.js":82}],77:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20188,7 +20349,7 @@ exports.default = void 0;
 
 var _rng = _interopRequireDefault(require("./rng.js"));
 
-var _bytesToUuid = _interopRequireDefault(require("./bytesToUuid.js"));
+var _stringify = _interopRequireDefault(require("./stringify.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20206,7 +20367,7 @@ let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
 
 function v1(options, buf, offset) {
   let i = buf && offset || 0;
-  const b = buf || [];
+  const b = buf || new Array(16);
   options = options || {};
   let node = options.node || _nodeId;
   let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
@@ -20281,12 +20442,12 @@ function v1(options, buf, offset) {
     b[i + n] = node[n];
   }
 
-  return buf || (0, _bytesToUuid.default)(b);
+  return buf || (0, _stringify.default)(b);
 }
 
 var _default = v1;
 exports.default = _default;
-},{"./bytesToUuid.js":69,"./rng.js":72}],75:[function(require,module,exports){
+},{"./rng.js":74,"./stringify.js":76}],78:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20303,7 +20464,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const v3 = (0, _v.default)('v3', 0x30, _md.default);
 var _default = v3;
 exports.default = _default;
-},{"./md5.js":71,"./v35.js":76}],76:[function(require,module,exports){
+},{"./md5.js":70,"./v35.js":79}],79:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20312,18 +20473,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = _default;
 exports.URL = exports.DNS = void 0;
 
-var _bytesToUuid = _interopRequireDefault(require("./bytesToUuid.js"));
+var _stringify = _interopRequireDefault(require("./stringify.js"));
+
+var _parse = _interopRequireDefault(require("./parse.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function uuidToBytes(uuid) {
-  // Note: We assume we're being passed a valid uuid string
-  const bytes = [];
-  uuid.replace(/[a-fA-F0-9]{2}/g, function (hex) {
-    bytes.push(parseInt(hex, 16));
-  });
-  return bytes;
-}
 
 function stringToBytes(str) {
   str = unescape(encodeURIComponent(str)); // UTF8 escape
@@ -20344,30 +20498,39 @@ exports.URL = URL;
 
 function _default(name, version, hashfunc) {
   function generateUUID(value, namespace, buf, offset) {
-    const off = buf && offset || 0;
-    if (typeof value === 'string') value = stringToBytes(value);
-    if (typeof namespace === 'string') namespace = uuidToBytes(namespace);
-
-    if (!Array.isArray(value)) {
-      throw TypeError('value must be an array of bytes');
+    if (typeof value === 'string') {
+      value = stringToBytes(value);
     }
 
-    if (!Array.isArray(namespace) || namespace.length !== 16) {
-      throw TypeError('namespace must be uuid string or an Array of 16 byte values');
-    } // Per 4.3
+    if (typeof namespace === 'string') {
+      namespace = (0, _parse.default)(namespace);
+    }
+
+    if (namespace.length !== 16) {
+      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
+    } // Compute hash of namespace and value, Per 4.3
+    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
+    // hashfunc([...namespace, ... value])`
 
 
-    const bytes = hashfunc(namespace.concat(value));
+    let bytes = new Uint8Array(16 + value.length);
+    bytes.set(namespace);
+    bytes.set(value, namespace.length);
+    bytes = hashfunc(bytes);
     bytes[6] = bytes[6] & 0x0f | version;
     bytes[8] = bytes[8] & 0x3f | 0x80;
 
     if (buf) {
-      for (let idx = 0; idx < 16; ++idx) {
-        buf[off + idx] = bytes[idx];
+      offset = offset || 0;
+
+      for (let i = 0; i < 16; ++i) {
+        buf[offset + i] = bytes[i];
       }
+
+      return buf;
     }
 
-    return buf || (0, _bytesToUuid.default)(bytes);
+    return (0, _stringify.default)(bytes);
   } // Function#name is not settable on some platforms (#270)
 
 
@@ -20380,7 +20543,7 @@ function _default(name, version, hashfunc) {
   generateUUID.URL = URL;
   return generateUUID;
 }
-},{"./bytesToUuid.js":69}],77:[function(require,module,exports){
+},{"./parse.js":72,"./stringify.js":76}],80:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20390,16 +20553,11 @@ exports.default = void 0;
 
 var _rng = _interopRequireDefault(require("./rng.js"));
 
-var _bytesToUuid = _interopRequireDefault(require("./bytesToUuid.js"));
+var _stringify = _interopRequireDefault(require("./stringify.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function v4(options, buf, offset) {
-  if (typeof options === 'string') {
-    buf = options === 'binary' ? new Uint8Array(16) : null;
-    options = null;
-  }
-
   options = options || {};
 
   const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
@@ -20409,21 +20567,21 @@ function v4(options, buf, offset) {
   rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
 
   if (buf) {
-    const start = offset || 0;
+    offset = offset || 0;
 
     for (let i = 0; i < 16; ++i) {
-      buf[start + i] = rnds[i];
+      buf[offset + i] = rnds[i];
     }
 
     return buf;
   }
 
-  return (0, _bytesToUuid.default)(rnds);
+  return (0, _stringify.default)(rnds);
 }
 
 var _default = v4;
 exports.default = _default;
-},{"./bytesToUuid.js":69,"./rng.js":72}],78:[function(require,module,exports){
+},{"./rng.js":74,"./stringify.js":76}],81:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20440,7 +20598,47 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const v5 = (0, _v.default)('v5', 0x50, _sha.default);
 var _default = v5;
 exports.default = _default;
-},{"./sha1.js":73,"./v35.js":76}],79:[function(require,module,exports){
+},{"./sha1.js":75,"./v35.js":79}],82:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _regex = _interopRequireDefault(require("./regex.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function validate(uuid) {
+  return typeof uuid === 'string' && _regex.default.test(uuid);
+}
+
+var _default = validate;
+exports.default = _default;
+},{"./regex.js":73}],83:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _validate = _interopRequireDefault(require("./validate.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function version(uuid) {
+  if (!(0, _validate.default)(uuid)) {
+    throw TypeError('Invalid UUID');
+  }
+
+  return parseInt(uuid.substr(14, 1), 16);
+}
+
+var _default = version;
+exports.default = _default;
+},{"./validate.js":82}],84:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -20461,14 +20659,14 @@ function extend() {
     return target
 }
 
-},{}],80:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 module.exports = {
 	h32: require("./xxhash")
 ,	h64: require("./xxhash64")
 }
 
-},{"./xxhash":81,"./xxhash64":82}],81:[function(require,module,exports){
-(function (Buffer){
+},{"./xxhash":86,"./xxhash64":87}],86:[function(require,module,exports){
+(function (Buffer){(function (){
 /**
 xxHash implementation in pure Javascript
 
@@ -20859,9 +21057,9 @@ XXH.prototype.digest = function () {
 
 module.exports = XXH
 
-}).call(this,require("buffer").Buffer)
-},{"buffer":28,"cuint":31}],82:[function(require,module,exports){
-(function (Buffer){
+}).call(this)}).call(this,require("buffer").Buffer)
+},{"buffer":28,"cuint":31}],87:[function(require,module,exports){
+(function (Buffer){(function (){
 /**
 xxHash64 implementation in pure Javascript
 
@@ -21307,7 +21505,7 @@ XXH64.prototype.digest = function () {
 
 module.exports = XXH64
 
-}).call(this,require("buffer").Buffer)
+}).call(this)}).call(this,require("buffer").Buffer)
 },{"buffer":28,"cuint":31}],"alan-compiler":[function(require,module,exports){
 const { default: buildPipeline, } = require('./dist/pipeline')
 const ammtojs = require('./dist/ammtojs')
@@ -21334,7 +21532,7 @@ module.exports = (inFormat, outFormat, text) => {
 }
 
 },{"./dist/ammtoaga":6,"./dist/ammtojs":7,"./dist/lntoamm":20,"./dist/pipeline":23}],"alan-js-runtime":[function(require,module,exports){
-(function (process,Buffer){
+(function (process,Buffer){(function (){
 require('cross-fetch/polyfill')
 const EventEmitter = require('events')
 const http = require('http')
@@ -22683,8 +22881,8 @@ module.exports = {
 
 module.exports.asyncopcodes = Object.keys(module.exports).filter(k => module.exports[k].constructor.name === 'AsyncFunction')
 
-}).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":38,"buffer":28,"child_process":26,"cross-fetch/polyfill":30,"events":34,"http":43,"net":26,"util":68,"xxhashjs":80}],"alan-runtime":[function(require,module,exports){
+}).call(this)}).call(this,require('_process'),require("buffer").Buffer)
+},{"_process":38,"buffer":28,"child_process":26,"cross-fetch/polyfill":30,"events":34,"http":43,"net":26,"util":68,"xxhashjs":85}],"alan-runtime":[function(require,module,exports){
 const r = require('alan-js-runtime')
 
 // Redefined stdoutp and exitop to work in the browser
