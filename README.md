@@ -6,4 +6,4 @@
 with css files defined in the repo.
 - Solarized Ace themes with no dependencies (Ace found in cdns requires `require.js`) come from [here](https://github.com/ajaxorg/ace-builds/tree/master/src-min-noconflict)
 but mdbook plays nicer with js files defined in the repo.
-- This repo has an APGL3 license because of its usage of the [alan compiler](https://github.com/alantech/compiler)
+- This repo has the MIT license
