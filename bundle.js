@@ -313,6 +313,10 @@ const unhandled = (val, reason) => {
     throw new Error();
 };
 class DepGraph {
+    get isNop() {
+        return (this.byOrder.length === 0 ||
+            this.byOrder.every((n) => n.closure != null && n.closure.isNop));
+    }
     constructor(fn, outer) {
         this.byOrder = [];
         this.byVar = {};
@@ -332,10 +336,6 @@ class DepGraph {
                 .filter((s) => !s.has('whitespace'));
             this.build(stmts);
         }
-    }
-    get isNop() {
-        return (this.byOrder.length === 0 ||
-            this.byOrder.every((n) => n.closure != null && n.closure.isNop));
     }
     buildParams(params) {
         this.params = {};
@@ -1572,7 +1572,7 @@ const ammToAga = (amm) => {
     outStr += blockVec.join('\n');
     return outStr;
 };
-exports.fromFile = (filename) => {
+const fromFile = (filename) => {
     const lp = new lp_1.LP(filename);
     const ast = amm_1.default.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -1580,7 +1580,8 @@ exports.fromFile = (filename) => {
     }
     return ammToAga(ast);
 };
-exports.fromString = (str) => {
+exports.fromFile = fromFile;
+const fromString = (str) => {
     const lp = lp_1.LP.fromText(str);
     const ast = amm_1.default.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -1588,6 +1589,7 @@ exports.fromString = (str) => {
     }
     return ammToAga(ast);
 };
+exports.fromString = fromString;
 
 },{"../amm":3,"../lp":22,"./aga":4,"./depgraph":5}],7:[function(require,module,exports){
 "use strict";
@@ -1788,7 +1790,7 @@ const ammToJsText = (amm) => {
     outFile += "r.emit('_start', undefined)\n"; // Let's get it started in here
     return outFile;
 };
-exports.fromFile = (filename) => {
+const fromFile = (filename) => {
     const lp = new lp_1.LP(filename);
     const ast = amm_1.default.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -1796,7 +1798,8 @@ exports.fromFile = (filename) => {
     }
     return ammToJsText(ast);
 };
-exports.fromString = (str) => {
+exports.fromFile = fromFile;
+const fromString = (str) => {
     const lp = lp_1.LP.fromText(str);
     const ast = amm_1.default.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -1804,6 +1807,7 @@ exports.fromString = (str) => {
     }
     return ammToJsText(ast);
 };
+exports.fromString = fromString;
 
 },{"./amm":3,"./lp":22,"alan-js-runtime":"alan-js-runtime"}],8:[function(require,module,exports){
 "use strict";
@@ -2506,7 +2510,7 @@ const resolve = (path) => {
         return null;
     }
 };
-exports.fromString = (str) => {
+const fromString = (str) => {
     const lp = lp_1.LP.fromText(str);
     const ast = ln.ln.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -2521,12 +2525,14 @@ exports.fromString = (str) => {
     }
     return ast;
 };
-exports.fromFile = (filename) => {
-    const ast = exports.fromString(fs.readFileSync(filename, { encoding: 'utf8' }));
+exports.fromString = fromString;
+const fromFile = (filename) => {
+    const ast = (0, exports.fromString)(fs.readFileSync(filename, { encoding: 'utf8' }));
     ast.filename = filename;
     return ast;
 };
-exports.resolveDependency = (modulePath, dependency) => {
+exports.fromFile = fromFile;
+const resolveDependency = (modulePath, dependency) => {
     // Special case path for the standard library importing itself
     if (modulePath.substring(0, 4) === '@std')
         return dependency.t.trim();
@@ -2667,7 +2673,8 @@ exports.resolveDependency = (modulePath, dependency) => {
     }
     return importPath;
 };
-exports.resolveImports = (modulePath, ast) => {
+exports.resolveDependency = resolveDependency;
+const resolveImports = (modulePath, ast) => {
     const resolvedImports = [];
     const imports = ast.get('imports').getAll();
     for (let i = 0; i < imports.length; i++) {
@@ -2682,12 +2689,13 @@ exports.resolveImports = (modulePath, ast) => {
             // Should I do anything else here?
             throw new Error('Malformed AST, import statement without an import definition?');
         }
-        const importPath = exports.resolveDependency(modulePath, dependency);
+        const importPath = (0, exports.resolveDependency)(modulePath, dependency);
         resolvedImports.push(importPath);
     }
     return resolvedImports;
 };
-exports.functionAstFromString = (fn) => {
+exports.resolveImports = resolveImports;
+const functionAstFromString = (fn) => {
     const lp = lp_1.LP.fromText(fn);
     const ast = ln.functions.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -2700,7 +2708,8 @@ exports.functionAstFromString = (fn) => {
     }
     return ast;
 };
-exports.statementAstFromString = (s) => {
+exports.functionAstFromString = functionAstFromString;
+const statementAstFromString = (s) => {
     const lp = lp_1.LP.fromText(s);
     const ast = ln.statement.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -2713,7 +2722,8 @@ exports.statementAstFromString = (s) => {
     }
     return ast;
 };
-exports.fulltypenameAstFromString = (s) => {
+exports.statementAstFromString = statementAstFromString;
+const fulltypenameAstFromString = (s) => {
     const lp = lp_1.LP.fromText(s);
     const ast = ln.fulltypename.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -2726,7 +2736,8 @@ exports.fulltypenameAstFromString = (s) => {
     }
     return ast;
 };
-exports.assignablesAstFromString = (s) => {
+exports.fulltypenameAstFromString = fulltypenameAstFromString;
+const assignablesAstFromString = (s) => {
     const lp = lp_1.LP.fromText(s);
     const ast = ln.assignables.apply(lp);
     if (ast instanceof lp_1.LPError) {
@@ -2739,6 +2750,7 @@ exports.assignablesAstFromString = (s) => {
     }
     return ast;
 };
+exports.assignablesAstFromString = assignablesAstFromString;
 
 },{"../ln":8,"../lp":22,"fs":26,"path":37}],10:[function(require,module,exports){
 "use strict";
@@ -2956,7 +2968,7 @@ class Microstatement {
         return original;
     }
     static fromConstantsAst(constantsAst, scope, microstatements) {
-        const constName = '_' + uuid_1.v4().replace(/-/g, '_');
+        const constName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
         let constType = 'void';
         if (constantsAst.has('bool'))
             constType = 'bool';
@@ -3062,7 +3074,7 @@ ${objectLiteralsAst.t} on line ${objectLiteralsAst.line}:${objectLiteralsAst.cha
 ${objectLiteralsAst.t} on line ${objectLiteralsAst.line}:${objectLiteralsAst.char}`);
             }
             // Create a new variable to hold the size of the array literal
-            const lenName = '_' + uuid_1.v4().replace(/-/g, '_');
+            const lenName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
             microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, lenName, Type_1.default.builtinTypes['int64'], [`${arrayLiteralContents.length}`], []));
             // Add the opcode to create a new array with the specified size
             const opcodes = require('./opcodes').default;
@@ -3083,7 +3095,7 @@ ${objectLiteralsAst.t} on line ${objectLiteralsAst.line}:${objectLiteralsAst.cha
                 const size = FIXED_TYPES.includes(arrayLiteralContents[i].outputType.typename)
                     ? '8'
                     : '0';
-                const sizeName = '_' + uuid_1.v4().replace(/-/g, '_');
+                const sizeName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
                 microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, sizeName, Type_1.default.builtinTypes['int64'], [size], []));
                 // Push the value into the array
                 const opcodes = require('./opcodes').default;
@@ -3201,7 +3213,7 @@ ${objectLiteralsAst.t} on line ${objectLiteralsAst.line}:${objectLiteralsAst.cha
                 arrayLiteralContents.push(microstatements[microstatements.length - 1]);
             }
             // Create a new variable to hold the size of the array literal
-            const lenName = '_' + uuid_1.v4().replace(/-/g, '_');
+            const lenName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
             microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, lenName, Type_1.default.builtinTypes['int64'], [`${fields.length}`], []));
             // Add the opcode to create a new array with the specified size
             const opcodes = require('./opcodes').default;
@@ -3218,7 +3230,7 @@ ${objectLiteralsAst.t} on line ${objectLiteralsAst.line}:${objectLiteralsAst.cha
                 const size = FIXED_TYPES.includes(arrayLiteralContents[i].outputType.typename)
                     ? '8'
                     : '0';
-                const sizeName = '_' + uuid_1.v4().replace(/-/g, '_');
+                const sizeName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
                 microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, sizeName, Type_1.default.builtinTypes['int64'], [size], []));
                 // Push the value into the array
                 const opcodes = require('./opcodes').default;
@@ -3231,7 +3243,7 @@ ${objectLiteralsAst.t} on line ${objectLiteralsAst.line}:${objectLiteralsAst.cha
         }
     }
     static closureDef(fns, scope, microstatements) {
-        const closuredefName = '_' + uuid_1.v4().replace(/-/g, '_');
+        const closuredefName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
         // Keep any rerefs around as closure references
         const rerefs = microstatements.filter((m) => m.statementType === StatementType_1.default.REREF);
         microstatements.push(new Microstatement(StatementType_1.default.CLOSUREDEF, scope, true, // TODO: What should this be?
@@ -3255,7 +3267,7 @@ ${objectLiteralsAst.t} on line ${objectLiteralsAst.line}:${objectLiteralsAst.cha
         // There might be off-by-one bugs in the conversion here
         const innerMicrostatements = microstatements.slice(len, newlen);
         microstatements.splice(len, newlen - len);
-        const constName = '_' + uuid_1.v4().replace(/-/g, '_');
+        const constName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
         // if closure is not void return the last inner statement
         // TODO: Revisit this, if the closure doesn't have a type defined, sometimes it can only be
         // determined in the calling context and shouldn't be assumed to be `void`
@@ -3308,7 +3320,7 @@ ${emitsAst.t} on line ${emitsAst.line}:${emitsAst.char}`);
         }
         else {
             // Otherwise, create a microstatement with no value
-            const constName = '_' + uuid_1.v4().replace(/-/g, '_');
+            const constName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
             microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, constName, Type_1.default.builtinTypes.void, ['void'], null));
         }
     }
@@ -3532,7 +3544,7 @@ ${assignmentsAst.get('varn').t} on line ${assignmentsAst.line}:${assignmentsAst.
 ${assignmentsAst.get('varn').t} on line ${assignmentsAst.get('varn').line}:${assignmentsAst.get('varn').char}`);
                 }
                 // Create a new variable to hold the address within the array literal
-                const addrName = '_' + uuid_1.v4().replace(/-/g, '_');
+                const addrName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
                 microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, addrName, Type_1.default.builtinTypes['int64'], [`${fieldNum}`], []));
                 // Insert a `register` opcode.
                 const opcodes = require('./opcodes').default;
@@ -3577,7 +3589,7 @@ ${letName} on line ${assignmentsAst.line}:${assignmentsAst.char}`);
                 throw new Error(`${letName}.${fieldName} is of type ${originalType.typename} but assigned a value of type ${assign.outputType.typename}`);
             }
             // Create a new variable to hold the address within the array literal
-            const addrName = '_' + uuid_1.v4().replace(/-/g, '_');
+            const addrName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
             microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, addrName, Type_1.default.builtinTypes['int64'], [`${fieldNum}`], []));
             // Insert a `copytof` or `copytov` opcode.
             const opcodes = require('./opcodes').default;
@@ -3640,7 +3652,7 @@ ${letdeclarationAst.t} on line ${letdeclarationAst.line}:${letdeclarationAst.cha
         }
     }
     static fromConstdeclarationAst(constdeclarationAst, scope, microstatements) {
-        const constName = '_' + uuid_1.v4().replace(/-/g, '_');
+        const constName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
         const constAlias = constdeclarationAst.get('variable').t;
         const constTypeHint = constdeclarationAst.get('typedec').has()
             ? constdeclarationAst.get('typedec').get('fulltypename').t
@@ -3896,7 +3908,7 @@ ${baseassignable.t} on line ${baseassignable.line}:${baseassignable.char}`);
   ${baseassignable.t} on line ${baseassignable.line}:${baseassignable.char}`);
                         }
                         // Create a new variable to hold the address within the array literal
-                        const addrName = '_' + uuid_1.v4().replace(/-/g, '_');
+                        const addrName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
                         microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, addrName, Type_1.default.builtinTypes['int64'], [`${fieldNum}`], []));
                         // Insert a `register` opcode.
                         const opcodes = require('./opcodes').default;
@@ -3977,7 +3989,7 @@ ${baseassignable.t} on line ${baseassignable.line}:${baseassignable.char}`);
                     if (arrIndex.outputType.typename === 'int64') {
                         const opcodes = require('./opcodes').default;
                         // Create a new variable to hold the `okR` size value
-                        const sizeName = '_' + uuid_1.v4().replace(/-/g, '_');
+                        const sizeName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
                         microstatements.push(new Microstatement(StatementType_1.default.CONSTDEC, scope, true, sizeName, Type_1.default.builtinTypes['int64'], ['8'], []));
                         // Insert an `okR` opcode.
                         opcodes.exportScope
@@ -5351,7 +5363,7 @@ class Type {
         for (const typename of genericReplacements) {
             const typebox = scope.deepGet(typename);
             if (!typebox || !(typebox instanceof Type)) {
-                const fulltypename = Ast_1.fulltypenameAstFromString(typename);
+                const fulltypename = (0, Ast_1.fulltypenameAstFromString)(typename);
                 if (fulltypename.has('opttypegenerics')) {
                     const basename = fulltypename.get('typename').t;
                     const generics = [];
@@ -5411,8 +5423,8 @@ class Type {
             !otherType.originalType ||
             this.originalType.typename !== otherType.originalType.typename)
             return false;
-        const typeAst = Ast_1.fulltypenameAstFromString(this.typename);
-        const otherTypeAst = Ast_1.fulltypenameAstFromString(otherType.typename);
+        const typeAst = (0, Ast_1.fulltypenameAstFromString)(this.typename);
+        const otherTypeAst = (0, Ast_1.fulltypenameAstFromString)(otherType.typename);
         let generics = [];
         if (typeAst.has('opttypegenerics')) {
             generics.push(typeAst.get('opttypegenerics').get('generics').get('fulltypename').t);
@@ -5453,7 +5465,7 @@ class Type {
     }
     // There has to be a more elegant way to tackle this
     static fromStringWithMap(typestr, interfaceMap, scope) {
-        const typeAst = Ast_1.fulltypenameAstFromString(typestr);
+        const typeAst = (0, Ast_1.fulltypenameAstFromString)(typestr);
         const baseName = typeAst.get('typename').t;
         const baseType = scope.deepGet(baseName);
         if (typeAst.has('opttypegenerics')) {
@@ -5910,7 +5922,7 @@ ${statements[i].statementAst.t.trim()} on line ${statements[i].statementAst.line
     static conditionalToCond(cond, scope) {
         const newStatements = [];
         let hasConditionalReturn = false; // Flag for potential second pass
-        const condName = '_' + uuid_1.v4().replace(/-/g, '_');
+        const condName = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
         const condStatement = Ast.statementAstFromString(`
       const ${condName}: bool = ${cond.get('assignables').t}
     `.trim() + ';');
@@ -6205,7 +6217,7 @@ ${statements[i].statementAst.t.trim()} on line ${statements[i].statementAst.line
             // instead hoisted into writing a closure variable
             if (hasConditionalReturn) {
                 // Need the UUID to make sure this is unique if there's multiple layers of nested returns
-                const retNamePostfix = '_' + uuid_1.v4().replace(/-/g, '_');
+                const retNamePostfix = '_' + (0, uuid_1.v4)().replace(/-/g, '_');
                 const retVal = 'retVal' + retNamePostfix;
                 const retNotSet = 'retNotSet' + retNamePostfix;
                 const retValStatement = Ast.statementAstFromString(`
@@ -6641,7 +6653,7 @@ const ammFromModuleAsts = (moduleAsts) => {
         // Check if there's a collision
         if (eventNames.has(evt.name)) {
             // We modify the event name by attaching a UUIDv4 to it
-            evt.name = evt.name + '_' + uuid_1.v4().replace(/-/g, '_');
+            evt.name = evt.name + '_' + (0, uuid_1.v4)().replace(/-/g, '_');
         }
         // Add the event to the list
         eventNames.add(evt.name);
@@ -6656,7 +6668,7 @@ const ammFromModuleAsts = (moduleAsts) => {
             if (eventTypes.has(type))
                 continue; // This event was already processed, so we're done
             // Modify the type name by attaching a UUIDv4 to it
-            type.typename = type.typename + '_' + uuid_1.v4().replace(/-/g, '_');
+            type.typename = type.typename + '_' + (0, uuid_1.v4)().replace(/-/g, '_');
         }
         // Add the type to the list
         eventTypeNames.add(type.typename);
@@ -6673,7 +6685,7 @@ const ammFromModuleAsts = (moduleAsts) => {
                     continue; // This event was already processed, so we're done
                 // Modify the type name by attaching a UUIDv4 to it
                 propType.typename =
-                    propType.typename + '_' + uuid_1.v4().replace(/-/g, '_');
+                    propType.typename + '_' + (0, uuid_1.v4)().replace(/-/g, '_');
             }
             // Add the type to the list
             eventTypeNames.add(propType.typename);
@@ -6746,8 +6758,10 @@ const ammFromModuleAsts = (moduleAsts) => {
     }
     return outStr;
 };
-exports.fromFile = (filename) => ammFromModuleAsts(moduleAstsFromFile(filename));
-exports.fromString = (str) => ammFromModuleAsts(moduleAstsFromString(str));
+const fromFile = (filename) => ammFromModuleAsts(moduleAstsFromFile(filename));
+exports.fromFile = fromFile;
+const fromString = (str) => ammFromModuleAsts(moduleAstsFromString(str));
+exports.fromString = fromString;
 
 },{"./Ast":9,"./Event":11,"./Microstatement":12,"./Module":13,"./StatementType":17,"./Std":1,"./UserFunction":19,"fs":26,"uuid":69}],21:[function(require,module,exports){
 "use strict";
@@ -6891,7 +6905,7 @@ const addopcodes = (opcodes) => {
                     const inputTypes = inputs.map((i) => i.outputType);
                     const interfaceMap = new Map();
                     Object.values(args).forEach((t, i) => t.typeApplies(inputTypes[i], scope, interfaceMap));
-                    microstatements.push(new Microstatement_1.default(StatementType_1.default.CONSTDEC, scope, true, '_' + uuid_1.v4().replace(/-/g, '_'), ((inputTypes, scope) => {
+                    microstatements.push(new Microstatement_1.default(StatementType_1.default.CONSTDEC, scope, true, '_' + (0, uuid_1.v4)().replace(/-/g, '_'), ((inputTypes, scope) => {
                         // The `syncop` opcode's return type is always the return type of the closure it was
                         // given, so we can short circuit this really quickly.
                         if (opcodeName === 'syncop') {
@@ -7032,7 +7046,7 @@ const addopcodes = (opcodes) => {
                                 const arrayInnerTypeStr = inputTypes[0].typename.replace(/^Array<(.*)>$/, '$1');
                                 const arrayInnerType = arrayInnerTypeStr.includes('<')
                                     ? (() => {
-                                        const fulltypenameAst = Ast_1.fulltypenameAstFromString(arrayInnerTypeStr);
+                                        const fulltypenameAst = (0, Ast_1.fulltypenameAstFromString)(arrayInnerTypeStr);
                                         const baseTypeStr = fulltypenameAst.get('typename').t;
                                         const baseType = scope.deepGet(baseTypeStr);
                                         const generics = [
@@ -7239,7 +7253,7 @@ const addopcodes = (opcodes) => {
                                         const arrayInnerTypeStr = inputTypes[0].typename.replace(/^Array<(.*)>$/, '$1');
                                         const arrayInnerType = arrayInnerTypeStr.includes('<')
                                             ? (() => {
-                                                const fulltypenameAst = Ast_1.fulltypenameAstFromString(arrayInnerTypeStr);
+                                                const fulltypenameAst = (0, Ast_1.fulltypenameAstFromString)(arrayInnerTypeStr);
                                                 const baseTypeStr = fulltypenameAst.get('typename').t;
                                                 const baseType = scope.deepGet(baseTypeStr);
                                                 const generics = [
@@ -7845,7 +7859,8 @@ class LPError {
     }
 }
 exports.LPError = LPError;
-exports.lpError = (message, obj) => new LPError(`${message} in file ${obj.filename} line ${obj.line}:${obj.char}`);
+const lpError = (message, obj) => new LPError(`${message} in file ${obj.filename} line ${obj.line}:${obj.char}`);
+exports.lpError = lpError;
 // A special AST node that indicates that you successfully matched nothing, useful for optional ASTs
 class NulLP {
     constructor() {
@@ -7912,7 +7927,7 @@ class Token {
             lp.advance(this.t.length);
             return new Token(this.t, lp.filename, lp.line, lp.char);
         }
-        return exports.lpError(`Token mismatch, ${this.t} not found, instead ${lp.data[lp.i]}`, lp);
+        return (0, exports.lpError)(`Token mismatch, ${this.t} not found, instead ${lp.data[lp.i]}`, lp);
     }
 }
 exports.Token = Token;
@@ -7959,7 +7974,7 @@ class Not {
             lp.advance(this.t.length);
             return new Not(newT, lp.filename, lp.line, lp.char);
         }
-        return exports.lpError(`Not mismatch, ${this.t} found`, lp);
+        return (0, exports.lpError)(`Not mismatch, ${this.t} found`, lp);
     }
 }
 exports.Not = Not;
@@ -8045,7 +8060,7 @@ class ZeroOrMore {
             }
             const t2 = z.toString();
             if (!t2 || t2.length === 0) {
-                return exports.lpError('ZeroOrMore made no forward progress, will infinite loop', lp);
+                return (0, exports.lpError)('ZeroOrMore made no forward progress, will infinite loop', lp);
             }
             t += t2;
             zeroOrMore.push(z);
@@ -8097,7 +8112,7 @@ class OneOrMore {
             if (o instanceof LPError) {
                 lp.restore(s);
                 if (oneOrMore.length === 0) {
-                    const err = exports.lpError(`No match for OneOrMore ${this.oneOrMore.toString()}`, lp);
+                    const err = (0, exports.lpError)(`No match for OneOrMore ${this.oneOrMore.toString()}`, lp);
                     err.parent = o;
                     return err;
                 }
@@ -8105,7 +8120,7 @@ class OneOrMore {
             }
             const t2 = o.toString();
             if (t2.length === 0) {
-                return exports.lpError('OneOrMore made no forward progress, will infinite loop', lp);
+                return (0, exports.lpError)('OneOrMore made no forward progress, will infinite loop', lp);
             }
             t += t2;
             oneOrMore.push(o);
@@ -8220,7 +8235,7 @@ class Or {
             break;
         }
         if (or.length === 0) {
-            const err = exports.lpError(`No matching tokens ${this.or.map((o) => o.t).join(' | ')} found`, lp);
+            const err = (0, exports.lpError)(`No matching tokens ${this.or.map((o) => o.t).join(' | ')} found`, lp);
             err.parent = errs;
             return err;
         }
@@ -8282,12 +8297,12 @@ class ExclusiveOr {
             lp.restore(s);
         }
         if (xor.length === 0) {
-            const err = exports.lpError('No matching tokens found', lp);
+            const err = (0, exports.lpError)('No matching tokens found', lp);
             err.parent = errs;
             return err;
         }
         if (xor.length > 1) {
-            const err = exports.lpError('Multiple matching tokens found', lp);
+            const err = (0, exports.lpError)('Multiple matching tokens found', lp);
             err.parent = errs;
             return err;
         }
@@ -8342,7 +8357,7 @@ class LeftSubset {
         }
         // In this path, we force a failure because the match also exists in the right subset
         lp.restore(s);
-        return exports.lpError(`Right subset ${this.right.t} matches unexpectedly`, lp);
+        return (0, exports.lpError)(`Right subset ${this.right.t} matches unexpectedly`, lp);
     }
 }
 exports.LeftSubset = LeftSubset;
@@ -8457,7 +8472,7 @@ class NamedOr {
             break;
         }
         if (Object.keys(or).length === 0) {
-            const err = exports.lpError('No matching or tokens found', lp);
+            const err = (0, exports.lpError)('No matching or tokens found', lp);
             err.parent = errs;
             return err;
         }
@@ -8501,13 +8516,13 @@ class CharSet {
             lp.advance(1);
             return outCharSet;
         }
-        return exports.lpError(`Token mismatch, expected character in range of ${String.fromCharCode(this.lowerCharCode)}-${String.fromCharCode(this.upperCharCode)}`, lp);
+        return (0, exports.lpError)(`Token mismatch, expected character in range of ${String.fromCharCode(this.lowerCharCode)}-${String.fromCharCode(this.upperCharCode)}`, lp);
     }
 }
 exports.CharSet = CharSet;
 // A composite AST 'node' that matches the child node between the minimum and maximum repetitions or
 // fails.
-exports.RangeSet = (toRepeat, min, max) => {
+const RangeSet = (toRepeat, min, max) => {
     const sets = [];
     for (let i = min; i <= max; i++) {
         if (i === 0) {
@@ -8524,6 +8539,7 @@ exports.RangeSet = (toRepeat, min, max) => {
     }
     return Or.build(sets);
 };
+exports.RangeSet = RangeSet;
 
 },{"fs":26}],23:[function(require,module,exports){
 "use strict";
