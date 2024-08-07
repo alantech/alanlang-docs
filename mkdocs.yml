@@ -5,6 +5,8 @@ repo_name: alantech/alan
 repo_url: https://github.com/alantech/alan
 theme:
   name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
   features:
     - content.code.copy
     - content.code.select
