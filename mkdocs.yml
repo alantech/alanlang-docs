@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
-site_name: The Alan Language Documentation
+site_name: The Alan Programming Language
 site_url: https://docs.alan-lang.org
 repo_name: alantech/alan
 repo_url: https://github.com/alantech/alan
@@ -12,11 +12,11 @@ theme:
     - navigation.indexes
     - navigation.instant
     - navigation.instant.progress
-    - navigation.path
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.top
     - navigation.tracking
+    - navigation.sections
     - search.highlight
     - search.share
     - search.suggest
@@ -44,7 +44,13 @@ nav:
   - Home:
     - index.md
   - Getting Started:
-    - getting_started.md
+    - getting_started/index.md
+    - tutorial.md
+  - Reference Guides:
+    - reference_guides/index.md
+    - overview.md
+    - built_ins.md
+    - standard_library.md
   - Articles:
     - blog/index.md
 plugins:
@@ -63,6 +69,7 @@ plugins:
   - tags
 markdown_extensions:
   - abbr
+  - attr_list
   - admonition
   - footnotes
   - pymdownx.highlight:
