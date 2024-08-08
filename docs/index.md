@@ -18,7 +18,7 @@ export fn main {
 
 ??? question "Looking for Alan v0.1?"
 
-    Documentation for Alan v0.1 can be found on [the legacy documentation website](https://docs-legacy.alan-lang.org)
+    Documentation for Alan v0.1 can be found on [the legacy documentation website](https://docs-legacy.alan-lang.org).
 
 ## Why Alan?
 
