@@ -74,11 +74,12 @@ markdown_extensions:
   - attr_list
   - admonition
   - footnotes
+  - pymdownx.details
   - pymdownx.highlight:
       use_pygments: true
       pygments_lang_class: true
-  - pymdownx.superfences
   - pymdownx.inlinehilite
+  - pymdownx.superfences
   - pymdownx.tasklist:
       custom_checkbox: true
 extra:

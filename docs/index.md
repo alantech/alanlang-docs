@@ -16,6 +16,10 @@ export fn main {
 
 [Get Started with Alan](/getting_started){ .md-button .md-button--primary }
 
+??? question "Looking for Alan v0.1?"
+
+    Documentation for Alan v0.1 can be found on [the legacy documentation website](https://docs-legacy.alan-lang.org)
+
 ## Why Alan?
 
 Utilizing GPUs for general-purpose computing (GPGPU) has been a difficult ask for developers, with various unsatisfying trade-offs. You must either:
@@ -34,3 +38,4 @@ This means that CPU code written in idiomatic Alan should have roughly the same 
 
 Ready to learn more about Alan? Checkout the [basic tutorial](./tutorial) to become dangerous with Alan, dig into the [built-in types, functions, and operators](./built_ins) automatically available to every Alan module, deep dive into [the standard library](./standard_library) of Alan, or read some [articles](./blog) on Alan for projects that have used it or interesting patterns to take for yourself.
 
+![Alan Logo](./assets/logo.png)
