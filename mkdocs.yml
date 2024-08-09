@@ -60,7 +60,12 @@ plugins:
       blog_dir: blog
   - privacy
   - search
-  - social
+  - social:
+      cards_layout: default
+      cards_layout_options:
+        title: The Alan Programming Language
+        description: A GPGPU-native programming language for the rest of us
+        background_color: "#268bd2"
   - rss:
       match_path: blog/posts/.*
       date_from_meta:
