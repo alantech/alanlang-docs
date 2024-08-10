@@ -1,5 +1,6 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 site_name: The Alan Programming Language
+site_description: A GPGPU-native programming language for the rest of us
 site_url: https://docs.alan-lang.org
 repo_name: alantech/alan
 repo_url: https://github.com/alantech/alan
@@ -66,10 +67,7 @@ plugins:
       blog_dir: blog
   - privacy
   - search
-  - social:
-      cards_layout_options:
-        title: The Alan Programming Language
-        description: A GPGPU-native programming language for the rest of us
+  - social
   - rss:
       match_path: blog/posts/.*
       date_from_meta:
