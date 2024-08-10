@@ -607,6 +607,135 @@ Here we also see both higher-order functions (passing functions to other functio
 
 ## Higher-Order Functions and Generic Functions
 
+### Higher-Order Functions
+
 You can create functions that accept other functions as an argument and then call it in the course of its operation to create re-usable patterns of behavior that you can then use in other situations.
+
+Just the type portion of the function definition needs to be provided.
+
+```rs
+fn foostring (s: string) -> string = "foo".concat(s);
+
+fn stringChanger(s: string, changer: (string) -> string) -> string {
+  "Original String: ".concat(s).print;
+  let out = changer(s);
+  "New String     : ".concat(out).print;
+  return out;
+}
+
+export fn main {
+  let changed = stringChanger("bar", foostring);
+  "New Length     : ".concat(changed.len.string).print;
+  stringChanger("baz", fn (s: string) -> string = changed.concat(s)).print;
+}
+```
+
+We can now pass in the `foostring` function as well as an anonymous closure function that uses the `changed` variable itself to produce a new output. The full output of this example when compiled and run looks like:
+
+```
+$ alan compile changer.ln
+Done! Took 0.73sec
+$ ./changer
+Original String: bar
+New String     : foobar
+New Length     : 6
+Original String: baz
+New String     : foobarbaz
+foobarbaz
+```
+
+The same `stringChanger` function produced different outputs based on the behavior of the function it was provided.
+
+### Function Type Digression
+
+The type for a function is defined with `I -> O` the input type turns into the output type. Input *type*? Shouldn't that be types, for each argument?
+
+Well, for Alan, the traditional way you write a set of arguments and their types is *identical* to a struct-style tuple. A struct is a singular type, and constructing a tuple is *identical* to calling a function with a set of arguments matching the tuple args, because they are literally the same thing in Alan.
+
+This also means that, while definitely not recommended, if you wanted to do [Go-style error handling](https://go.dev/doc/tutorial/handle-errors) by returning a tuple of `(value, error)` and then manually check if the error actually exists, you could define a function like:
+
+```rs
+fn goStyleIntParse(s: string) -> (val: i64, err: Error?) {
+  let result = s.i64;
+  return {val: i64, err: Error?}(result.i64.getOr(0), result.Error);
+}
+```
+
+And now you need to manually check if the `Error` exists in the output tuple before you can safely use the `i64`. But if you ever have a *legitimate* reason to return multiple values from a single function, it's perfectly possible.
+
+The reverse is also true, *anything* can be the input side of things, but how do you even access the values if you didn't give them field names? We can't *exactly* use the `0`, `1`, etc of tuple accessor syntax because they can't be properties of anything, so the compromise in this case is to prefix `arg` on these tuple names.
+
+```rs
+fn lazyFooString(string) -> string = "foo".concat(arg0);
+
+export fn main {
+  "bar".lazyFooString.print; // Prints foobar
+}
+```
+
+You don't *technically* need the parens in the definition, either. You can just put in some whitespace after the name to make it unambiguous.
+
+```rs
+fn lazyFooString string -> string = "foo".concat(arg0);
+
+export fn main {
+  "bar".lazyFooString.print; // Prints foobar
+}
+```
+
+It's just conventional to have parens because that's what the majority of popular programming languages do.
+
+### Generic Functions
+
+Generic Functions are functions where the types of data they're operating on aren't known at the time the function is written. They are often most useful in conjunction with Higher-Order Functions, where the function passed to the generic function determines the output type involved. You specify names for the unknown types inside of `{}` just after the function name.
+
+```rs
+fn fma{T, U}(arr: Array{T}, f: T -> bool, m: T -> U, r: (U, U) -> U) -> U? {
+  return arr.filter(f).map(m).reduce(r);
+}
+```
+
+This function takes an array of any type `T`, first filters out irrelevant parts with a filter function `f` that takes `T` and returns a `bool` to determine if it stays or goes. Then it passes it to a map function `m` that takes type `T` and converts it into type `U`, and finally gives it to the reducer function `r` that takes two values of type `U` and returns a singular `U`. The output of this whole chain is a `Maybe` type, specifically `U?`, because the input array might be empty.
+
+By convention, the type variables in generic functions (and generic types) are written with singular uppercase letters to make them stand out from normal variables and types.
+
+### Default Value Digression
+
+We didn't use the generic types anywhere but in the type of the function, but suppose `U` has a default constructor function that can be called without any arguments. We could then get a default value to fall back on and eliminate the `Maybe` from the return type signature here.
+
+```rs
+fn fma{T, U}(arr: Array{T}, f: T -> bool, m: T -> U, r: (U, U) -> U) -> U {
+  return arr.filter(f).map(m).reduce(r).getOr({U}());
+}
+```
+
+We can get a reference to whatever the actual type ends up being by wrapping it in `{}` within the body, and then we immediately invoke it with the parens `()` afterwards.
+
+Default values can often be dangerous in a production system because they can hide a mistake in the code where a value was not initialized correctly, so the vast majority of types in Alan do not support it (the `Maybe` type is the exception. `Maybe{i64}()` produces a `Maybe`-wrapped `void` value). But you can easily add that to the language, scoped to just the source file you're currently working in, by defining a zero-arg constructor function for any type. Eg:
+
+```rs
+fn i64() -> i64 = 0;
+```
+
+Now this type has a zero-arg constructor, so if we wanted to use `fma` that returns, say, the total length of all captial words in a string, we could do something like:
+
+```rs
+export fn main {
+  "Hello there! How are you doing this fine Monday morning?"
+    .split(" ")
+    .fma(fn (s: string) -> bool = s < "a", len, add)
+    .print; // Prints 14
+  "foo bar baz"
+    .split(" ")
+    .fma(fn (s: string) -> bool = s < "a", len, add)
+    .print; // Prints 0
+}
+```
+
+!!! note
+
+    Type inference from non-generic functions based on their statements is planned for a future release, potentially reducing the anonymous function definition from `fn (s: string) -> bool = s < "a"` to something like `fn s => s < "a"` (exact syntax TBD), but a consistent "tie-breaker" logic needs to be fully specified so this does what users expect it to.
+
+We use string ordering to figure out which strings begin with capital letters (because their first character is earlier in ASCII and unicode ordering than the lowercase letters) and keep only those, then we compute the `len` of each substring, then we add them together, and finally print the output number. Because `i64` now has a default constructor, even when we called it a second time with only lowercase words, we'll get the expected value of `0` in this situation.
 
 TO BE CONTINUED...
