@@ -20,7 +20,7 @@ export fn main() -> void {
 }
 ```
 
-But `void` is itself a simple alias for an `()` a grouping of nothing, which coincidentally is what the arguments were, making this the same thing:
+`void` is itself a simple alias for `()` - a grouping of nothing, which coincidentally is what the arguments were, making this the same thing:
 
 ```rs
 export fn main() -> () {
@@ -36,7 +36,7 @@ export fn main {
 }
 ```
 
-And when a function consists of a single statement, we can just state that the function is equal to that statement, and we can reduce it to just:
+And when a function consists of a single statement, we can state that the function is equal to that statement, and we can reduce it to just:
 
 ```rs
 export fn main = print("Hello, World!");
@@ -70,6 +70,8 @@ When the function takes a single argument, it may also be used in property synta
 export fn main = "Hello, World!".print;
 ```
 
+This makes more sense for the accessor functions on your types, but can also be useful to allow a "property" to continue to exist for a type even when the value is no longer directly stored in the type.
+
 ## Variables
 
 In Alan, variables are declared with `let` and `const`. `let` variables may have their value changed, while `const` variables are immutable the moment they are assigned. This means `let` variables can be re-assigned, while `const` cannot.
@@ -102,7 +104,7 @@ Alan has many built-in types, but a few of them are considered "primitive." Thes
 
 !!! note
 
-    `int` and `float` are currently actually `i64` and `f64`. It is planned to have automatic coercion of the integer and float syntactic constructs into the "best" int and float type as determined by type inference, but this has not yet been done and they are always automatically coerced to their 64-bit representations, and the user must explicitly cast to a smaller type if desired.
+    `int` and `float` are currently actually `i64` and `f64`. It is planned to have automatic coercion of the integer and float syntactic constructs into the "best" int and float type as determined by type inference, but this has not yet been done. They are always automatically coerced to their 64-bit representations and the user must explicitly cast to a smaller type if desired.
 
 ### Integers
 
@@ -117,7 +119,7 @@ let five = 5;
 Base 2, 8, and 16 require a leading `0` followed by `b`, `o`, and `x`, respectively, and then the digits involved.
 
 ```rs
-let three   = 0b10;
+let two     = 0b10;
 let eight   = 0o10;
 let sixteen = 0x10;
 ```
@@ -126,7 +128,10 @@ For all of the integer types, underscores are allowed to be inserted to act as s
 
 ```rs
 let million = 1_000_000;
+let lakh = 1_00_000;
 ```
+
+Alan doesn't care where the understores are inserted, so place them anywhere that makes sense to you. The only restriction is that you can't have a leading underscore.
 
 Because the other base types are generally used when doing bitwise arithmetic, they do not have a negative representation, only base-10 has this syntactic feature:
 
@@ -154,7 +159,7 @@ let scientific = -2e-2;
 
 ### Booleans
 
-Booleans are simply the bare keywords `true` and `false`. Other types do not automatically coerce into booleans, so there's no "truthy" `0` is `false`, `>=1` is `true` kind of behavior in the language. (At least, by default.)
+Booleans are simply the bare keywords `true` and `false`. Other types do not automatically coerce into booleans, so there's no "truthy" `0` is `false`, `>=1` is `true` kind of behavior in the language. (At least, by default. More on that later.)
 
 ### Strings
 
@@ -177,7 +182,7 @@ Suffice it to say, you're not likely to work with the `void` type *directly*, bu
 
 ## Type Aliases
 
-Types are defined similarly to single-argument functions, but with `type` instead of `fn`.
+Types are defined similarly to single-statement functions, but with `type` instead of `fn`.
 
 ```rs
 type Foo = i64;
@@ -189,7 +194,7 @@ They do become more convenient when defining your own types, though.
 
 ## Product Types (Tuples and Structs)
 
-Product types let you group multiple values together and pass them around together in your code.
+Product Types let you group multiple values together and pass them around together in your code.
 
 ### Tuples
 
@@ -203,7 +208,7 @@ type myTuple = i64, string;
 
     All type statements in Alan are resolved into a functional style. `type myTuple = i64, string;` can also be written as `type myTuple = Tuple{i64, string};` The `,` symbol, except within the generic argument parameterization, is a **type operator** for the `Tuple{A, B}` type function.
 
-    You can define your own type functions (AKA generic types) and type operators to extend type system, if you wish, *buuut* you probably don't want to do that most of the time.
+    You can define your own type functions (AKA generic types) and type operators to extend type system, but be careful about legibility of the resulting code.
 
 When you define types in Alan, constructor and accessor functions are created automatically for you to create types and retrieve values from them. `myTuple` automatically defines a constructor function named `myTuple`, and accessor functions `0` and `1` to access the individual elements of the tuple.
 
@@ -221,7 +226,7 @@ export fn main {
 
 !!! note
 
-    The grammar of Alan disallows defining a function that starts with a number to avoid ambiguity with numeric constants, which makes tuple accessor functions special. They also are the only functions that can *only* be called with accessor syntax, as calling them as regular functions is similarly ambiguous.
+    The grammar of Alan disallows defining a function that starts with a number to avoid ambiguity with numeric constants, which makes tuple accessor functions special. That makes them the only functions that can *only* be called with accessor syntax, as calling them as regular functions is similarly ambiguous.
 
 This also demonstrates why type aliases are simply *aliases* and not explicitly used for type checking, as tuples can be anonymously constructed:
 
@@ -256,10 +261,6 @@ type myStruct =
 You can then use the `myStruct` type like this:
 
 ```rs
-type myStruct =
-  foo: i64,
-  bar: string;
-
 export fn main {
   let testStruct = myStruct(1, "test");
   testStruct.foo.print; // Prints 1
@@ -308,7 +309,7 @@ export fn main {
 }
 ```
 
-Under-the-hood, they all become tuples and the field names are just syntactic sugar for you.
+Under the hood, they all become tuples and the field names are just syntactic sugar for you.
 
 !!! question "Why's it called a 'Product Type'?"
 
@@ -357,7 +358,7 @@ export fn main {
 }
 ```
 
-Both constructor functions get the same name as the type, just like with product types, while the function dispatch logic figures out which one to call based on the input type provided. If you provide a value that doesn't match any of the constituent types, it will fail to compile.
+Both constructor functions get the same name as the type while the function dispatch logic figures out which one to call based on the input type provided. If you provide a value that doesn't match any of the constituent types, it will fail to compile.
 
 ```rs
 type intOrString = i64 | string;
@@ -367,7 +368,19 @@ export fn main {
 }
 ```
 
-It also creates two accessor functions, also one for each constituent type:
+But if you want, you can make a custom constructor function for any type that converts into the type, by just defining that function.
+
+```rs
+type intOrString = i64 | string;
+
+fn intOrString(b: bool) -> intOrString = b.string.intOrString;
+
+export fn main {
+  let mightBeBool = intOrString(true); // Now works
+}
+```
+
+It also creates two accessor functions, one for each constituent type:
 
 ```rs
 type intOrString = i64 | string;
@@ -498,7 +511,7 @@ A Buffer Type is a special version of a Tuple, where every element is exactly th
 type fiveInts = i64[5]; // Equivalent to Buffer{i64, 5}
 ```
 
-This produces two different types of constructor functions and integer-ordered property accessors. One constructor function requires an argument value for each location, and the other takes a single value and assigns it to every location.
+This produces two different types of constructor functions as well as the integer-ordered property accessors. One constructor function requires an argument value for each location, and the other takes a single value and assigns it to every location.
 
 ```rs
 let individual = {i64[5]}(1, 2, 3, 4, 5);
@@ -552,28 +565,28 @@ A Set type is like an Array type, but each element in a set type is unique. Unli
 ```rs
 export fn main {
   let uniqueFibonacci = Set{i64}([1, 1, 2, 3, 5, 8]);
-  uniqueFibonacci.Array.print; // Prints [1, 2, 3, 5, 8]
+  uniqueFibonacci.Array.print; // Prints [1, 2, 3, 5, 8] but maybe not in that order
 }
 ```
 
 ## Dictionary Types
 
-A Dictionary Type lets you create a mapping of keys to values. There is no specific ordering of these pairs, but you can use array accessor syntax to get a value when providing they key. You can also convert it into an Array of tuples of key-value pairs to iterate over. Unlike Sets, Dictionaries maintain their insertion order.
+A Dictionary Type lets you create a mapping of keys to values. You can use array accessor syntax to get a value when providing they key. You can also convert it into an Array of tuples of key-value pairs to iterate over. Unlike Sets, Dictionaries maintain their insertion order when converted back into an Array.
 
 The constructor function needs the key and value type defined, but if you construct it with an initial key-value pair, they can be inferred.
 
 ```rs
 export fn main {
-  let myDict = Dict(1, "test"); // Equivalent to Dict{i64, string}(1, "test")
-  myDict[1]; // Maybe{string}("test")
-  myDict[0]; // Maybe{string}(void)
-  myDict.Array; // [(1, "test")]
+  let myDict = Dict("test", 1); // Equivalent to Dict{string, i64}("test", 1)
+  myDict["test"]; // Maybe{i64}(1)
+  myDict["huh?"]; // Maybe{i64}(void)
+  myDict.Array; // [("test", 1)]
 }
 ```
 
 ## The GBuffer and GPGPU Types
 
-In Alan, there's one more buffer-like type, the `GBuffer{T}` types. This type is constructed from either a `Buffer` or `Array`. The type sits in-between the two in that its length is not known at compile time, but it cannot be changed once constructed. This represents a block of memory on the GPU, which you can set at construction time (from the buffer or array).
+In Alan, there's one more buffer-like type, the `GBuffer{T}` types. This type is constructed from either a `Buffer` or `Array`. The type sits in-between the two in that its length is not known at compile time, but it cannot be changed once constructed. This represents a block of memory on the GPU, which you can set at construction time (from a buffer or array).
 
 !!! note
 
