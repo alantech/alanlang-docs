@@ -67,7 +67,9 @@ plugins:
       blog_dir: blog
   - privacy
   - search
-  - social
+  - social:
+      cards_layout_options:
+        background_color: "#6c71c4"
   - rss:
       match_path: blog/posts/.*
       date_from_meta:
