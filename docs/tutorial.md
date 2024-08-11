@@ -738,4 +738,302 @@ export fn main {
 
 We use string ordering to figure out which strings begin with capital letters (because their first character is earlier in ASCII and unicode ordering than the lowercase letters) and keep only those, then we compute the `len` of each substring, then we add them together, and finally print the output number. Because `i64` now has a default constructor, even when we called it a second time with only lowercase words, we'll get the expected value of `0` in this situation.
 
-TO BE CONTINUED...
+## Compile-Time Computation, Conditional Types, and Conditional Compilation
+
+As you can see with `Buffer`s, the type system can work with constant primitive types. The type system can work with integers, floats, booleans, and strings. These types can also be manipulated at compile time to generate the actual value to use.
+
+### Compile-Time Computation
+
+While declaring a buffer of `i64[1 + 2]` will give you a buffer of three elements, this feature is meant for use with generic types. For instance the `concat` function for buffers has a type signature of:
+
+```rs
+export fn concat{T, S, N}(a: Buffer{T, S}, b: Buffer{T, N}) -> Buffer{T, S + N} {
+  ...
+```
+
+The output buffer length is computed from the lengths of the two input buffers. Beyond addition there are all of the arithmetic operations, as well as the comparison operators (`<`, `<=`, `>`, `>=`, `==`, `!=`), and so on.
+
+There are also some special compile-time types to provide data at compile-time that may be useful.
+
+* `Env{K}` returns the string environment variable for the given string key (or aborts compilation if not present)
+* `FileStr{F}` returns the contents of a file as a string for a given file path (or aborts compilation)
+* `If{C, A, B}` resolves as type `A` if `C` is `true`, and as `B` if `C` is false.
+
+### Conditional Types
+
+The `If{C, A, B}` type is the primary conditional type in Alan, letting you choose which type to actually resolve as. This could be for a variety of reasons; automatically swapping between `Buffer`, `Array`, or `GBuffer` based on the size of the data to be processed, or swapping out filesystem type depending on the operating system you're running on.
+
+For example, a `Path` type could be defined like:
+
+```rs
+type Path =
+  hasDrives: If{Windows, true, false},
+  separator: If{Windows, "\\", "/"},
+  path: string;
+```
+
+When a field in a product type resolves to a constant type value, Alan removes it from the actual product type that is constructed but keeps the accessor function for it that returns the primitive type with that value, and the compiler converts any calls to that function directly into the constant in the code, making it effectively zero-cost to "annotate" your types with metadata that can be determined at compile-time for all instances of that type.
+
+This usually only applies for things like the target operation system, processor architecture, or build type (test, debug, release), but there's no restriction on what it can be used for.
+
+### Tagged Types Digression
+
+An internal type for implementing the GPU types, `WgpuType{N}`, is used with `N` being the `wgsl` name of the type (which differs from the Alan name for the type) and is a constant string. Eg:
+
+```rs
+type gu32 = WgpuType{"u32"};
+```
+
+This isn't conditional, but allows the type to be "tagged" with metadata to use at run time.
+
+### Conditional Compilation
+
+`If{C, A, B}` is useful in combination with the `Env{K}` type to have features enabled or disabled during compilation, but when the type or function they're associated with differs significantly, sprinkling conditionals everywhere can make your code harder to read, so Alan has a unique feature (as far as we're aware) to allow top-level *keywords* to be optionally generic, accepting a single compile-time boolean type as the argument to determine whether or not to include it in the compilation process at all.
+
+The `Path` example *could* be written as:
+
+
+```rs
+type Path = hasDrives: false, separator: "/", path: string;
+type{Windows} Path = hasDrive: true, separator "\\", path: string;
+```
+
+Here we're relying on the "last definition wins" tiebreaker for identical definitions. For non-Windows platforms the first `Path` is the only one so it sticks around, while on Windows, both are defined but the Windows-specific one is defined second so it overrides the first definition.
+
+But this works any keyword in the top-level of the source file, so `fn{Test}` defines a function that only exists during testing, `export{Windows}` exports something only for the Windows platform, etc.
+
+Conditional compilation in Alan simply requires tagging the code that you want to be compiled only in certain circumstances with the condition that it should be compiled and that's it.
+
+## Operators and Type Operators
+
+It has been alluded to in prior sections that operators are just functions and type operators are just generic types (aka type functions), and that is the case.
+
+Alan defines a mapping of certain operator symbols to certain functions and type operator symbols to certain generic types, so `1 + 2` inside of a function is equivalent to `add(1, 2)` and the same inside of a type is equivalent to `Add{1, 2}`.
+
+There is also a defined precedence between operators, so multiplying `*` is processed before adding `+`. Multiplying is given a precedence of `4` and adding a precedence of `3`.
+
+When processing a statement (type or function), the statement is scanned for the highest precedence operator, with ties resolving to the left-most operator, then converting it and the surrounding sub-statement segments into a function call, and repeating the process until only function calls remain in the statement.
+
+Operators can only be one or two argument functions (or generic types). For two arguments, the operator is an `infix` operator placed between its two operands, while for one argument, the operator may be bound as a `prefix` or `postfix` operator. Prefix operators come before the value they operate on, eg `-x` maps to `neg(x)` and postfix operators come after the value they operate on, eg `i64?` maps to `Maybe{i64}`.
+
+### Augmenting Operators
+
+As operators and type operators simply map to functions and generic types (type functions), you can augment the behavior of an operator by defining a new function with the same name as one of the operators' mapped function names, but for a new type.
+
+In standard Alan, the following doesn't compile:
+
+```fn
+export fn main {
+  print("Hello, " + "World!");
+}
+```
+
+But it can be made it work pretty easily:
+
+```fn
+fn add(a: string, b: string) -> string = a.concat(b);
+
+export fn main {
+  print("Hello, " + "World!");
+}
+```
+
+!!! note
+
+    This pattern of string construction is generally frowned upon nowadays, primarily because in Javascript and other dynamic languages it leads to weird math errors where `"Hello" + 2` works, but even with this augmentation that would still fail to compile in Alan. But the other reason why is because it requires a lot of memory allocation and memory copying that template-based string construction avoids, making the template-based approach faster for all but the most trivial of examples.
+
+This behavior is more useful for your own custom types, for instance:
+
+```rs
+type Vec{T, L} = If{
+  L < 5,
+  T[L],
+  Fail{"Vector CPU extensions only work for vectors of length 4 or less"}};
+```
+
+A wrapper around a buffer type constrained to lengths 1-4 that you then execute specialized functions on would be nicer to work with if you can use arithmetic operators on it for parallelized addition, multiplication, etc.
+
+Just defining:
+
+```rs
+fn add{T, L}(a: Vec{T, L}, b: Vec{T, L}) -> Vec{T, L} {
+  ...
+```
+
+will then include this function in the set the `+` operator could resolve to.
+
+The other way operators can be augmented is by altering the function they bind to and/or the precedence they're set at.
+
+!!! warning
+
+    While this change will only be visible within the specific file you've made this alteration to or any other file that `import`s this change, changing the precedence or binding of an operator can be **VERY** confusing to anyone reading the code in your file. Do not do this lightly.
+
+The syntax to alter an operator is:
+
+```rs
+infix <fnName> as <symbol> precedence <N>;
+prefix <fnName> as <symbol> precedence <N>;
+postfix <fnName> as <symbol> precedence <N>;
+```
+
+So we can drop the precedence of the prefix negation operator (`-`) by writing:
+
+```rs
+prefix neg as - precedence 0;
+```
+
+Or change the infix addition operator (`+`) to `concat` by writing:
+
+```rs
+infix concat as + precedence 3;
+```
+
+The syntax for type operators is identical, except that it is preceded by the `type` keyword:
+
+```rs
+type infix <typeName> as <symbol> precedence <N>;
+type prefix <typeName> as <symbol> precedence <N>;
+type postfix <typeName> as <symbol> precedence <N>;
+```
+
+So you could swap the precedence of the `Function` and `Tuple` type operators by writing:
+
+```rs
+type infix Function as -> precedence 0;
+type infix Tuple as , precedence 3;
+```
+
+This would let you define a function that takes multiple arguments *without* needing to group those arguments with parenthesis:
+
+```rs
+foo: i64, bar: bool -> string
+```
+
+But then requires you to wrap the entirety of the function type in parenthesis when using it as a type within a higher-order function:
+
+```rs
+fn someFn normalArg: i64, fnArg: (foo: i64, bar: bool -> string) -> string[]
+```
+
+This looks weird and produces surprising syntax, so you **really** shouldn't do this.
+
+### Defining New Operators
+
+But this same syntax can be used for defining *new* operators, which is more acceptable, especially if your code is defining a DSL that makes sense.
+
+Returning to the vector example, instead of defining an `add` function and using `+`, we could do what Julia does where there's a `.+` operator that does piecewise addition.
+
+Then we just need to define the `piecewiseAdd` function:
+
+```rs
+fn piecewiseAdd{T, L}(a: Vec{T, L}, b: Vec{T, L}) -> Vec{T, L} {
+  ...
+```
+
+And create the `.+` operator:
+
+```rs
+infix piecewiseAdd as .+ precedence 3;
+```
+
+And we can now `vec1 .+ vec2` in our code. The benefits here are:
+
+1. Those who are familiar with the dotted-operator DSL from Julia can immediately understand that this is a piecewise addition between vectors or matrices, aiding our comprehension.
+2. Those who are *not* familiar with this syntax immediately know this is doing something non-standard, but can search for `.+ precedence` in the code to find the definition of this operator and then see what function is bound to the operator so they can then read up on what it's actually doing, as the mechanism for defining an operator is standardized.
+
+## Binding Functions and Types from Rust (or Javascript)
+
+!!! note
+
+    Currently only Rust binding exists and that's what the documentation currently covers, but before Alan v0.2.0 it is intended to modify the binding syntax to also define bindings for Javascript, and the binding syntax and mechanism may be significantly altered.
+
+Beyond defining functions and types in Alan, you may also bind functions and types to Rust functions and types. This binding process trusts you completely that the binding has been done correctly, so be wary of doing so, but a lot of the root scope is binding definitions, so it can certainly be useful.
+
+### Binding Functions
+
+The two function syntaxes we have covered up until now are the single-statement and multi-statement syntaxes.
+
+```rs
+fn foo(a: i64, b: i64, c: i64) -> i64 = a * b + c;
+fn bar(a: i64, b: i64, c: i64) -> i64 {
+  const d = a * b;
+  const e = a * c;
+  return a + b + c + d + e;
+}
+```
+
+But there is a third syntax:
+
+```rs
+fn baz(a: i64, b: i64, c: i64) -> i64 binds baz;
+```
+
+The `binds` keyword is followed by the name of a Rust function. The Alan type definition is assumed to be valid for the Rust function. If it is not, there will be a Rust compilation error emitted during compilation that a programmer using Alan may be ill-equipped to deal with.
+
+Alan generates Rust code for you, so most of the time you won't need to use this syntax, but as the naming implies, when you are writing a binding for a Rust library that you want to use in Alan, this syntax can be very useful.
+
+Right now, the Alan compiler assumes that there is a file in the same directory as your Alan source file with the same name, except replacing the `.ln` file extension with `.rs`. This file is then included in the generated output as a preamble to your code, and is where the rust code that you're binding should be made available.
+
+!!! note
+
+    Currently you can bind standard library functions and a set of blessed third-party Rust libraries only. Before release allowing you to specify packages you wish to install from Cargo during the build process will be added, which will require changing the current syntax.
+
+    At the same time as this syntax change, binding Javascript functions will also be added to allow compiling to Javascript for use in the browser, which will similarly allow you to specify NPM packages to include in the build process.
+
+### Binding Types
+
+Similarly, there is a second syntax for defining types in Alan:
+
+```rs
+type Foo binds Foo;
+```
+
+This also works for generic types:
+
+```rs
+type Foo{A, B} binds Foo<A, B>;
+```
+
+!!! warning
+
+    This is one place where it may make sense to use more than single-letter variable names for generic type arguments, as the actual type arguments are simply converted into their Rust versions and then that definition is *string substituted* into the bound rust type defind here. A future version of Alan will include a proper Rust parser to avoid this issue, but this is a lower priority at this time.
+
+Bound types are different from normal Alan types in that *zero* constructor and accessor functions are automatically defined for them. It is up to you `bind` Rust functions that create and work with this type.
+
+!!! warning
+
+    In Alan, it is assumed that **all** types can be `clone`d and `hash`ed, and the Alan compiler will generate code with that assumption. It is **highly** recommended that types that can't be cloned are wrapped in `Rc<T>` during the binding, and types that can't be hashed should be wrapped with the [New Type Idiom](https://doc.rust-lang.org/rust-by-example/generics/new_types.html) and then [`impl` the `Hash`](https://doc.rust-lang.org/stable/std/hash/trait.Hash.html#implementing-hash) and [the `PartialEq` and `Eq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html#how-can-i-implement-partialeq) traits. If you need to do both, put the `Rc<T>` wrapping within the New Type wrapper.
+
+Bound functions and types are tricky to work with, but provide a zero-cost FFI to the existing Rust (and eventually Javascript) ecosystem of libraries. The syntax is pretty simple, but leaves correctness up to you, so tread lightly if you need it!
+
+## Conditional Statements
+
+Currently in Alan, Conditional statements are implemented solely with the `if` functions, which take a boolean and one or two functions that take zero arguments and optionally return a value.
+
+If you provide just one function, it is run only if the condition is `true` and its return value is passed back through the `if` function wrapped in a `Maybe{T}` that you then need to check the value of.
+
+If you provide two functions, the first is run when `true` and the second is run when `false`. Both functions *must* return the same type, and the `if` function returns the value from either branch for you.
+
+Before Alan v0.2.0 is released a "normal-looking" conditional syntax is planned, allowing for early returns and etc, and will actually be implemented via rewriting your code to use the `if` function, instead, but this has not yet been done.
+
+## Interfaces (AKA Types of Types)
+
+Currently, when you pass "bad" types into generic functions or generic types that won't actually work, it will fail to compile as one would expect, but it fails deeper into the compilation and the resulting error message from the compiler is confusing.
+
+It is planned to allow generic types and generic functions to specify type constraints. These type constraints can be the names of generic types that the type must be constructed from *or* an `interface` type that declares a set of function types indicating how the type can be operated on, allowing a type-safe kind of "duck typing."
+
+This was implemented in Alan v0.1, but has not yet been implemented in Alan v0.2.
+
+## Importing from Files and Libraries
+
+This was also implemented in Alan v0.1, but has not yet been implemented in Alan v0.2.
+
+The exact syntax will not match the Alan v0.1 syntax and has not yet been fully determined.
+
+## Testing your Code
+
+The `Test` type exists to determine if your code is being compiled and run with `alan test`, but nothing else about testing has been determined, yet.
+
+## Want to Learn More?
+
+Every feature of the Alan language has now been covered. If you want to learn more, take a look at the [built-in types, functions, and operators](./built_ins.md) and the [standard library](./standard_library.md).
