@@ -554,7 +554,7 @@ count.store(5, 5).Error.exists.print; // Prints true, it failed to store a value
 
     The Array Accessor syntax is syntactic sugar on a call to the function `get`, where the first argument is the variable the accessor syntax is applied to, and the contents of the accessor syntax are the remaining arguments.
 
-    This means `buf[idx]` is equivalent to `buf.get(idx)` or `get(buf, idx)`, and `matrix[row, col]` is equivalent to `matrix.get(row, col)`.
+    This means `buf[idx]` is equivalent to `buf.get(idx)` or `get(buf, idx)`, and `matrix[col, row]` is equivalent to `matrix.get(col, row)`.
 
 ## Array Types
 

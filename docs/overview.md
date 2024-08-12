@@ -102,7 +102,7 @@ Arrays can be defined with `[val1, val2, ...]` syntax instead of `Array{i64}(val
 
 Arrays can be accessed with `myArray[myIndex]` in place of `myArray.get(myIndex)`. Unlike in Rust, these are identical so you will need to unwrap the `Maybe{T}` that it returns, but you can opt into the "crash on error" by slapping `.getOrExit` on the end.
 
-This bracket accessor syntax works for three-or-more arguments, as well. A `myMatrix[row, col]` would be equivalent to `myMatrix.get(row, col)`, making matrix operations clearer and more idiomatic.
+This bracket accessor syntax works for three-or-more arguments, as well. A `myMatrix[col, row]` would be equivalent to `myMatrix.get(col, row)`, making matrix operations clearer and more idiomatic.
 
 Re-assignment to a variable with `foo = bar` is equivalent to `foo.store(bar)`. (Not `set` so as not to be confused with the `Set` constructor function for sets. So the re-assignment could itself return a value, which could then be operated on, such as determining if the assignment actually succeeded with a `Fallible{T}` return type.
 
