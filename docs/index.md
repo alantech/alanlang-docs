@@ -14,7 +14,7 @@ export fn main {
 }
 ```
 
-[Get Started with Alan](/getting_started){ .md-button .md-button--primary }
+[Get Started with Alan](getting_started/index.md){ .md-button .md-button--primary }
 
 ??? question "Looking for Alan v0.1?"
 
@@ -32,10 +32,10 @@ Alan is being designed from the ground up around the idea of GPGPU as a first-cl
 
 This means that CPU code written in idiomatic Alan should have roughly the same performance as idiomatic Rust code (the default target language for Alan), while GPU code written in Alan can mix and match CPU and GPU types as desired, and Alan will generate the necessary WGSL shader for you, even when mixing in branching logic like conditionals -- something not even GPU.js can do as it has no ability to alter the behavior of the JS interpreter to follow both branches of a conditional statement for AST generation.
 
-[Get to Know Alan](/overview){ .md-button .md-button--primary }
+[Get to Know Alan](overview.md){ .md-button .md-button--primary }
 
 ## Learn Alan
 
-Ready to learn more about Alan? Checkout the [basic tutorial](./tutorial) to become dangerous with Alan, dig into the [built-in types, functions, and operators](./built_ins) automatically available to every Alan module, deep dive into [the standard library](./standard_library) of Alan, or read some [articles](./blog) on Alan for projects that have used it or interesting patterns to take for yourself.
+Ready to learn more about Alan? Checkout the [basic tutorial](tutorial.md) to become dangerous with Alan, dig into the [built-in types, functions, and operators](built_ins.md) automatically available to every Alan module, deep dive into [the standard library](standard_library.md) of Alan, or read some [articles](blog/index.md) on Alan for projects that have used it or interesting patterns to take for yourself.
 
 ![Alan Logo](./assets/logo.png)
