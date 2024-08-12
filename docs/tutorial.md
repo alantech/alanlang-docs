@@ -535,6 +535,21 @@ individual[someOtherIntVariable]; // Maybe{i64}
 
 To access the value you'll need to call `getOr` or `getOrExit` like with any `Maybe` type.
 
+You can also use the array assignment syntax to update a value.
+
+```rs
+let count = {i64[3]}(1, 2, 5);
+count[2] = 3;
+count.print; // Prints [1, 2, 3]
+```
+
+This is syntactic sugar for the `store` function. If you want to confirm that the assignment actually works, you can call that function and check it's return value.
+
+```rs
+let count = {i64[3](1, 2, 3);
+count.store(5, 5).Error.exists.print; // Prints true, it failed to store a value out-of-bounds
+```
+
 !!! note
 
     The Array Accessor syntax is syntactic sugar on a call to the function `get`, where the first argument is the variable the accessor syntax is applied to, and the contents of the accessor syntax are the remaining arguments.
@@ -558,6 +573,21 @@ export fn main {
 }
 ```
 
+Arrays can be altered with the array assignment syntax just like buffers:
+
+```rs
+let count = [1, 2, 5];
+count[2] = 3;
+count.print; // Prints [1, 2, 3]
+```
+
+You similarly can't `store` values out-of-bounds for an array. If you wish to grow the array, you should `push` the new value onto the array rather than attempting to write to a non-existent index.
+
+```rs
+let count = [1, 2, 3];
+count.store(5, 5).Error.exists.print; // Prints true, 5 is out-of-bounds for the array and the value was not stored.
+```
+
 ## Set Types
 
 A Set type is like an Array type, but each element in a set type is unique. Unlike arrays there is no specific ordering so you can't access values directly, but you can convert a Set into an Array if you need to iterate through all of its values. You can also convert an Array into a Set during Set construction.
@@ -568,6 +598,16 @@ export fn main {
   uniqueFibonacci.Array.print; // Prints [1, 2, 3, 5, 8] but maybe not in that order
 }
 ```
+
+Sets can have new values added to them with the `store` function.
+
+```rs
+uniqueFibonacci.store(13);
+```
+
+!!! note
+
+    Because the two-argument `store` function is bound to `=`, you can *technically* add new values to a Set with just `setName = newValue`, but this is super confusing, so don't do that.
 
 ## Dictionary Types
 
@@ -583,6 +623,16 @@ export fn main {
   myDict.Array; // [("test", 1)]
 }
 ```
+
+New values can be inserted into dictionaries with the array assignment syntax.
+
+```rs
+let myDict = Dict{string, i64}();
+myDict["test"] = 1;
+myDict.Array; // [("test", 1)]
+```
+
+Calls to `store` *always* succeed for Dictionaries, so there is no need to check.
 
 ## The GBuffer and GPGPU Types
 
