@@ -546,7 +546,7 @@ count.print; // Prints [1, 2, 3]
 This is syntactic sugar for the `store` function. If you want to confirm that the assignment actually works, you can call that function and check it's return value.
 
 ```rs
-let count = {i64[3](1, 2, 3);
+let count = {i64[3]}(1, 2, 3);
 count.store(5, 5).Error.exists.print; // Prints true, it failed to store a value out-of-bounds
 ```
 
