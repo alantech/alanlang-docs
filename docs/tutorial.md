@@ -613,7 +613,7 @@ uniqueFibonacci.store(13);
 
 ## Dictionary Types
 
-A Dictionary Type lets you create a mapping of keys to values. You can use array accessor syntax to get a value when providing they key. You can also convert it into an Array of tuples of key-value pairs to iterate over. Unlike Sets, Dictionaries maintain their insertion order when converted back into an Array.
+A Dictionary Type lets you create a mapping of keys to values. You can use array accessor syntax to get a value by providing the key. You can also convert it into an Array of Tuples of key-value pairs to iterate over. Unlike Sets, Dictionaries maintain their insertion order when converted back into an Array.
 
 The constructor function needs the key and value type defined, but if you construct it with an initial key-value pair, they can be inferred.
 
@@ -634,7 +634,9 @@ myDict["test"] = 1;
 myDict.Array; // [("test", 1)]
 ```
 
-Calls to `store` *always* succeed for Dictionaries, so there is no need to check.
+!!! note
+
+    Calls to `store` *always* succeed for Dictionaries, so there is no need to check.
 
 ## The GBuffer and GPGPU Types
 
@@ -700,16 +702,16 @@ The same `stringChanger` function produced different outputs based on the behavi
 
 ### Function Type Digression
 
-The type for a function is defined with `I -> O` the input type turns into the output type. Input *type*? Shouldn't that be types, for each argument?
+The type for a function is defined with `I -> O` where the input type `I` turns into the output type `O`. Input *type*? Shouldn't that be types, for each argument?
 
 Well, for Alan, the traditional way you write a set of arguments and their types is *identical* to a struct-style tuple. A struct is a singular type, and constructing a tuple is *identical* to calling a function with a set of arguments matching the tuple args, because they are literally the same thing in Alan.
 
 This also means that, while definitely not recommended, if you wanted to do [Go-style error handling](https://go.dev/doc/tutorial/handle-errors) by returning a tuple of `(value, error)` and then manually check if the error actually exists, you could define a function like:
 
 ```rs
-fn goStyleIntParse(s: string) -> (val: i64, err: Error?) {
+fn goStyleIntParse(s: string) -> (i64, Error?) {
   let result = s.i64;
-  return {val: i64, err: Error?}(result.i64.getOr(0), result.Error);
+  return {i64, Error?}(result.i64.getOr(0), result.Error);
 }
 ```
 
@@ -769,20 +771,18 @@ Default values can often be dangerous in a production system because they can hi
 fn i64() -> i64 = 0;
 ```
 
-Now this type has a zero-arg constructor, so if we wanted to use `fma` that returns, say, the total length of all captial words in a string, we could do something like:
+Now this type has a zero-arg constructor, so if we wanted to use `fma` to return, say, the total length of all captial words in a string, we could do something like:
 
 ```rs
+fn capcount(s: string) -> i64 = s.split(" ").fma(fn (s: string) -> bool = s < "a", len, add);
+
 export fn main {
-  "Hello there! How are you doing this fine Monday morning?"
-    .split(" ")
-    .fma(fn (s: string) -> bool = s < "a", len, add)
-    .print; // Prints 14
-  "foo bar baz"
-    .split(" ")
-    .fma(fn (s: string) -> bool = s < "a", len, add)
-    .print; // Prints 0
+  "Hello there! How are you doing this fine Monday morning?".capcount.print; // Prints 14
+  "foo bar baz".capcount.print; // Prints 0
 }
 ```
+
+Assuming the default `i64` constructor function and the more recent `fma` definition are already defined.
 
 !!! note
 
@@ -792,18 +792,20 @@ We use string ordering to figure out which strings begin with capital letters (b
 
 ## Compile-Time Computation, Conditional Types, and Conditional Compilation
 
-As you can see with `Buffer`s, the type system can work with constant primitive types. The type system can work with integers, floats, booleans, and strings. These types can also be manipulated at compile time to generate the actual value to use.
+As was shown with `Buffer`s when defining the size of buffer instances, the type system can work with constant primitive types. The type system includes integers, floats, booleans, and strings. These types can also be manipulated at compile time to generate the actual value to use.
 
 ### Compile-Time Computation
 
-While declaring a buffer of `i64[1 + 2]` will give you a buffer of three elements, this feature is meant for use with generic types. For instance the `concat` function for buffers has a type signature of:
+While declaring a buffer of `i64[1 + 2]` will give you a buffer of three elements, that's not *generally* useful. (Though sometimes you do want to include a bunch of explicit arithmetic to show where some constant value came from.) This feature is more meant for use with generic types. For instance, the `concat` function for buffers has a type signature of:
 
 ```rs
 export fn concat{T, S, N}(a: Buffer{T, S}, b: Buffer{T, N}) -> Buffer{T, S + N} {
   ...
 ```
 
-The output buffer length is computed from the lengths of the two input buffers. Beyond addition there are all of the arithmetic operations, as well as the comparison operators (`<`, `<=`, `>`, `>=`, `==`, `!=`), and so on.
+The output buffer length is computed from the lengths of the two input buffers.
+
+Beyond addition there are all of the arithmetic operations, as well as the comparison operators (`<`, `<=`, `>`, `>=`, `==`, `!=`), and so on.
 
 There are also some special compile-time types to provide data at compile-time that may be useful.
 
@@ -854,7 +856,7 @@ Here we're relying on the "last definition wins" tiebreaker for identical defini
 
 But this works any keyword in the top-level of the source file, so `fn{Test}` defines a function that only exists during testing, `export{Windows}` exports something only for the Windows platform, etc.
 
-Conditional compilation in Alan simply requires tagging the code that you want to be compiled only in certain circumstances with the condition that it should be compiled and that's it.
+Conditional compilation in Alan simply requires tagging the code that you want to be compiled only in certain circumstances with the condition that it should be compiled. That's it.
 
 ## Operators and Type Operators
 
@@ -862,11 +864,16 @@ It has been alluded to in prior sections that operators are just functions and t
 
 Alan defines a mapping of certain operator symbols to certain functions and type operator symbols to certain generic types, so `1 + 2` inside of a function is equivalent to `add(1, 2)` and the same inside of a type is equivalent to `Add{1, 2}`.
 
-There is also a defined precedence between operators, so multiplying `*` is processed before adding `+`. Multiplying is given a precedence of `4` and adding a precedence of `3`.
+There is also a defined precedence between operators, so multiplying `*` is converted to a functional form before adding `+`.
 
-When processing a statement (type or function), the statement is scanned for the highest precedence operator, with ties resolving to the left-most operator, then converting it and the surrounding sub-statement segments into a function call, and repeating the process until only function calls remain in the statement.
+Specifically, multiplying is given a precedence of `4` and adding a precedence of `3`. When processing a statement (type or function), the statement is scanned for the highest precedence operator, with ties resolving to the left-most operator, then converting it and the surrounding sub-statement segments into a function call, and repeating the process until only function calls remain in the statement.
 
-Operators can only be one or two argument functions (or generic types). For two arguments, the operator is an `infix` operator placed between its two operands, while for one argument, the operator may be bound as a `prefix` or `postfix` operator. Prefix operators come before the value they operate on, eg `-x` maps to `neg(x)` and postfix operators come after the value they operate on, eg `i64?` maps to `Maybe{i64}`.
+<figure markdown="span">
+  !["It's all function calls?" "Always has been"](./assets/always_has_been.jpg)
+  <figcaption><h6>You can faintly hear mad cackling coming from the old <a href="https://en.wikipedia.org/wiki/Symbolics">Symbolics</a> headquarters...</h6></figcaption>
+</figure>
+
+Operators can only be one or two argument functions (or generic types). For two arguments, the operator is an `infix` operator placed between its two operands, while for one argument, the operator may be bound as a `prefix` or `postfix` operator. Prefix operators come before the value they operate on, eg `-x` maps to `neg(x)`, and postfix operators come after the value they operate on, eg `i64?` maps to `Maybe{i64}`.
 
 ### Augmenting Operators
 
@@ -880,7 +887,7 @@ export fn main {
 }
 ```
 
-But it can be made it work pretty easily:
+But it can be made to work pretty easily:
 
 ```fn
 fn add(a: string, b: string) -> string = a.concat(b);
@@ -892,7 +899,9 @@ export fn main {
 
 !!! note
 
-    This pattern of string construction is generally frowned upon nowadays, primarily because in Javascript and other dynamic languages it leads to weird math errors where `"Hello" + 2` works, but even with this augmentation that would still fail to compile in Alan. But the other reason why is because it requires a lot of memory allocation and memory copying that template-based string construction avoids, making the template-based approach faster for all but the most trivial of examples.
+    This pattern of string construction is generally frowned upon nowadays, primarily because in Javascript and other dynamic languages it leads to weird math errors where `"Hello" + 2` works, though even with the augmentation described above that would still fail to compile in Alan.
+
+    But the other reason why is because it requires a lot of memory allocation and memory copying that template-based string construction avoids, making the template-based approach faster for all but the most trivial of examples.
 
 This behavior is more useful for your own custom types, for instance:
 
