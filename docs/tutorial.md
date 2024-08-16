@@ -980,7 +980,7 @@ This looks weird and produces surprising syntax, so you **really** shouldn't do 
 
 ### Defining New Operators
 
-But this same syntax can be used for defining *new* operators, which is more acceptable, especially if your code is defining a DSL that makes sense.
+But this same syntax can be used for defining *new* operators, which is more acceptable, especially if your code is defining a DSL that makes sense for your particular use-case and the developers you are collaborating with.
 
 Returning to the vector example, instead of defining an `add` function and using `+`, we could do what Julia does where there's a `.+` operator that does piecewise addition.
 
@@ -1000,7 +1000,7 @@ infix piecewiseAdd as .+ precedence 3;
 And we can now `vec1 .+ vec2` in our code. The benefits here are:
 
 1. Those who are familiar with the dotted-operator DSL from Julia can immediately understand that this is a piecewise addition between vectors or matrices, aiding our comprehension.
-2. Those who are *not* familiar with this syntax immediately know this is doing something non-standard, but can search for `.+ precedence` in the code to find the definition of this operator and then see what function is bound to the operator so they can then read up on what it's actually doing, as the mechanism for defining an operator is standardized.
+2. Those who are *not* familiar with this syntax immediately know this is doing something non-standard, but can search for the text `.+ precedence` in the code to find the definition of this operator and then see what function is bound to the operator so they can then read up on what it's actually doing, as the mechanism for defining an operator is standardized. (And a language server could automatically figure this out for them and allow a go-to-definition for the operator.)
 
 ## Binding Functions and Types from Rust (or Javascript)
 
