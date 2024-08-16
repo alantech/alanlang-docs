@@ -1001,6 +1001,10 @@ Beyond defining functions and types in Alan, you may also bind functions and typ
 
 ### Binding Functions
 
+!!! warning
+
+    This syntax is being altered right now. The documentation will be updated when the new syntax is available.
+
 The two function syntaxes we have covered up until now are the single-statement and multi-statement syntaxes.
 
 ```rs
@@ -1032,21 +1036,12 @@ Right now, the Alan compiler assumes that there is a file in the same directory 
 
 ### Binding Types
 
-Similarly, there is a second syntax for defining types in Alan:
+Similarly, binding types is done with the `Binds{T}` and `BindsGeneric{T, A, ...}` generic types.
 
 ```rs
-type Foo binds Foo;
+type Foo = Binds{"Foo"};
+type Bar{A, B} = BindsGeneric{"Bar", A, B}; // Becomes Bar<A, B> in Rust
 ```
-
-This also works for generic types:
-
-```rs
-type Foo{A, B} binds Foo<A, B>;
-```
-
-!!! warning
-
-    This is one place where it may make sense to use more than single-letter variable names for generic type arguments, as the actual type arguments are simply converted into their Rust versions and then that definition is *string substituted* into the bound rust type defind here. A future version of Alan will include a proper Rust parser to avoid this issue, but this is a lower priority at this time.
 
 Bound types are different from normal Alan types in that *zero* constructor and accessor functions are automatically defined for them. It is up to you `bind` Rust functions that create and work with this type.
 
@@ -1055,6 +1050,21 @@ Bound types are different from normal Alan types in that *zero* constructor and 
     In Alan, it is assumed that **all** types can be `clone`d and `hash`ed, and the Alan compiler will generate code with that assumption. It is **highly** recommended that types that can't be cloned are wrapped in `Rc<T>` during the binding, and types that can't be hashed should be wrapped with the [New Type Idiom](https://doc.rust-lang.org/rust-by-example/generics/new_types.html) and then [`impl` the `Hash`](https://doc.rust-lang.org/stable/std/hash/trait.Hash.html#implementing-hash) and [the `PartialEq` and `Eq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html#how-can-i-implement-partialeq) traits. If you need to do both, put the `Rc<T>` wrapping within the New Type wrapper.
 
 Bound functions and types are tricky to work with, but provide a zero-cost FFI to the existing Rust (and eventually Javascript) ecosystem of libraries. The syntax is pretty simple, but leaves correctness up to you, so tread lightly if you need it!
+
+!!! note
+
+    When multiple target languages are supported in Alan, there will be global boolean type constants `Rs` and `Js` that you can use with conditional compilation to choose which `type` or `fn` definition is actually selected, eg:
+
+    ```rs
+    type{Rs} i32 = Binds{"i32"};
+    type{Js} i32 = Binds{"Number"};
+    ```
+
+    Libraries in Alan that need to bind into the target language **should**, if at all possible, have a binding for both target languages, but if they can't, or it doesn't make sense to (eg, process control access in Javascript or DOM access in Rust), then it would be best to implement a poison pill like this to block compilation in the wrong target language:
+
+    ```rs
+    type{Rs} Dom = Fail{"This library can only be used when compiled to Javascript, as Rust does not have a DOM."}
+    ```
 
 ## Conditional Statements
 
