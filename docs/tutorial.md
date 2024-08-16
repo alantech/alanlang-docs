@@ -533,6 +533,12 @@ individual[6]; // Maybe{i64}(void)
 individual[someOtherIntVariable]; // Maybe{i64}
 ```
 
+!!! note
+
+    The Array Accessor syntax is syntactic sugar on a call to the function `get`, where the first argument is the variable the accessor syntax is applied to, and the contents of the accessor syntax are the remaining arguments.
+
+    This means `buf[idx]` is equivalent to `buf.get(idx)` or `get(buf, idx)`, and `matrix[col, row]` is equivalent to `matrix.get(col, row)`.
+
 To access the value you'll need to call `getOr` or `getOrExit` like with any `Maybe` type.
 
 You can also use the array assignment syntax to update a value.
@@ -543,18 +549,14 @@ count[2] = 3;
 count.print; // Prints [1, 2, 3]
 ```
 
-This is syntactic sugar for the `store` function. If you want to confirm that the assignment actually works, you can call that function and check it's return value.
-
-```rs
-let count = {i64[3]}(1, 2, 3);
-count.store(5, 5).Error.exists.print; // Prints true, it failed to store a value out-of-bounds
-```
-
 !!! note
 
-    The Array Accessor syntax is syntactic sugar on a call to the function `get`, where the first argument is the variable the accessor syntax is applied to, and the contents of the accessor syntax are the remaining arguments.
+    This is syntactic sugar for the `store` function. If you want to confirm that the assignment actually works, you can call that function and check it's return value.
 
-    This means `buf[idx]` is equivalent to `buf.get(idx)` or `get(buf, idx)`, and `matrix[col, row]` is equivalent to `matrix.get(col, row)`.
+    ```rs
+    let count = {i64[3]}(1, 2, 3);
+    count.store(5, 5).Error.exists.print; // Prints true, it failed to store a value out-of-bounds
+    ```
 
 ## Array Types
 
