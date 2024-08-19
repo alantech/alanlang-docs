@@ -670,19 +670,29 @@ You can create functions that accept other functions as an argument and then cal
 Just the type portion of the function definition needs to be provided.
 
 ```rs
-fn foostring (s: string) -> string = "foo".concat(s);
+// "Doubles" the string by concatenating it to itself
+fn doublestring(s: string) -> string = s.concat(s);
 
+// Accepts a function that transforms a string and then returns a
+// string that documents that change
 fn stringChanger(s: string, changer: (string) -> string) -> string {
-  "Original String: ".concat(s).print;
-  let out = changer(s);
-  "New String     : ".concat(out).print;
-  return out;
+  return s.concat(" becomes ").concat(changer(s));
 }
 
 export fn main {
-  let changed = stringChanger("bar", foostring);
-  "New Length     : ".concat(changed.len.string).print;
-  stringChanger("baz", fn (s: string) -> string = changed.concat(s)).print;
+  // Calling `doublestring`
+  let danceName = doublestring("can");
+  // Call `stringChanger` with a string and the `doublestring` function
+  stringChanger("can", doublestring).print;
+  // Call `stringChanger` with a string and a closure function that
+  // encloses the `danceName` variable defined above
+  stringChanger(
+    "a person",
+    fn (s: string) -> string = s
+      .concat(" who can dance the ")
+      .concat(danceName)
+      .concat(" through practice")
+  ).print;
 }
 ```
 
@@ -690,14 +700,10 @@ We can now pass in the `foostring` function as well as an anonymous closure func
 
 ```
 $ alan compile changer.ln
-Done! Took 0.73sec
+Done! Took 0.67sec
 $ ./changer
-Original String: bar
-New String     : foobar
-New Length     : 6
-Original String: baz
-New String     : foobarbaz
-foobarbaz
+can becomes cancan
+a person becomes a person who can dance the cancan through practice
 ```
 
 The same `stringChanger` function produced different outputs based on the behavior of the function it was provided.
