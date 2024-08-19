@@ -387,9 +387,10 @@ type intOrString = i64 | string;
 
 export fn main {
   let mightBeInt = intOrString(5);
-  let mightBeStr = intOrString('test');
   mightBeInt.i64.exists.print; // Prints true
   mightBeInt.string.exists.print; // Prints false
+
+  let mightBeStr = intOrString('test');
   mightBeStr.i64.exists.print; // Prints false
   mightBeStr.string.exists.print; // Prints true
 }
@@ -432,9 +433,10 @@ type intOrString = i64 | string;
 
 export fn main {
   let mightBeInt = intOrString(5);
-  let mightBeStr = intOrString('test');
   mightBeInt.i64.getOr(3).print; // Prints 5
   mightBeInt.string.getOr('value').print; // Prints value
+
+  let mightBeStr = intOrString('test');
   mightBeStr.i64.getOr(3).print; // Prints 3
   mightBeStr.string.getOr('value').print; // Prints test
 }
