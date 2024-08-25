@@ -331,6 +331,21 @@ export fn main {
 
 You can directly construct a type definition by wrapping it in curly braces (`{}`). This may be useful for a type you want to keep fully internal to a function definition and not ever share it at all with any other code in your codebase, but is more likely to be used to allow you to construct a generic type inside a generic function. (More on that, later.)
 
+### Type Properties
+
+Similarly to how you can access tuple fields by number and struct fields by name, you can do the same thing with the product type itself to access the sub-types from it.
+
+So using the hybrid type as an example:
+
+```rs
+type myStructTupleHybrid = i64, bar: string;
+
+type firstField = myStructTupleHybrid.0; // Equivalent to `i64`
+type secondField = myStructTupleHybrid.bar; // Equivalent to `string`
+```
+
+This may not seem useful, and in this example it is more verbose than the actual types involved, but it can be useful when working with generic types, covered later.
+
 ## Sum Types (Type Unions, Maybe, Fallible, and Tagged Unions)
 
 Sum Types let you define values that are one of set of potential values.
@@ -500,6 +515,26 @@ export fn main {
 Giving the labeled types their own alias then lets us use it in the type union and use each piece as a constructor function makes this more ergonomic to use at the cost of more type definitions.
 
 This also demonstrates how tagged unions in Alan are equivalent to single-value product types.
+
+### Type Properties (Again)
+
+As with product types, sum types can also have their sub-types accessed via properties, both numeric, and when possible, by field name.
+
+Returning to the first tagged union example, we can see how this works:
+
+
+```rs
+type intInput = computed: i64 | parsed: i64 | gigo: string;
+
+type firstField = intInput.computed; // Resolves to `i64`
+type secondField = intInput.1; // Resolves to `parsed: i64`
+type secondFieldName = intInput.1.0 // Resolves to `"parsed"`
+type secondFieldType = intInput.1.1 // Resolves to `i64`
+```
+
+There is a slight difference when accessing by field name versus a numeric index. When you access by field name, it grabs the type within the field definition, but when you access by numeric index it returns it with the field still attached if there is such a thing. You can then separately access the field's name and underlying type with `.0` and `.1` on that, respectively.
+
+This can be useful when introspecting a generic type provided to you, perhaps for debugging purposes.
 
 !!! question "Why's it called a 'Sum Type'?"
 
