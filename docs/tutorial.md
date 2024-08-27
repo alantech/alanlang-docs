@@ -1098,11 +1098,11 @@ which reduces some redundant syntax, but also eliminates the wrapper function fr
 
 ### Binding Types
 
-Similarly, binding types is done with the `Binds{T}` and `BindsGeneric{T, A, ...}` generic types.
+Similarly, binding types is done with the `Binds{T, ...}` type.
 
 ```rs
 type Foo = Binds{"Foo"};
-type Bar{A, B} = BindsGeneric{"Bar", A, B}; // Becomes Bar<A, B> in Rust
+type Bar{A, B} = Binds{"Bar", A, B}; // Becomes Bar<A, B> in Rust
 ```
 
 Bound types are different from normal Alan types in that *zero* constructor and accessor functions are automatically defined for them. It is up to you `Call` Rust functions that create and work with this type.
