@@ -1049,15 +1049,11 @@ And we can now `vec1 .+ vec2` in our code. The benefits here are:
 
 !!! note
 
-    Currently only Rust binding exists and that's what the documentation currently covers, but before Alan v0.2.0 it is intended to modify the binding syntax to also define bindings for Javascript, and the binding syntax and mechanism may be significantly altered.
+    Currently only Rust binding exists and that's what the documentation currently covers, but before Alan v0.2.0 it is intended to modify the binding syntax to also define bindings for Javascript
 
-Beyond defining functions and types in Alan, you may also bind functions and types to Rust functions and types. This binding process trusts you completely that the binding has been done correctly, so be wary of doing so, but a lot of the root scope is binding definitions, so it can certainly be useful.
+Beyond defining functions and types in Alan, you may also bind functions and types to Rust functions and types. This binding process trusts you completely that the binding has been specified correctly, so be sure that you're doing so.
 
 ### Binding Functions
-
-!!! warning
-
-    This syntax is being altered right now. The documentation will be updated when the new syntax is available.
 
 The two function syntaxes we have covered up until now are the single-statement and multi-statement syntaxes.
 
@@ -1073,18 +1069,30 @@ fn bar(a: i64, b: i64, c: i64) -> i64 {
 But there is a third syntax:
 
 ```rs
-fn baz(a: i64, b: i64, c: i64) -> i64 binds baz;
+fn baz "baz" :: (i64, i64, i64) -> i64;
 ```
 
-The `binds` keyword is followed by the name of a Rust function. The Alan type definition is assumed to be valid for the Rust function. If it is not, there will be a Rust compilation error emitted during compilation that a programmer using Alan may be ill-equipped to deal with.
+The `::` symbol is an alias for the `Call{N, F}` type, specifying a function call with the Rust function name as a string on the left, and the function type that it represents on the right. This `Call` type doesn't have any properties, but defines a single "constructor" function that takes the input specified and returns the output. This is used in conjunction with the function declaration syntax to give this "constructor" an easy-to-use name.
 
-Alan generates Rust code for you, so most of the time you won't need to use this syntax, but as the naming implies, when you are writing a binding for a Rust library that you want to use in Alan, this syntax can be very useful.
+In fact, you could use this syntax with any type that produces an automatically-defined constructor function, so if you wanted to create an alias for a struct, but only when constructing it, you could do so:
 
-Right now, the Alan compiler assumes that there is a file in the same directory as your Alan source file with the same name, except replacing the `.ln` file extension with `.rs`. This file is then included in the generated output as a preamble to your code, and is where the rust code that you're binding should be made available.
+```rs
+type Record = value: string, count: i64;
+
+fn r Record;
+```
+
+This will produce a function `r` that takes a `string` and `i64` and generates a `Record` object. It's essentially shorthand for:
+
+```rs
+fn r (v: string, c: i64) -> Record = Record(v, c);
+```
+
+which reduces some redundant syntax, but also eliminates the wrapper function from the call stack.
 
 !!! note
 
-    Currently you can bind standard library functions and a set of blessed third-party Rust libraries only. Before release allowing you to specify packages you wish to install from Cargo during the build process will be added, which will require changing the current syntax.
+    Currently you can bind standard library functions and a set of blessed third-party Rust libraries only. Before release this syntax will be extended to allow you to specify packages you wish to install from Cargo during the build process.
 
     At the same time as this syntax change, binding Javascript functions will also be added to allow compiling to Javascript for use in the browser, which will similarly allow you to specify NPM packages to include in the build process.
 
@@ -1097,7 +1105,7 @@ type Foo = Binds{"Foo"};
 type Bar{A, B} = BindsGeneric{"Bar", A, B}; // Becomes Bar<A, B> in Rust
 ```
 
-Bound types are different from normal Alan types in that *zero* constructor and accessor functions are automatically defined for them. It is up to you `bind` Rust functions that create and work with this type.
+Bound types are different from normal Alan types in that *zero* constructor and accessor functions are automatically defined for them. It is up to you `Call` Rust functions that create and work with this type.
 
 !!! warning
 
