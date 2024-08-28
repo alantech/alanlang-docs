@@ -1090,6 +1090,14 @@ fn r (v: string, c: i64) -> Record = Record(v, c);
 
 which reduces some redundant syntax, but also eliminates the wrapper function from the call stack.
 
+You can bind more than just Rust functions as Alan functions. Since functions in Alan are also methods, properties, and operators, these concepts in Rust are also bindable as functions (which you can then use as methods or properties automatically and can rebind to an operator if desired).
+
+```rs
+fn eq Infix{"=="} :: (i8, i8) -> bool;
+```
+
+This defines an `eq` function for comparing 8-bit signed integers to each other, with `eq` being bound to Rust's `==` operator *and* being bound to `==` within Alan.
+
 !!! note
 
     Currently you can bind standard library functions and a set of blessed third-party Rust libraries only. Before release this syntax will be extended to allow you to specify packages you wish to install from Cargo during the build process.
