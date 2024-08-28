@@ -1093,10 +1093,18 @@ which reduces some redundant syntax, but also eliminates the wrapper function fr
 You can bind more than just Rust functions as Alan functions. Since functions in Alan are also methods, properties, and operators, these concepts in Rust are also bindable as functions (which you can then use as methods or properties automatically and can rebind to an operator if desired).
 
 ```rs
-fn eq Infix{"=="} :: (i8, i8) -> bool;
+fn add Infix{"+"} :: (f32, f32) -> f32;
 ```
 
-This defines an `eq` function for comparing 8-bit signed integers to each other, with `eq` being bound to Rust's `==` operator *and* being bound to `==` within Alan.
+This defines an `add` function for 32-bit floats, being bound to Rust's `+` operator *and* that function name `and` being bound to `+` within Alan.
+
+In Alan, values are passed by reference to functions, but in Rust, you can call functions in different ways, such as passing ownership to the function, passing a mutable reference, or simply dereferencing a reference. Therefore, you can annotate the function type for these bound functions, operators, etc, with `Own{T}`, `Deref{T}`, etc.
+
+```rs
+fn eq Infix{"=="} :: (Deref{i8}, Deref{i8}) -> bool;
+```
+
+This defines an `eq` function for 8-bit integers, binding it to Rust's `==` operator, but indicating to Alan that it should dereference the arguments when passing them to the operator. These various generic types allow you to annotate the binding, eliminating the need for writing wrapper functions in Rust.
 
 !!! note
 
