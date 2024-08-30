@@ -98,6 +98,29 @@ There is a built-in `clone` function in Alan that lets you make a copy of *any* 
 let myMutableVariable = myConstant.clone();
 ```
 
+## Mutable Arguments
+
+Relatedly, when you pass variables to a function in Alan, that function can declare whether or not it wants to mutate the variable while running. In that case, either a bare value needs to be passed in at this point (and the mutation ignored), or the variable passed in *must* be a `let` variable, not a `const`.
+
+By default all functions in Alan get their own copies of the variables passed in, so if they mutate it but do not return that mutation, the mutation is lost after the function call is complete.
+
+If you want that mutation to persist past the function call and don't want to make it the return value, you must declare that you are mutating the original variable by wrapping the variable's type in `Mut{T}`.
+
+```rs
+fn increment(a: Mut{i64}, b: i64) {
+  a = a.clone() + b;
+}
+
+export fn main {
+  let five = 3;
+  five.print;
+  five.increment(2);
+  five.print;
+}
+```
+
+which will print 3, followed by 5. In this example, `i64` is the "primitive type" of the integers, and `Mut{i64}` is a realized "generic type" indicating that we want to be able to mutate the integer that was passed into our function. We'll go over all of these, starting with primitive types.
+
 ## Primitive Types
 
 Alan has many built-in types, but a few of them are considered "primitive." These are types that have a special representation in the language itself: `int`, `float`, `bool`, `string`, and `void`.
@@ -180,6 +203,16 @@ The `void` type represents nothing (but it likes to stare). It's not useful on i
 
 Suffice it to say, you're not likely to work with the `void` type *directly*, but it's very useful in keeping bugs out of your code.
 
+## Generic Types
+
+Generic types are types that take other types as arguments to produce a new type.
+
+As we saw in a previous example, there's a type called `Mut{T}` that takes one argument, `T`, which produces a new type indicating that we want changes to this type to be reflected in the original variable that was passed in.
+
+There are many built-in generic types that have particular meanings, from which you can assemble the type you need to store your data, and the most common of these are covered below.
+
+But before we get to those, we need to introduce one more concept. If you needed to write the generic type invocation every time you need that type it would be very cumbersome to manage, which is where type aliases come in.
+
 ## Type Aliases
 
 Types are defined similarly to single-statement functions, but with `type` instead of `fn`.
@@ -189,6 +222,14 @@ type Foo = i64;
 ```
 
 This is the simplest type definition in Alan, a type alias. It provides **zero** type safety guards over using the original type that is aliased. The compiler strips all aliasing when checking whether or not an input value can be passed to the function in a function call, so only use them if it is more convenient in your code or clearer to read.
+
+Similarly, you can define your own generic type like this:
+
+```rs
+type Bar{T} = T;
+```
+
+which is similarly reduced back to whatever type `T` you passed into the `Bar` generic type, adding nothing on its own to the type safety of your code.
 
 They do become more convenient when defining your own types, though.
 
