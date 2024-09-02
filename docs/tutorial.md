@@ -430,6 +430,8 @@ But if you want, you can make a custom constructor function for any type that co
 type intOrString = i64 | string;
 
 fn intOrString(b: bool) -> intOrString = b.string.intOrString;
+// For most functions, you don't need to specify the return type. This also works:
+// fn intOrString(b: bool) = b.string.intOrString;
 
 export fn main {
   let mightBeBool = intOrString(true); // Now works
@@ -729,7 +731,7 @@ This type cannot be accessed directly at all, it must be explicitly `read` back 
 ```rs
 export fn main {
   GBuffer([1, 2, 3, 4])
-    .map(fn (val: gi32) -> gi32 = val * 2)
+    .map(fn (val: gi32) = val * 2)
     .read
     .print; // Prints [2, 4, 6, 8]
 }
@@ -747,11 +749,11 @@ Just the type portion of the function definition needs to be provided.
 
 ```rs
 // "Doubles" the string by concatenating it to itself
-fn doublestring(s: string) -> string = s.concat(s);
+fn doublestring(s: string) = s.concat(s);
 
 // Accepts a function that transforms a string and then returns a
 // string that documents that change
-fn stringChanger(s: string, changer: (string) -> string) -> string {
+fn stringChanger(s: string, changer: (string) -> string) {
   return s.concat(" becomes ").concat(changer(s));
 }
 
@@ -764,7 +766,7 @@ export fn main {
   // encloses the `danceName` variable defined above
   stringChanger(
     "a person",
-    fn (s: string) -> string = s
+    fn (s: string) = s
       .concat(" who can dance the ")
       .concat(danceName)
       .concat(" through practice")
@@ -784,6 +786,8 @@ a person becomes a person who can dance the cancan through practice
 
 The same `stringChanger` function produced different outputs based on the behavior of the function it was provided.
 
+Note that the function definitions *usually* skipped the `->` symbol and return type, leaving it up to the compiler to infer the return type of the function involved. In this example this was done in every situation Alan can infer the return type, while the singular place it remains is where it's always required: when defining the kind of function a higher-order function takes as an input.
+
 ### Function Type Digression
 
 The type for a function is defined with `I -> O` where the input type `I` turns into the output type `O`. Input *type*? Shouldn't that be types, for each argument?
@@ -793,7 +797,7 @@ Well, for Alan, the traditional way you write a set of arguments and their types
 This also means that, while definitely not recommended, if you wanted to do [Go-style error handling](https://go.dev/doc/tutorial/handle-errors) by returning a tuple of `(value, error)` and then manually check if the error actually exists, you could define a function like:
 
 ```rs
-fn goStyleIntParse(s: string) -> (i64, Error?) {
+fn goStyleIntParse(s: string) {
   let result = s.i64;
   return {i64, Error?}(result.i64.getOr(0), result.Error);
 }
@@ -805,6 +809,7 @@ The reverse is also true, *anything* can be the input side of things, but how do
 
 ```rs
 fn lazyFooString(string) -> string = "foo".concat(arg0);
+// fn lazyFooString(string) = "foo".concat(arg0);
 
 export fn main {
   "bar".lazyFooString.print; // Prints foobar
@@ -815,6 +820,7 @@ You don't *technically* need the parens in the definition, either. You can just 
 
 ```rs
 fn lazyFooString string -> string = "foo".concat(arg0);
+fn lazyFooString string = "foo".concat(arg0);
 
 export fn main {
   "bar".lazyFooString.print; // Prints foobar
@@ -833,7 +839,7 @@ fn fma{T, U}(arr: Array{T}, f: T -> bool, m: T -> U, r: (U, U) -> U) -> U? {
 }
 ```
 
-This function takes an array of any type `T`, first filters out irrelevant parts with a filter function `f` that takes `T` and returns a `bool` to determine if it stays or goes. Then it passes it to a map function `m` that takes type `T` and converts it into type `U`, and finally gives it to the reducer function `r` that takes two values of type `U` and returns a singular `U`. The output of this whole chain is a `Maybe` type, specifically `U?`, because the input array might be empty.
+This function takes an array of any type `T`, first filters out irrelevant parts with a filter function `f` that takes `T` and returns a `bool` to determine if it stays or goes. Then it passes it to a map function `m` that takes type `T` and converts it into type `U`, and finally gives it to the reducer function `r` that takes two values of type `U` and returns a singular `U`. The output of this whole chain is a `Maybe` type, specifically `U?`, because the input array might be empty. The final return type is optional, but is less "obvious" with this code, so is good to include for better clarity for this function. It also acts as a safeguard -- the compiler will fail to compile your code if the annotated return type does not match the return type it infers, which can help prevent unexpected changes in behavior when refactoring your codebase.
 
 By convention, the type variables in generic functions (and generic types) are written with singular uppercase letters to make them stand out from normal variables and types.
 
@@ -852,13 +858,13 @@ We can get a reference to whatever the actual type ends up being by wrapping it 
 Default values can often be dangerous in a production system because they can hide a mistake in the code where a value was not initialized correctly, so the vast majority of types in Alan do not support it (the `Maybe` type is the exception. `Maybe{i64}()` produces a `Maybe`-wrapped `void` value). But you can easily add that to the language, scoped to just the source file you're currently working in, by defining a zero-arg constructor function for any type. Eg:
 
 ```rs
-fn i64() -> i64 = 0;
+fn i64 = 0;
 ```
 
 Now this type has a zero-arg constructor, so if we wanted to use `fma` to return, say, the total length of all captial words in a string, we could do something like:
 
 ```rs
-fn capcount(s: string) -> i64 = s.split(" ").fma(fn (s: string) -> bool = s < "a", len, add);
+fn capcount(s: string) = s.split(" ").fma(fn (s: string) = s < "a", len, add);
 
 export fn main {
   "Hello there! How are you doing this fine Monday morning?".capcount.print; // Prints 14
@@ -867,10 +873,6 @@ export fn main {
 ```
 
 Assuming the default `i64` constructor function and the more recent `fma` definition are already defined.
-
-!!! note
-
-    Type inference from non-generic functions based on their statements is planned for a future release, potentially reducing the anonymous function definition from `fn (s: string) -> bool = s < "a"` to something like `fn s => s < "a"` (exact syntax TBD), but a consistent "tie-breaker" logic needs to be fully specified so this does what users expect it to.
 
 We use string ordering to figure out which strings begin with capital letters (because their first character is earlier in ASCII and unicode ordering than the lowercase letters) and keep only those, then we compute the `len` of each substring, then we add them together, and finally print the output number. Because `i64` now has a default constructor, even when we called it a second time with only lowercase words, we'll get the expected value of `0` in this situation.
 
@@ -974,7 +976,7 @@ export fn main {
 But it can be made to work pretty easily:
 
 ```fn
-fn add(a: string, b: string) -> string = a.concat(b);
+fn add(a: string, b: string) = a.concat(b);
 
 export fn main {
   print("Hello, " + "World!");
@@ -1099,8 +1101,8 @@ Beyond defining functions and types in Alan, you may also bind functions and typ
 The two function syntaxes we have covered up until now are the single-statement and multi-statement syntaxes.
 
 ```rs
-fn foo(a: i64, b: i64, c: i64) -> i64 = a * b + c;
-fn bar(a: i64, b: i64, c: i64) -> i64 {
+fn foo(a: i64, b: i64, c: i64) = a * b + c;
+fn bar(a: i64, b: i64, c: i64) {
   const d = a * b;
   const e = a * c;
   return a + b + c + d + e;
@@ -1115,6 +1117,10 @@ fn baz "baz" :: (i64, i64, i64) -> i64;
 
 The `::` symbol is an alias for the `Call{N, F}` type, specifying a function call with the Rust function name as a string on the left, and the function type that it represents on the right. This `Call` type doesn't have any properties, but defines a single "constructor" function that takes the input specified and returns the output. This is used in conjunction with the function declaration syntax to give this "constructor" an easy-to-use name.
 
+!!! note
+
+    The `Call{N, F}` type requires a fully-defined function type, including the return type, for any function being bound from Rust (or Javascript in the future). Alan's type inference cannot operate on a language it wasn't designed for, so it must be told all of the necessary information ahead of time to work.
+
 In fact, you could use this syntax with any type that produces an automatically-defined constructor function, so if you wanted to create an alias for a struct, but only when constructing it, you could do so:
 
 ```rs
@@ -1126,7 +1132,7 @@ fn r Record;
 This will produce a function `r` that takes a `string` and `i64` and generates a `Record` object. It's essentially shorthand for:
 
 ```rs
-fn r (v: string, c: i64) -> Record = Record(v, c);
+fn r (v: string, c: i64) = Record(v, c);
 ```
 
 which reduces some redundant syntax, but also eliminates the wrapper function from the call stack.
