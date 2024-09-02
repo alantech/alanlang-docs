@@ -8,7 +8,7 @@ export fn main {
   // Create a buffer of memory on the GPU
   let b = GBuffer([1, 2, 3, 4]);
   // Map the values into a new buffer on the GPU
-  let out = b.map(fn (val: gi32) -> gi32 = val + 2);
+  let out = b.map(fn (val: gi32) = val + 2);
   // Read the results back to RAM and print them
   out.read{i32}.print;
 }
