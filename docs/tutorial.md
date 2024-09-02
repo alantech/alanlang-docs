@@ -121,6 +121,14 @@ export fn main {
 
 which will print 3, followed by 5. In this example, `i64` is the "primitive type" of the integers, and `Mut{i64}` is a realized "generic type" indicating that we want to be able to mutate the integer that was passed into our function. We'll go over all of these, starting with primitive types.
 
+!!! note
+
+    Arguments in Alan are *conceptually* [call-by-value](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_value) by default, though it passes immutable references (`&`) when compiling via Rust rather than full copies of the data. If the variable is mutated within that scope then it will make a copy of that variable via `clone` instead of producing a compiler error as Rust would do in a similar circumstance. All arguments to a function are treated as if they were `let` bound.
+
+    When `Mut{T}` is applied to an argument it switches semantically to [call-by-reference](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_reference), using a mutable reference (`&mut`) when compiling via Rust.
+
+    Alan does not generate functions that take ownership of the provided argument like Rust does, primarily because this concept is foreign to most developers, but the function binding logic does support calling functions implemented in Rust that do this via the `Own{T}` generic type. Under the hood it is calling `clone` for you automatically to prevent an unexpected semantic drift, though that may be optimized away if you never use that variable again in a future version of the compiler.
+
 ## Primitive Types
 
 Alan has many built-in types, but a few of them are considered "primitive." These are types that have a special representation in the language itself: `int`, `float`, `bool`, `string`, and `void`.
