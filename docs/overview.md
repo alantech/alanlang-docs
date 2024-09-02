@@ -12,7 +12,7 @@ Memory allocation and deallocation is handled for you, and values are passed-by-
 
 ### Functions
 
-Functions are currently fully typed, with the form `fn optionalName (arg1: Type1, arg2: Type2) -> ReturnType`, while a function *type* for higher-order functions (functions that are passed other functions to call) is just the type portion: `(Type1, Type2) -> ReturnType`. It is intended for the return type to be inferrable, in the future, but this is not yet implemented.
+Functions are currently fully typed, with the form `fn optionalName (arg1: Type1, arg2: Type2) -> ReturnType`, while a function *type* for higher-order functions (functions that are passed other functions to call) is just the type portion: `(Type1, Type2) -> ReturnType`. The return type can be inferred for all function definitions except when binding into the platform language (where the inference logic doesn't work). The function type used by higher-order functions always requires the return type to be specified. For function definitions that the return type can be inferred, it still is, with the return type acting as a compiler check and allowing the compiler to indicate the expected and actual return type to you.
 
 ### Variables
 
