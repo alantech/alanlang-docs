@@ -52,9 +52,8 @@ theme:
 nav:
   - Home:
     - index.md
-  - Getting Started:
-    - getting_started/index.md
-    - tutorial.md
+  - Getting Started: getting_started/index.md
+  - Learn Alan: learn_alan/index.md
   - Reference Guides:
     - reference_guides/index.md
     - overview.md
