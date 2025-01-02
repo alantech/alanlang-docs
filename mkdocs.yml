@@ -54,7 +54,8 @@ nav:
     - index.md
   - Getting Started:
     - getting_started/index.md
-    - tutorial.md
+  - Learn Alan:
+    - learn_alan/index.md
   - Reference Guides:
     - reference_guides/index.md
     - overview.md

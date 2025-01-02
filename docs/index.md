@@ -36,6 +36,6 @@ This means that CPU code written in idiomatic Alan should have roughly the same 
 
 ## Learn Alan
 
-Ready to learn more about Alan? Checkout the [basic tutorial](tutorial.md) to become dangerous with Alan, dig into the [built-in types, functions, and operators](built_ins.md) automatically available to every Alan module, deep dive into [the standard library](standard_library.md) of Alan, or read some [articles](blog/index.md) on Alan for projects that have used it or interesting patterns to take for yourself.
+Ready to learn more about Alan? Checkout the [basic tutorial](learn_alan/index.md) to become dangerous with Alan, dig into the [built-in types, functions, and operators](built_ins.md) automatically available to every Alan module, deep dive into [the standard library](standard_library.md) of Alan, or read some [articles](blog/index.md) on Alan for projects that have used it or interesting patterns to take for yourself.
 
 ![Alan Logo](./assets/logo.png)
