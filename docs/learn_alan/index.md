@@ -963,7 +963,7 @@ There is also a defined precedence between operators, so multiplying `*` is conv
 Specifically, multiplying is given a precedence of `4` and adding a precedence of `3`. When processing a statement (type or function), the statement is scanned for the highest precedence operator, with ties resolving to the left-most operator, then converting it and the surrounding sub-statement segments into a function call, and repeating the process until only function calls remain in the statement.
 
 <figure markdown="span">
-  !["It's all function calls?" "Always has been"](./assets/always_has_been.jpg)
+  !["It's all function calls?" "Always has been"](../assets/always_has_been.jpg)
   <figcaption><h6>You can faintly hear mad cackling coming from the old <a href="https://en.wikipedia.org/wiki/Symbolics">Symbolics</a> headquarters...</h6></figcaption>
 </figure>
 
@@ -1180,7 +1180,7 @@ Bound types are different from normal Alan types in that *zero* constructor and 
 
 !!! warning
 
-    In Alan, it is assumed that **all** types can be `clone`d and `hash`ed, and the Alan compiler will generate code with that assumption. It is **highly** recommended that types that can't be cloned are wrapped in `Rc<T>` during the binding, and types that can't be hashed should be wrapped with the [New Type Idiom](https://doc.rust-lang.org/rust-by-example/generics/new_types.html) and then [`impl` the `Hash`](https://doc.rust-lang.org/stable/std/hash/trait.Hash.html#implementing-hash) and [the `PartialEq` and `Eq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html#how-can-i-implement-partialeq) traits. If you need to do both, put the `Rc<T>` wrapping within the New Type wrapper.
+    In Alan, it is assumed that **all** types can be `clone`d and `hash`ed, and the Alan compiler will generate code with that assumption. It is **highly** recommended that types that can't be cloned are wrapped in `Rc<T>` or `Arc<T>` during the binding, and types that can't be hashed should be wrapped with the [New Type Idiom](https://doc.rust-lang.org/rust-by-example/generics/new_types.html) and then [`impl` the `Hash`](https://doc.rust-lang.org/stable/std/hash/trait.Hash.html#implementing-hash) and [the `PartialEq` and `Eq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html#how-can-i-implement-partialeq) traits. If you need to do both, put the `Rc<T>` wrapping within the New Type wrapper.
 
 Bound functions and types are tricky to work with, but provide a zero-cost FFI to the existing Rust (and eventually Javascript) ecosystem of libraries. The syntax is pretty simple, but leaves correctness up to you, so tread lightly if you need it!
 
@@ -1219,13 +1219,186 @@ This was implemented in Alan v0.1, but has not yet been implemented in Alan v0.2
 
 ## Importing from Files and Libraries
 
-This was also implemented in Alan v0.1, but has not yet been implemented in Alan v0.2.
+In many languages, importing from other files and libraries is done with a special syntax, and this syntax is often a preamble placed at the beginning of a source file. This is true of Rust, Java, C#, Python, and modern module-aware Javascript, amongst many others. This general approach is the default across many languages.
 
-The exact syntax will not match the Alan v0.1 syntax and has not yet been fully determined.
+C is an example of a language that differs in this regard as importing is done through trickery in the C preprocessor, conditionally including the source of another file, usually a "header" file that simply declares the C functions that exist in another file that will be linked into the library or binary to be generated. Essentially, there is no such thing as modules in the language itself; it's just a construct within the preprocessor to order the source into one long set of source code to actually compile. Pre-module-aware Javascript was similar, and this is the second most common way for languages to "deal" with importing -- make it the developer's problem to handle.
+
+Alan differs from both of these. The authors of Alan have not seen the approach chosen in any other language, though it is most similar to Lisp: importing is done through the type system. There are 5 types involved in importing code from other files:
+
+```ln
+Import{N, D}
+From{D}
+Dependency{N, V}
+Rust{D}
+Node{D}
+```
+
+Of these, the first three have operators binding them.
+
+```rs
+N <- D
+<-- D
+N @ V
+```
+
+The `Import{N, D}`, or `N <- D` type imports the named type or function from the specified dependency. The `N` parameter must resolve into a string, while the `D` parameter may be a string, a `Dependency{N, V}`, `Rust{D}` or `Node{D}`.
+
+When `D` is a string, it is treated as a path to another file on the filesystem. If the path is a relative path, it is relative to the current file. If it's an absolute path, the root of the path is anchored in the path where the `alan` command was invoked. Relative paths can also only reach within the filesystem tree contained by the path the `alan` command was invoked, to reduce/eliminate certain security vulnerabilities during compilation and to prevent accidentally writing code that is not properly encapsulated.
+
+!!! warning
+
+    Passing a `Dpendency{N, V}` *directly* to an `Import{N, D}` is not yet implemented as the finer details of libraries have not yet been fleshed out.
+
+When `D` is `Rust{D}` or `Node{D}`, this indicates that the dependency is a native one to the Rust or Node.js platform, respectively, and this `D` *must* resolve to a `Dependency{N, V}` type. When done this way, `N` is the name of the module in `Cargo` or `NPM`, and `V` is the version, by default. However, `V` could also be the URL to a git repository, and that URL may have a `#` followed by a branch/tag name to specify the particular branch or tag to check out.
+
+When compiling natively, only `Rust{D}` may be used, and when bundling for the browser, only `Node{D}` may be used. Usage of the wrong native dependency type is an immediate compilation failure. Fortunately you can easily mask one or the other with conditional compilation and the built-in `Rs` and `Js` boolean type values.
+
+If the `Import{N, D}` is a type, you can make use of it in your own code by simply assigning it to an alias, eg:
+
+```rs
+type foo = Import{"foo", "./foo.ln"};
+```
+
+Similarly, as functions can be defined solely from a type, if `foo` were a function instead of a type, you could do:
+
+```rs
+fn foo Import{"foo", "./foo.ln"};
+```
+
+Importing in Alan requires explicitly declaring whether the value being imported is a function or a type, making the code more self-documenting when it is read later.
+
+!!! note
+
+    There currently is no way to import operators or type operators, though this is intended to be implemented in the future. It has been a lower priority since operators and type operators are simple declarative statements so copy-pasting isn't too terrible.
+
+The `Import{N, D}` syntax is shorter with the `<-` operator syntax:
+
+```rs
+type foo "foo" <- "./foo.ln";
+fn foo "foo" <- "./foo.ln";
+```
+
+This makes renaming types and functions from other files simply choosing a different name for the alias:
+
+```rs
+type foofoo "foo" <- "./foo.ln";
+fn foofoo "foo" <- "./foo.ln";
+```
+
+But for *most* use-cases, this feels redundant with the `foo "foo"` repetition, so the special `From{D}` type was defined:
+
+```rs
+type foo = From{"./foo.ln"};
+fn foo = From{"./foo.ln"};
+```
+
+```rs
+type foo <-- "./foo.ln";
+fn foo <-- "./foo.ln";
+```
+
+!!! note
+
+    This is intended to be just `<-` once disambiguating infix and prefix types of the same type symbol works.
+
+It has a little bit of compile-time magic built into it, grabbing the name of the type or function it is being assigned *to* and transforming it into an `Import` of that name and the specified dependency.
+
+!!! warning
+
+    If `From{D}` is unable to find the type or function name, the `From` type instead becomes a compilation failure and the explicit `Import` syntax is required instead.
+
+    This is possible if you use an imported type as part of a sum or product type directly,
+
+    ```rs
+    type myTuple = string, From{"./foo.ln"}; // What type do you mean?
+    ```
+
+    or if you are calling a function from another by defining the function type implicitly
+
+    ```rs
+    fn getFoo(foo: string) {
+      {From{"./foo.ln"}}(foo); // What function do you mean?
+    }
+    ```
+
+It could feel tedious to specify the import path or dependency name and version for every type and function you are importing, but you can simply assign the dependency a type alias to deal with it.
+
+The root scope includes a shim library for both Rust and Javascript to support the built-in functionality of the language that are assigned to the `RootBacking` name.
+
+```rs
+type{Rs} RootBacking = Rust{"alan_std" @ "https://github.com/alantech/alan.git"};
+type{Js} RootBacking = Node{"alan_std" @ "https://github.com/alantech/alan.git"};
+```
+
+This is then used with the import syntax in built-in types:
+
+```rs
+type{Rs} Error = Binds{"alan_std::AlanError" <- RootBacking};
+type{Js} Error = Binds{"alan_std.AlanError" <- RootBacking};
+```
+
+and functions:
+
+```rs
+fn{Rs} storageBuffer "alan_std::storage_buffer_type" <- RootBacking :: () -> BufferUsages;
+fn{Js} storageBuffer "alan_std.storageBufferType" <- RootBacking :: () -> BufferUsages;
+```
+
+!!! note
+
+    Remember, because these are native function imports, Alan can't automatically figure out the type signature, so it needs to be wrapped in a `Call{N, F}`, which is the `::` operator. The type operator precedence order is defined such that no grouping parens are needed for this.
+
+By being baked into the type system itself, it can be extended naturally. You can make the module or function being imported be defined by a compile-time environment variable, for example, to provide compile-time options similar in concept to Rust features.
+
+It is also intended to eventually add a capabilities system to the import logic, preventing libraries from having access to the filesystem, or sockets, etc, to improve security, which will be done via other built-in types, but this has not been fleshed out, yet.
 
 ## Testing your Code
 
-The `Test` type exists to determine if your code is being compiled and run with `alan test`, but nothing else about testing has been determined, yet.
+The `Test` type exists to determine if your code is being compiled and run with `alan test`. You can use in during conditional compilation to define a `main` function that only exists during testing.
+
+```rs
+export fn{Test} main {
+  ...
+```
+
+This `Test` type also gates the existence of a built-in test suite for Alan. It consists of a `Testing` type used to set up a series of tests and support functions that create, mutate, and consume it.
+
+`describe` is the first function and it creates a top-level group for tests. There are several variants for better ergonomics, but at its core it takes a string describing the subject of a group of tests and returns a `Testing` object. It may be chained fluently or be provided a closure function.
+
+`it` is the next function. It takes a `Testing` object returned by a `describe` and specified a singular test topic, then returns the `Testing` object. It may also be chained fluently or be provided a closure function.
+
+`assert` is the third function. It takes a `Testing` object from an `it` as well as a comparison function, followed by two values to be compared against. Generally the first of these two arguments is the "actual" value computed during the test by your code, while the last argument is the "expected" value that has been hardwired in your test suite.
+
+`report` is the final function. It takes a `Testing` object and generates the test report, with color coding (red for failure, green for success, yellow for in-progress) and Unicode symbols (❎ for failure, ✅ for success, and •︎ for in-progress) to indicate test outcomes.
+
+At the moment, the test suite will early-exit on the first failure, but it's intended to make that optional in the future. Much (but not all) of Alan's features are [tested using this test suite](https://github.com/alantech/alan/blob/main/alan/test.ln). That is currently the best source to understand its usage, but here's a trivial Alan app that only does something when you run `alan test` on it:
+
+```rs
+export fn getFoo = "foo";
+export fn makeFooish (s: string) = getFoo().concat(s);
+
+export fn{Test} main {
+  describe("Foo")
+    .it("getFoo")
+      .assert(eq, getFoo(), "foo")
+    .it("makeFooish", fn (test: Mut{Testing}) {
+      let bar = "bar";
+      let bbb = bar.repeat(3);
+      test
+        .assert(eq, makeFooish(bar), "foobar")
+        .assert(eq, makeFooish(bbb), "foobarbarbar");
+    })
+    .report;
+}
+```
+
+Note that the closure function specifies the type as `Mut{Testing}` because the original `Testing` value is being mutated within the function and isn't returned back.
+
+The test suite being defined in a conditonally-compiled `main` function makes it an executable only during tests, while not a compilation target under normal circumstances, which makes it possible to define the test suite for a library in the same file as the library rather than require a separate file, which is useful for unit tests.
+
+It is planned to eventually have `alan test` with no compilation target provided to recursively search all `.ln` files in the `PWD` for files that have `export fn{Test} main` and run these tests sequentially.
+
+It is already possible to both `alan test foo.ln` and `alan test --js foo.ln` to execute the test suite both natively and inside of Node.js. This is planned to eventually move to testing within a headless browser once the headless browsers support WebGPU so the GPGPU logic can be tested in the browser context as well, but for now GPGPU testing must be done only natively (or with a very complicated setup on supported operating systems implemented in the Alan monorepo involving Node, Chrome, and Rust simultaneously, but only on MacOS).
 
 ## Want to Learn More?
 
