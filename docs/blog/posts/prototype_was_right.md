@@ -139,7 +139,7 @@ The linearity of the logic is helped by method chaining. `variable.method1(arg1)
 
 We work around this problem with formatting rules, rewriting the second as something like:
 
-```
+```js
 method4(
   method3(
     method2(
@@ -158,7 +158,7 @@ method4(
 
 which takes up significantly more vertical space, and therefore reducing the overall code density on screen, but your eye is drawn to the "peak" of the "pyramid" and that is where execution starts, and you can visually trace which arguments belong to which function calls by the indentation level. An alternative exists by assigning intermediate results to variables:
 
-```
+```js
 let val1 = method1(variable, arg1);
 let val2 = method2(val1, arg2);
 let val3 = method3(val2, arg3, arg4);
