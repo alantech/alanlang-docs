@@ -1,6 +1,6 @@
 ---
 draft: true
-date: 2025-01-09
+date: 2025-01-10
 authors:
   - dfellis
 categories:
@@ -69,9 +69,69 @@ But just "not doing it" has never been acceptable to users, otherwise `Babel` an
 
 This is much more opinion-based. Why developers write code in any way can have a multitude of reasons, and developers are not one homogenous group, so this will be flat-out wrong for certain developer communities. I will attempt to demonstrate my reasoning why a majority of developers (or at least the largest plurality) gravitate towards methods, and therefore why `Underscore.js` or just `require`ing libraries that operate on these built-in objects and gluing them together, has never been good enough.
 
-Let's take a look at code that makes good use of methods. We have an `Array` of grades for students that we're deriving some statistics from. Each element of the array will be a record, an object with the following keys (with Typescript types for clarity): `surname: string`, `givenName: string`, `gender: string | null`, `subject: 'Algebra' | 'English' | 'Physics' | 'Music'`, `grade: number`. The first three strings are essentially free-form, but we'll be bucketing `gender` into `male`, `female`, `non-binary`, and `non-specified`, with the first two being exact string matches, any other string going to `non-binary`, and `null` going to `non-specified`. The name information is irrelevant for our purposes, so it'll be removed before any processing, and then there will be statistics calculated. We'll be extracting the mean (average), min, and max grades for each bucket. First across all subjects and genders, then for each subject, then each gender, and finally each subject+gender pairing. For all of these, but especially the last one, there will not be a report generated if there are 3 or fewer students within the bucket, and the report will be removed.
+First, let's rewind to the standard of Javascript that `Prototype.js` was born in, [ECMAScript 3rd Edition](https://ecma-international.org/wp-content/uploads/ECMA-262_3rd_edition_december_1999.pdf). At that time, full conformance with the standard was poor, and the standard was generally just documenting what Netscape Navigator and Internet Explorer were doing. It was descriptive, not proscriptive. Thankfully, most of the deviations dealt with the DOM, not the core of the language, so we can use this specification during the analysis.
+
+To help ground things, we're going to work with an example problem. We've been given an `Array` of grades for students that we're deriving some statistics from. Each element of the array will be a record, which will be a basic Javascript `Object` with the following keys: `surname`, `givenName`, `gender`, `subject`, and `grade`. This is Javascript so the values for these keys could be *anything*, but let's assume the following Typescript type describes them:
+
+```ts
+type Record = {
+  surname: string,
+  givenName: string,
+  gender: string | null,
+  subject: 'Algebra' | 'English' | 'Physics' | 'Music',
+  grade: number,
+};
+```
+
+The student could enter whatever they wanted for `gender`, with it being `null` meaning they chose not to specify their gender. For the statistics, we need to bucket `gender` into four categories: `male`, `female`, `non-binary`, and `non-specified`.
+
+We need to calculate the min, max, and mean (average) grades, bucketed for the entirety of the dataset, and by subject, and by gender, and by a combination of subject and gender. But if any bucket results in 3 or fewer students in the analysis, that bucket is dropped for privacy and data quality reasons.
+
+In 2005 when `Prototype.js` was first released, `Array` did not have `map`, `reduce`, `filter`, etc. These actions could only be done with C-like `for` loops. Meanwhile `Prototype.js` added `map` and `filter` but interestingly not `reduce`. Javascript at this time also did not have strict equality checking (no `===` and `!==`, just `==` and `!=`).
+
+Let's compare the code we get as we implement this example in (1) pure ECMAScript 3rd Edition code, which we'll call JS3 (2) JS3 + `Prototype.js`, which we'll just call Prototype and (3) modern JS (which is apparently now up to ECMAScript 15th Edition) that we'll call Modern.
+
+First, we decide that we don't want to worry about PII, so we're going to censor the names from this array of student grade records.
 
 ```js
+/* JS3 */
+// Censor the names from the grades and convert the gender into one of four buckets for analysis
+var censoredGrades = [];
+for (var i = 0; i < grades.length; i++) {
+  var gender = "non-specified";
+  if (grades[i].gender != null) {
+    if (grades[i].gender == "male" || grades[i].gender == "female") {
+      gender = grades[i].gender;
+    } else {
+      gender = "non-binary";
+    }
+  }
+  censoredGrades.push({
+    subject: grades[i].subject,
+    grade: grads[i].grade,
+    gender: gender,
+  });
+}
+
+/* Prototype */
+// Censor the names from the grades and convert the gender into one of four buckets for analysis
+var censoredGrades = grades.map(function (record) {
+  var gender = "non-specified";
+  if (record.gender != null) {
+    if (record.gender == "male" || record.gender == "female") {
+      gender = record.gender;
+    } else {
+      gender = "non-binary";
+    }
+  }
+  return {
+    subject: record.subject,
+    grade: record.grade,
+    gender: gender,
+  };
+});
+
+/* Modern */
 // Censor the names from the grades and convert the gender into one of four buckets for analysis
 let censoredGrades = grades.map(({ gender, subject, grade }) => ({
   subject,
@@ -82,6 +142,61 @@ let censoredGrades = grades.map(({ gender, subject, grade }) => ({
       'non-specified' :
       'non-binary'
 }));
+```
+
+The first thing you'll notice is that the fully-modern JS is a lot shorter, at 9 lines of code (without comments) versus 15 for `Prototype.js` and 16 for ES3. You'll also notice that I used nested `if` statements mutating a variable for ES3 and Prototype, while I used a nested ternary operator for the ES5 example.
+
+This may seem unfair to the older code since the ternary operator has been around since the beginning and could have been used in those examples to similarly reduce the line count. However, nesting ternary operators was highly frowned upon in the past, and it's only because modrn JS `=>` arrow function syntax has a shorthand to just return the specified value without even a `return` statement if the entire function body is one logical value that has encouraged this more functional style using the ternary operator.
+
+I do not believe it would have been used by most people with `Prototype.js` *because* it is harder to read.
+
+
+!!! note
+
+    If Javascript had a functional variant of `if`, it would be clearer than the ternary operator and it would be harder to make this argument.
+
+    ```js
+    let censoredGrades = grades.map(({ gender, subject, grade }) => ({
+      subject,
+      grade,
+      gender: if(gender === 'male' || gender === 'female',
+        gender,
+        if(gender === null ?
+          'non-specified',
+          'non-binary')),
+    }));
+    ```
+
+    This takes up the same lines of code, but it's much easier to tell which conditional produces which values.
+
+Next, we need to create the list of all reports we need to generate.
+
+```js
+/* ES3 */
+// Create the grade report groups, one for all, one for each of the gender buckets, one for each of
+// the subjects, and one for each gender+subject pair
+var groups = [];
+var genders = [null, 'male', 'female', 'non-binary', 'non-specified'];
+var subjects = [null, 'Algebra', 'English', 'Physics', 'Music'];
+for (var i = 0; i < genders.length; i++) {
+  groups.push({ gender: genders[i] });
+  for (var j = 0; j < subjects.length; j++) {
+    groups.push({ gender: genders[i], subject: subjects[j] });
+  }
+}
+
+/* Prototype */
+// Create the grade report groups, one for all, one for each of the gender buckets, one for each of
+// the subjects, and one for each gender+subject pair
+var groups = [];
+[null, 'male', 'female', 'non-binary', 'non-specified'].each(function (gender) {
+  groups.push({ gender: gender });
+  [null, 'Algebra', 'English', 'Physics', 'Music'].each(function (subject) {
+    groups.push({ gender: gender, subject: subject });
+  });
+});
+
+/* Modern */
 // Create the grade report groups, one for all, one for each of the gender buckets, one for each of
 // the subjects, and one for each gender+subject pair
 let groups = [];
@@ -91,6 +206,117 @@ for (const gender of [null, 'male', 'female', 'non-binary', 'non-specified']) {
     groups.push({ gender, subject, });
   }
 }
+```
+
+Once again, ES3 takes the most number of LOC, while Prototype is now the same LOC as Modern. Just looking at LOC isn't enough, though. The very classic C-style `for` loops for ES3 required us to create named `genders` and `subjects` arrays because we need to access the array values with the iterator variable, while for Prototype and Modern we could keep it unnamed and only have a variable for the actual analysis `groups` added into the scope.
+
+This explicit iterator usage is a source of easy typo-based bugs that are hard to notice, since the iterator variables are traditionally single character variables, and usually `ijkl` where three of the four symbols are graphically similar (at a glace, `i` and `j` can be confused, or `i` and `l`. Usually other character swaps would be more noticable).
+
+If the innermost line in the ES3 example was instead: `groups.push({ gender: genders[j], subject: subjects[j] });` that code would "work" and never produce an `undefined` value as the two arrays have the same `length` (5), but you would get a repeat pairing of `null, null`, `'male', 'Algebra'`, `'female', 'English'`, `'non-binary', 'Physics'`, and `'non-specified', 'Music'` in the output array.
+
+This makes the explicit iterator approaches in the Prototype and Modern code better because you can't make this mistake at all.
+
+The next thing to note is that Prototype is written in a functional style, while Modern is using the `for..of` syntax. `forEach` does exist in modern JS, so why didn't I use that? Well, because a new functional closure scope for the loops (especially the innermost loop which *does* use the outer scope) will always run slower than the imperative equivalent that never needs to leave the current function context, but also because even with arrow syntax, the functional approach is more "noisy" than the imperative iterator approach, so that is the one that I believe users would gravitate to: the safety benefits of the Prototype approach and the performance benefits of the ES3 approach.
+
+`Prototype.js` couldn't do anything about these syntactic primitives, but it was able to give us the safer approach almost as cleanly as modern JS has it.
+
+Now, we're going to actually generate the report. This one is going to be meaty.
+
+```js
+/* ES3 */
+// Generate the report for each reporting group
+var report = [];
+for (var i = 0; i < groups.length; i++) {
+  // Filter out records that don't match the reporting group
+  var relevantGrades = [];
+  for (var j = 0; j < censoredGrades.length; j++) {
+    if ((groups[i].gender == null || groups[i].gender == censoredGrades[j].gender) &&
+      (groups[i].subject == null | groups[i].subject == censoredGrades[j].subject)) {
+      relevantGrades.push(censoredGrades[j]);
+    }
+  }
+  // Skip this report if there are too few students in the sample
+  if (relevantGrades.length < 4) {
+    continue;
+  }
+  // Initialize the report with values that guarantee that the first record replaces all of the
+  // values (set the gender and subject based on the particular report group, min of Infinity so
+  // the grade is definitely smaller, max of -Infinity so the grade is definitely larger, and
+  // technically the mean doesn't matter as it will be multiplied by zero on the first record,
+  // but set it to zero anyway)
+  var stats = {
+    gender: groups[i].gender,
+    subject: groups[i].subject,
+    min: Infinity,
+    max: -Infinity,
+    mean: 0,
+  };
+  // Update the stats as each record is added
+  for (var j = 0; j < relevantGrades.length; j++) {
+    // Update the lowest grade recorded if lower
+    if (relevantGrades[j].grade < stats.min) {
+      stats.min = relevantGrades[j].grade;
+    }
+    // Update the highest grade recorded if higher
+    if (relevantGrades[j].grade > stats.max) {
+      stats.max = relevantGrades[j].grade;
+    }
+    // Update the mean. We can use the current index being processed to determine how many vals
+    // went into the existing mean and then multiply by that index to recreate the sum, then add
+    // the new grade and divide by the new total number of values (j + 1)
+    stats.mean = (stats.mean * j + relevantGrades[j].grade) / (j + 1);
+  }
+  report.push(stats);
+}
+
+/* Prototype */
+// Generate the report for each reporting group
+var report = groups
+  .map(function (group) {
+    // Filter out records that don't match the reporting group
+    var relevantGrades = censoredGrades.filter(function (record) {
+      return (group.gender == null || group.gender == record.gender) &&
+        (group.subject == null || group.subject == record.subject);
+    });
+    // Skip this report if there are too few students in the sample
+    if (relevantGrades.length < 4) {
+      return null;
+    }
+    // Initialize the report with values that guarantee that the first record replaces all of the
+    // values (set the gender and subject based on the particular report group, min of Infinity so
+    // the grade is definitely smaller, max of -Infinity so the grade is definitely larger, and
+    // technically the mean doesn't matter as it will be multiplied by zero on the first record,
+    // but set it to zero anyway)
+    var stats = {
+      gender: group.gender,
+      subject: group.subject,
+      min: Infinity,
+      max: -Infinity,
+      mean: 0,
+    };
+    // Update the stats as each record is added
+    relevantGrades.each(function(record, index) {
+      // Update the lowest grade recorded if lower
+      if (record.grade < stats.min) {
+        stats.min = record.grade;
+      }
+      // Update the highest grade recorded if higher
+      if (record.grade > stats.max) {
+        stats.max = record.grade;
+      }
+      // Update the mean. We can use the current index being processed to determine how many vals
+      // went into the existing mean and then multiply by that index to recreate the sum, then add
+      // the new grade and divide by the new total number of values (index + 1)
+      stats.mean = (stats.mean * index + record.grade) / (index + 1);
+    });
+    return stats;
+  })
+  // Remove reports that were censored for being too noisy and potentially expose individual scores
+  .filter(function (report) {
+      return report != null
+  });
+
+/* Modern */
 // Generate the report for each reporting group
 let report = groups
   .map(({ gender, subject }) => censoredGrades
@@ -133,9 +359,19 @@ let report = groups
   .filter((report) => report !== null);
 ```
 
-This is a non-trivial example, so the solution is also non-trivial, but the flow of the code is for the most part very linear, you can read from left-to-right, top-to-bottom and not really need to backtrack. The two exceptions are the double-for loop mutating the `groups` array, though that's a small backtracking you probably won't even notice, and then in the main `reduce` method call due to Javascript's unfortunate decision to put the initial value argument as the second argument instead of the first when it is used as a two-argument function. To be *sure* the main callback body passed to the `reduce` works, you'd need to read the initial value near the end of the example, which introduces a bit of non-linearity, *but* it's within a singular method call.
+Much of what was said before still applies here. The ES3 example relies heavily on mutating state variables and manually-managed iterators, while the Prototype example is mostly functional (variables are set only once) except where we had to emulate `reduce` by creating a mutable `stats` variable that the `each` callback function would mutate during iteration.
 
-The linearity of the logic is helped by method chaining. `variable.method1(arg1).method2(arg2).method3(arg3, arg4).method4(arg5)` is *significantly* easier to read than the purely functional variant `method4(method3(method2(method1(variable, arg1), arg2), arg3, arg4), arg5)`. The first thing to be executed is roughly in the middle of the purely functional style, and later execution straddles, with part of the definition earlier and part of it later.
+The Modern example has only *one* variable assignment for the final `report` array that is generated, while Prototype has 3 and ES3 has 6. This does not mean that there is only one variable name involved in the Modern approach, just that they are generally arguments provided to the callback functions and treated as immutable variables in the code. This reduces the chances of a mutation causing issues that are difficult to track and the methods enforce a structural meaning to the arguments in the callback by the argument order that you can be sure is the same across any code in any codebase you see using that method, which aids comprehension of the code once you've learned the pattern.
+
+But the ES3 approach can skip the `filter` concept by just skipping over groups that have too few records, [so it's got that going for it, which is nice](https://www.youtube.com/watch?v=pBWcRqPesws).
+
+The biggest value gained from this method-based approach is the elimination of a class of errors around iteration, the next is enforcing patterns on your code that aide comprehension for others (and your future self). But there is one more value these methods provide: source code cause-and-effect linearity.
+
+## Source code what?
+
+[Source code linearity](https://arxiv.org/html/2404.02377v1), where the flow of execution is the same as the flow of reading the code (top-to-bottom, left-to-right), has been demonstrated to reduce the time needed to understand what the code is doing.
+
+Achieving linearity of the logic is helped by method chaining. `variable.method1(arg1).method2(arg2).method3(arg3, arg4).method4(arg5)` is *significantly* easier to read than the purely functional variant `method4(method3(method2(method1(variable, arg1), arg2), arg3, arg4), arg5)`. The first thing to be executed is roughly in the middle of the purely functional style, and later execution straddles, with part of the definition earlier and part of it later.
 
 We work around this problem with formatting rules, rewriting the second as something like:
 
@@ -156,7 +392,9 @@ method4(
 )
 ```
 
-which takes up significantly more vertical space, and therefore reducing the overall code density on screen, but your eye is drawn to the "peak" of the "pyramid" and that is where execution starts, and you can visually trace which arguments belong to which function calls by the indentation level. An alternative exists by assigning intermediate results to variables:
+which takes up significantly more vertical space, and therefore reducing the overall code density on screen, but your eye is drawn to the "peak" of the "pyramid" and that is where execution starts, and you can visually trace which arguments belong to which function calls by the indentation level.
+
+An alternative exists by assigning intermediate results to variables:
 
 ```js
 let val1 = method1(variable, arg1);
