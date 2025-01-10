@@ -161,7 +161,7 @@ I do not believe it would have been used by most people with `Prototype.js` *bec
       grade,
       gender: if(gender === 'male' || gender === 'female',
         gender,
-        if(gender === null ?
+        if(gender === null,
           'non-specified',
           'non-binary')),
     }));
