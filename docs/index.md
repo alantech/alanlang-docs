@@ -6,7 +6,7 @@
 ```rs title="Hello, GPU"
 export fn main {
   // Create a buffer of memory on the GPU
-  let b = GBuffer([1.f32, 2.f32, 3.f32, 4.f32]);
+  let b = GBuffer([1.i32, 2.i32, 3.i32, 4.i32]);
   // Map the values into a new buffer on the GPU
   let out = b.map(fn (val: gi32) = val + 2);
   // Read the results back to RAM and print them
