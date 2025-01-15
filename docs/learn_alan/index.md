@@ -1215,8 +1215,6 @@ Currently, when you pass "bad" types into generic functions or generic types tha
 
 It is planned to allow generic types and generic functions to specify type constraints. These type constraints can be the names of generic types that the type must be constructed from *or* an `interface` type that declares a set of function types indicating how the type can be operated on, allowing a type-safe kind of "duck typing."
 
-This was implemented in Alan v0.1, but has not yet been implemented in Alan v0.2.
-
 ## Importing from Files and Libraries
 
 In many languages, importing from other files and libraries is done with a special syntax, and this syntax is often a preamble placed at the beginning of a source file. This is true of Rust, Java, C#, Python, and modern module-aware Javascript, amongst many others. This general approach is the default across many languages.
