@@ -233,6 +233,106 @@ This means the only type operator precedence table you need to know is the one b
 
 ## Functions
 
+Functions in Alan work a bit differently than in most programming languages. Function dispatch is based on both the function name and the arguments (number and type) they are called with. This way you can have both `add(i16, i16)` and `add(f32, f32)` and they do not overwrite each other.
+
+Generic functions also automatically attempt to infer their generic arguments at the callsite (which is doable *if* the generic arguments are all used in the input arguments of the function, not if any of them only exist in the output), so an `add{T}(T, T)` will also match for a call to an `add` function.
+
+How does Alan decide which function is the "best" to use if multiple match? The other way Alan differs from most languages is that function definition order matters, so the most-recently-defined matching function wins.
+
+So you can define a generic function that should work for all types you care about, but then afterwards define specialized functions for particular types where optimizations are possible and as they were defined later, code that follows after that definition will prefer the specialized versions over the generic version.
+
+This influences the order in which explicit functions are defined in Alan's root scope; the generic functions that apply as broadly as possible are first, and specialized functions follow.
+
+Explicit functions? That's the third way that Alan differs from most languages. In most languages types and very rigid, and certain kinds of types get certain language constructs, such as accessing properties from a struct. In Alan *all* of this is done with functions. A property access is simply taking a value of one type in and returning a value of a different type; it just happens to be a sub-type of the original type from the language's perspective. So instead in Alan all single-argument functions can be called with property syntax.
+
+So therefore when you define a new type, you're *also* implicitly defining a set of functions that work with that type to be able to access sub-types, construct the type, etc.
+
+This is only not true when you bind a native type. Alan has no idea what can be done with a bound native type, so you must also define all of the function calls that will work with that native type. Because the primitive types in Alan are all bound to the host language for better performance, there are several explicit functions to be described that would be implicitly defined otherwise.
+
+For clarity, the table of functions will be broken up into broad categories, and whether or not it is explicit or implicit will be called out, however, implicit functions from the root scope are only involving the `Tree{T}`, `Node{T}` and some of the GPGPU types, and even there explicit constructor and accessor functions have been defined for easier use of them. Because of this, most tables will not have an `Is Explicit` column, and when that is so, you can assume that they *all* are.
+
+### Functions for (potentially) every type
+
+TODO
+
+### Fallbile, Maybe, and Either functions
+
+TODO
+
+### Primitive type casting functions
+
+TODO
+
+### Boolean-related functions
+
+TODO
+
+### Float-related functions
+
+TODO
+
+### Unsigned Integer-related functions
+
+TODO
+
+### Signed Integer-related functions
+
+TODO
+
+### String-related functions
+
+TODO
+
+### Array-related functions
+
+TODO
+
+### Buffer-related functions
+
+TODO
+
+### Dictionary-related functions
+
+TODO
+
+### Set-related functions
+
+TODO
+
+### Tree-related functions
+
+TODO
+
+### Thread-related functions
+
+TODO
+
+### Time-related functions
+
+TODO
+
+### Uuid-related functions
+
+TODO
+
+### GPU-related functions
+
+TODO
+
+### Bitcasting functions
+
+TODO
+
+### Process Exit-related functions
+
+TODO
+
+### Stdout/stderr-related functions
+
+TODO
+
+### Testing-related functions
+
 TODO
 
 ## Operators
