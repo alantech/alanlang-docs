@@ -4,7 +4,185 @@ The Built-in Types, Functions, and Operators that are automatically available in
 
 ## Types
 
-TODO
+There are two kinds of built-in types: intrinsic types and constructed types. The intrinsic types are the types declared to exist by the Alan compiler and are interpreted by it to produce the types (and automatically generated functions) that you actually use in your code.
+
+In some ways, the intrinsic types are a kind of compile-time interpreted language that directs the compiler and generating types is a side-effect. There are more of these intrinsic types than you might expect because of compile-time computation and the necessity to bridge the Alan type system to the Rust (and sorta Javascript) type system.
+
+Of these intrinsic types, there is a core that you should be aware of, and secondary ones only necessary for writing your own bindings into the host language or for more complex types, and even of the core you should be aware of, they are often syntactic concepts in other languages that are part of the type system, here.
+
+The constructed types are those that are built on top of these intrinsic types and there are many of these that you might have expected to be intrinsic that are constructed, including all of the *run-time* integers, floats, bools, and strings.
+
+### Intrinsic Types
+
+There are a few sub-groups we can divide the intrinsic types into: the meta types, the host types, the type types, and the compute types.
+
+#### Meta Types
+
+The Meta types are types that are generally not used directly, but represent features of the language syntax itself.
+
+* `Type` is the first and most core type in the language. It isn't used directly, but holds onto the name and actual type when you use the `type typename = typdef;` syntax.
+* `Generic` is similar to `Type` in that it is not used directly, but is used when you use the `type typename{genericarg1, genericarg2} = genericdef;` syntax to define a generic type.
+* `Int` is also not used directly, but represents any integer value in the type system itself, such as the length of a fixed-length buffer type.
+* `Float` is also not used directly, but represents floating-point numbers in the type system. This has not actually been used in the language, yet.
+* `Bool` is also not used directly but represents `true` an `false` in the type system. It is used quite a bit for conditional compilation.
+* `String` is also not used directly be represents string values in the type system. It is useful for compile-time environmental variable compilation configuration and embedding the contents of a text file into the code. It has also been used as a way to provide a "tag" to a generic type that functions accepting that generic type can use to alter their behavior at runtime.
+* `Group{G}` is a type that represents parenthesis `()` in the type system syntax. It can be used outside of that, but it is kinda pointless to do so.
+* `Function{I, O}` is the only meta type that can and is used directly in several cases, most commonly when writing a function that accepts another function as an argument, *but* it is also automatically constructed when you write a function.
+* `AnyOf{A, B, ...}` is a type where all types within *can* be computed and it is up to the compiler to choose the one to use. It is generally used internally during automatic generic argument inference of function calls, and is intended to be used for integer type inference in the future.
+
+#### Host Types
+
+The Host types are types that are involved in bridging Alan to the host language, allowing you to call native functions, declare native types, and require native 3rd party libraries.
+
+* `Binds{T, ...}` is the first built-in type that you *do* use directly. It's a generic type whose first argument is the string name of the type in the host language (Rust or Javascript) that you are compiling to. Extra arguments to the generic type are the types to provide to the generic arguments of the type assuming it is a generic type.
+* `Call{N, F}` takes a "callable" type as the first argument and a `Function{I, O}` declaration on how to "call" it as the second type. A `String` refers to a standard function, while rest of the "callable" types are defined below.
+* `Infix{O}` is the first "callable" type. It takes a `String` representation of an infix operator in the host language, which the compiler will turn into `(A op B)`, with `A` and `B` being the two arguments (it will be a compile-time error if the `Function{I, O}` does not specify exactly two arguments) and `op` is the operator symbol. Parentheses are always used to avoid needing to clarify operator precedence rules in the host language.
+* `Prefix{O}` is the next "callable" type. It takes a `String` representation of a prefix operator in the host language, which the compiler will turn into `(op A)`, with `A` bing the singular argument (which will compile-time fail if the `Function{I, O}` is not a single-argument function) and `op` is the operator symbol. Parentheses are always used to avoid needing to clarify operator precedence rules in the host language.
+* `Method{F}` is another "callable" type. It takes a `String` representation of a method call. The first argument of the `Function{I, O}` is the variable the method will be called on, and all remaining arguments are the arguments of the method call. It is a compile-time error if the `Function{I, O}` definition does not include any input types.
+* `Property{P}` is another "callable" type. It takes a `String` representation of the property name to call. The first and only allowed argument of the `Function{I, O}` definition is the variable the property will be accessed from.
+* `Cast{T}` is a Rust-only "callable" type that is used for type casting from one type to another. The `Function{I, O}` must have only one input type and that input type must similarly be specially marked as `Own{T}` or `Deref{T}` for the `Cast{T}` to function correctly.
+* `Own{T}` is a Rust-only, function-argument-only type that indicates that the function should take full ownership of the variable away from the calling function. Alan does not have an ownership model, and while it will be able to determine if the variable is never used again and optimize the implementation of these calls in the future, right now what this means is that the Alan compiler will `.clone()` the argument and then pass that to the function, so try to avoid this when possible.
+* `Deref{T}` is a Rust-only, function-argument-only type that indicates that the function should derefernce the referenced variable (all arguments in Alan are pass-by-reference by default). This avoids the `.clone()`, but many types cannot be safely de-referenced like this. Alan will trust you that it is safe to do this, and may generate invalid Rust code, so also try to avoid this when possible.
+* `Mut{T}` is a function-argument-only type that indicates that the argument will be mutated by the function in question. This is actually the only function-argument-only type that is also used in pure Alan code to indicate that the passed in argument may be mutated by the function body. (It can also be specified on Javascript functions for documentation purposes, but all arguments in Javascript are actually mutable references).
+* `Dependency{N, V}` is a type used to define a 3rd party dependency, with `N` *usually* being the name of the dependency and `V` *usually* being the version of the dependency, but the specific meanings depend on the type the dependency type is embedded within.
+* `Rust{D}` is a wrapper around the `Dependency{N, V}` type indicating that this is a native Rust dependency. If it is present when compiling to Javascript, it will cause a compilation error. The dependency's `N` is a string that specifies the name of the Rust crate, and `V` is either a Cargo version or a `git` URL to get the crate. Unlike in the standard `Cargo.toml` format, appending a hashtag (`#`) followed by a string you can specify the branch, tag, or commit SHA that should be checked out from the `git` URL.
+* `Node{D}` is a wrapper around the `Dependency{N, V}` type indicating that it is a Node.js dependency. The dependency's `N` is a string that specifes the name of the Node module, and `V` is either an NPM version or a `git` URL to get the module. Similarly to the `Rust{D}` logic for `git` URLs, the hashtag (`#`) approach may also be used to determine the branch, tag, or commit SHA to use.
+* `Import{N, D}` pulls the named resource `N` from the dependency `D`. If `D` is a `String`, then it is assumed to be the filename of an Alan source file, which is then loaded and the `N` resource is extracted from it. If it is a bare `Dependency{N, V}` that is assumed to be an Alan dependency, which currently fails because dependency resolution for Alan has not yet been defined. If it is a `Rust{D}` dependency, then the `N` value is assumed to exist in the Rust crate specified, and similarly if it is a `Node{D}`, the `N` value is assumed to exist in the Node module. There is no checking done for this declaration, so invalide code may be generated if this is incorrect.
+* `From{D}` is a "magic" alternative to `Import{N, D}` that automatically figures out the `N` value that should be used based on the context in which it is invoked. Specifically if you are using the `type typename = ...` syntax or the `fn funcname ...` syntax, it will extract `typename` or `funcname` for you and then invoke `Import{N, D}` with it. Any other usage will result in a compile-time error.
+
+#### Type types
+
+The "Type" types are the types that are used to describe and build your own types out of other types. There are only surprisingly few of them.
+
+* `Tuple{A, ...}` defines a tuple type, AKA a [product type](https://en.wikipedia.org/wiki/Product_type), a type where all sub-types must have a value defined for. The sub-values defined in the tuple are accessed with `.0`, `.1`, etc with the number corresponding to its location in the tuple.
+* `Field{L, V}` defines a field type, which is a label `L` which must be a `String` and the value type `V`. Combine this with the `Tuple{A, ...}` type to get classic C-style structs. These fields may be accessed either with the numeric index *or* `.fieldname`.
+* `Either{A, ..}` defines an either type, AKA a [sum type](https://en.wikipedia.org/wiki/Tagged_union), a type where only one sub-type is defined at a time. This can be paired with the `Field{L, V}` type to get a Tagged Union. The access is the same as with tuples (`.0`, etc or `.fieldname`) but as the value may not exist a special `Maybe{T}` type is returned (which is actually `Either{T, ()}`) that has special functions to inspect and access.
+* `Buffer{T, S}` defines a buffer type, a fixed-length array where all values are of type `T` and there are an `Int` `S` number of entries in the buffer. It works similarly to a `Tuple` where all subtypes are the same type, except you also gain access to array access syntax since the return type is guaranteed to match in all cases. Using the `.0`, etc syntax checks the index at compile-time, so the value `T` type is accessed directly, while using the array access syntax `[0]`, where the number can be specified at runtime, returns a `Maybe{T}` that must be checked if it exists before being used.
+* `Array{T}` defines an array type, which is a variable-length array where all values are of type `T`. It may only use array access syntax to access the values, so all values are extracted as `Maybe{T}`.
+
+#### Compute types
+
+The Compute types are types that compute some value based on the input types given to them. Currently, Alan allows for conditional compile-time execution but it does not support loops at compile-time. This may change in the future, but it will certainly be done in a way to prevent infinite looping if added (the type system is pretty expressive, already, and an actual type generated by looping may be too difficult to understand).
+
+* `Prop{T, P}` extracts the sub-type from a `Tuple{A, ...}` or `Either{A, ...}` (in the `T` generic argument) by specifying the numeric integer index in the `P` generic argument, or if the desired type is wrapped in a `Field{L, V}` by setting `P` to the `String` matching the `L` generic argument to get the `V` value type. It is partway between a "Type" type and a Compute type as it returns the sub-type tree that is to be selected, but it is a compile-time failure if that is not possible, making it a compute type in that sense, and it is generally only useful for more complex generic functions.
+* `Len{A}` extracts the length of the inner type as an `Int`. For `Buffer`, `Tuple`, and `Either` this extracts the number of elements defined by the type. For `Array` this is a compile-time failure, and for everything else it is `1`.
+* `Size{T}` returns the size of the type in bytes if possible, and a compile-time failure otherwise. It currently fails in some situations that it should be able to calculate a value, so it would be best to avoid it when possible.
+* `FileStr{F}` returns a `String` of the file specified in the `F` argument, useful for embedding large text strings in the code in a legible way. If the file doesn't exist, this is a compile-time failure.
+* `Concat{A, B}` returns the `String` concatenation of two other `String`s, and fails if they are not a `String`.
+* `Env{K}` reads the environment variable `K` at compile-time and returns the value as a `String`. It is a compile-time failure if the value does not exist.
+* `EnvExists{K}` returns a `Bool` indicating if the environment variable key exists.
+* `Fail{M}` defines a failure type. The `M` must be a `String` that is the failure message. If this type is ever evaluated this message is emitted by the compiler for the developer. It is therefore only useful within conditional types.
+* `If{C, A, B}` is a conditional type. `C` must be a `Bool` while `A` and `B` can be any type. `A` is selected if `C` is `true`, otherwise `B` is selected.
+* `If{C, T}` is a variant of the conditional type above, except it expects a two-element `Tuple` instead of two distinct types. The zero index element of the `Tuple` is the `true` path, and the one index element is the `false` path.
+* `Env{K, D}` a variant of the `Env` type that accepts a default `String` as a second argument in case the `K` key does not exist. Logically equivalent to `type Env{K, D} = If{EnvExists{K}, Env{K}, D};` but a limitation in the compiler prevents overloading an intrinsic type with a user-defined type, so it is provided as another intrinsic type at the moment.
+* `Neg{A}` negates the provided value. It may only be an `Int` or a `Float`. All other types are a compile-time error.
+* `Add{A, B}` adds `A` to `B`. They must both be `Int` or `Float`. Any other type or a mismatch of types is a compile-time failure.
+* `Sub{A, B}` subtracts `B` from `A`. They must both be `Int` or `Float`. Any other type or a mismatch of types is a compile-time failure.
+* `Mul{A, B}` multiplies `A` and `B`. They must both be `Int` or `Float`. Any other type or a mismatch of types is a compile-time failure.
+* `Div{A, B}` divides `A` by `B`. They must both be `Int` or `Float`. Any other type or a mismatch of types is a compile-time failure.
+* `Mod{A, B}` performs the modulus (remainder) of `A` by `B`. They must both be `Int` only. Any other type is a compile-time failure.
+* `Pow{A, B}` raises `A` to the power of `B`. They must both be `Int` or both be `Float`. Any other type or a mismatch of types is a compile-time failure.
+* `Min{A, B}` returns the minimum of `A` and `B`. They must both be `Int` or both be `Float`. Any other type or a mismatch of types is a compile-time failure.
+* `Max{A, B}` returns the maximum of `A` and `B`. They must both be `Int` or both be `Float`. Any other type or a mismatch of types is a compile-time failure.
+* `Not{A}` performs a boolean or bitwise NOT. `A` must be `Int` or `Bool`. Any other type is a compile-time failure.
+* `And{A, B}` performs a boolean or bitwise AND. They must both be `Int` or both be `Bool`. Any other type or a mismatch of types is a compile-time failure.
+* `Or{A, B}` performs a boolean or bitwise OR. They must both be `Int` or both be `Bool`. Any other type or a mismatch of types is a compile-time failure.
+* `Xor{A, B}` performs a boolean or bitwise XOR. They must both be `Int` or both be `Bool`. Any other type or a mismatch of types is a compile-time failure.
+* `Nand{A, B}` performs a boolean or bitwise NAND. They must both be `Int` or both be `Bool`. Any other type or a mismatch of types is a compile-time failure.
+* `Nor{A, B}` performs a boolean or bitwise NOR. They must both be `Int` or both be `Bool`. Any other type or a mismatch of types is a compile-time failure.
+* `Xnor{A, B}` performs a boolean or bitwise XNOR. They must both be `Int` or both be `Bool`. Any other type or a mismatch of types is a compile-time failure.
+* `Eq{A, B}` returns a `Bool` if `A` and `B` are the same. Only returns `true` if both are the same `Int`, `Float`, `Bool`, or `String` value, `false` otherwise.
+* `Neq{A, B}` returns a `Bool` if `A` and `B` are the not the same. Only returns `false` if both are the `Int`, `Float`, `Bool`, or `String` values that differ, `true` otherwise.
+* `Lt{A, B}` returns `true` if both are `Int` or `Float` and `A` is less than `B`, returns `false` otherwise.
+* `Lte{A, B}` returns `true` if both are `Int` or `Float` and `A` is less than or equal to `B`, returns `false` otherwise.
+* `Gt{A, B}` returns `true` if both are `Int` or `Float` and `A` is greater than `B`, returns `false` otherwise.
+* `Gte{A, B}` returns `true` if both are `Int` or `Float` and `A` is greater than or equal to `B`, returns `false` otherwise.
+
+### Constructed Types
+
+Beyond the "Type" types above, the majority of the "every day useful" types are constructed types in Alan. This will be broken into a few categories: Configuration types, Optional types, Primitive types, Utility types, and GPGPU types. This is the order these different types are defined within the root scope definition (because believe it or not, the Primitive types can't be bound without the Configuration types already defined, for instance).
+
+#### Configuration Types
+
+* `Test` is a `Bool` that indicates whether or not the program is being compiled as a test.
+* `Release` is a `Bool` that indicates whether or not the program is being compiled as a release build.
+* `Debug` is a `Bool` that indicates whether or not the program is being compiled as a debug build. (Currently, this is unused. You can't make a `Debug` build, yet.)
+* `Rs` is a `Bool` that indicates if the host language is Rust or not.
+* `Js` is a `Bool` that indicates if the host language is Javascript or not. (Currently always the inverse of `Rs`, but if more target languages are added, not always the case, so this is included for completeness.)
+* `Lin` is a `Bool` that indicates if the target platform is Linux.
+* `Win` is a `Bool` that indicates if the target platform is Windows.
+* `Mac` is a `Bool` that indicates if the target platform is MacOS.
+* `Browser` is a `Bool` that indicates if the target platform is a web browser. (Currently always the same as `Js`, but that may not always be true in the future.)
+* `RootBacking` is the reference to Alan standard library support library for the host language you are targeting. Everything within it *should* be bound for you already, so it should simply be an implementation detail.
+
+#### Optional Types
+
+* `void` is an alias for `()`, a group of nothing, and defines a type that has no value.
+* `Self{T}` is an alias for `T`, allowing for an operator that should have zero impact on the resulting output (and is used to provide a cleaner-looking operator syntax for the `Buffer{T, S}` type.
+* `Error` is the special error type for Alan. Rather than go with the overly complicated conversion of error types in Rust in order to bubble up errors through your API, this singular `Error` type works more like Javascript's `Error`. It is planned to provide a mechanism to attach metadata to the `Error` beyond the basic error message, but this has not been fleshed out, yet.
+* `Fallible{T}` is `T | Error`. It's similar in concept to `Result<T, E>` in Rust, but the error type cannot be chosen, it is always `Error`. There are special built-in functions to work with this type.
+* `Maybe{T}` is `T | ()`. It is similar in concept to `Option<T>` in Rust. There are special built-in functions to work with this type (and most are identical to those for `Fallible{T}`).
+
+#### Primitive Types
+
+* `f32` constructs a 32-bit IEEE-754 floating point number.
+* `f64` constructs a 64-bit IEEE-754 floating point number.
+* `u8` constructs an 8-bit unsigned integer. (0 to 255)
+* `u16` constructs a 16-bit unsigned integer. (0 to 65_535)
+* `u32` constructs a 32-bit unsigned integer. (0 to 4_294_967_295)
+* `u64` constructs a 64-bit unsigned integer. (0 to 18_446_744_073_709_551_615)
+* `i8` constructs an 8-bit signed integer. (-128 to 127)
+* `i16` constructs a 16-bit signed integer. (-32_768 to 32_767)
+* `i32` constructs a 32-bit signed integer. (-2_147_483_648 to 2_147_483_647)
+* `i64` constructs a 64-bit signed integer. (-9_223_372_036_854_775_808 to 9_223_372_036_854_775_807)
+* `string` constructs a UTF-8 string. (Note: `String` is a compile-time string, while `string` is a run-time string. The default constructor function for a `String` produces a `string`.)
+* `bool` constructs a boolean. (Note: `Bool` is a compile-time boolean, while `bool` is a run-time boolean. The default constructor function for a `Bool` produces a `bool`.)
+
+#### Utility Types
+
+* `ExitCode` is a special type that the `main` function may return to indicate a non-successful execution to the parent process.
+* `Instant` and `Duration` are bound from Rust when compiling to Rust to allow for performance checking at run-time in Rust. `Performance` is similarly bound when compiling to Javascript for those purposes there. These types are not unified, but a small collection of functions with very similar calling structure allows one set or the other to be used efficiently in your code.
+* `uuid` provides a UUIDv4 type. (v4 is the correct choice for a UUID the vast majority of the time. If you *really* need a different kind, you need to BYOB.)
+* `Dict{K, V}` is a dictionary type. It maintains key insertion order when serialized to an `Array{(K, V)}` or similar.
+* `Set{V}` is a set type. It does not maintain insertion order.
+* `Tree{T}` is a tree type. It allows recursive-like data structures without an actually recursive type.
+* `Node{T}` is a node type. It represents a singular node within a tree.
+* `Testing` is a special type that only exists when `Test` is true, and is used for defining a test suite to execute during the test.
+
+#### GPGPU Types
+
+* `BufferUsages` is a type indicating how a GPU Buffer's memory may be accessed. The vast majority of the time you will not need to use this directly, but it is available for unusual needs.
+* `GBuffer` is the GPU Buffer type. It represents a block of memory and currently is not a generic type, though it should be. (This is one of the last blockers of Alan v0.2.0 being released.) It it somewhere in between an `Array{T}` and `Buffer{T, S}`: it is sized at run-time, but once created its size may not be altered.
+* `GPGPU` is a type representing work to do on the GPU. It can be constructed manually but is meant to be handled by other built-in functions, instead.
+* `WgpuType{N}` is a meta-type for defining an AST node for the various primitive GPU types. By being a singular generic type the primary `GPGPU` constructor function `build` can accept any of them and successfully build WGSL shadercode that eventually produces the desired value of the desired type.
+* `WgpuTypeMap` is a currently-unused mapping of GPU internal primitive types to CPU primitive types.
+* `gu32` is a GPU 32-bit unsigned integer.
+* `gi32` is a GPU 32-bit signed integer.
+* `gf32` is a GPU 32-bit IEEE-754 floating point number.
+* `gbool` is a GPU boolean.
+* `gvec2u` is a 2-element unsigned integer vector.
+* `gvec2i` is a 2-element signed integer vector.
+* `gvec2f` is a 2-element floating point vector.
+* `gvec2b` is a 2-element boolean vector.
+* `gvec3u` is a 3-element unsigned integer vector.
+* `gvec3i` is a 3-element signed integer vector.
+* `gvec3f` is a 3-element floating point vector.
+* `gvec3b` is a 3-element boolean vector.
+* `gvec4u` is a 4-element unsigned integer vector.
+* `gvec4i` is a 4-element signed integer vector.
+* `gvec4f` is a 4-element floating point vector.
+* `gvec4b` is a 4-element boolean vector.
+* `gmat2x2f` is a 2x2 matrix (all matrices are floating point in WGSL)
+* `gmat2x3f` is a 2x3 matrix.
+* `gmat2x4f` is a 2x4 matrix.
+* `gmat3x2f` is a 3x2 matrix.
+* `gmat3x3f` is a 3x3 matrix.
+* `gmat3x4f` is a 3x4 matrix.
+* `gmat4x2f` is a 4x2 matrix.
+* `gmat4x3f` is a 4x3 matrix.
+* `gmat4x4f` is a 4x4 matrix.
+* `Window` is a special type for configuring a window for rendering to the screen (rather than doing GPGPU work).
+* `Frame` is a special type for accessing the context on the GPU for the rendering of an individual frame to render.
 
 ## Type Operators
 
