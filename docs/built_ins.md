@@ -186,7 +186,50 @@ Beyond the "Type" types above, the majority of the "every day useful" types are 
 
 ## Type Operators
 
-TODO
+Many, but not all, of the built-in types are bound to operators in the type system. Some of these, like `Tuple{A, ...}`, become symbols you don't normally expect of operators (in this case, it becomes `,`). Operators also have a precedence level. In Alan the higher the precedence number, the more "greedy" it is, so multiplication has a higher precedence level than addition, for example. Tie-breaker precedence is left-to-right evaluation.
+
+Alan has a special type operator syntax so you can declare new operators for the type system and specify the precedence they should take; but these *cannot* be exported out of your module, they need to be re-declared in any file you wish to use the custom type operator, but this isn't a huge burden as they are all one-line, top-level statements and deviation from the standard type syntax should be explicit, anyways.
+
+This means the only type operator precedence table you need to know is the one baked into the root scope of every module, listed below:
+
+| Type         | -fix    | Symbol | Precedence |
+| :----------- | :------ | :----: | ---------: |
+| `Self`       | Postfix | `]`    | 11         |
+| `Prop`       | Infix   | `.`    | 6          |
+| `Array`      | Postfix | `[]`   | 5          |
+| `Fallible`   | Postfix | `!`    | 5          |
+| `Maybe`      | Postfix | `?`    | 5          |
+| `Not`        | Prefix  | `~`    | 5          |
+| `Pow`        | Infix   | `**`   | 5          |
+| `And`        | Infix   | `&&`   | 4          |
+| `Div`        | Infix   | `/`    | 4          |
+| `Function`   | Infix   | `->`   | 4          |
+| `Mod`        | Infix   | `%`    | 4          |
+| `Mul`        | Infix   | `*`    | 4          |
+| `Nand`       | Infix   | `!&`   | 4          |
+| `Add`        | Infix   | `+`    | 3          |
+| `Nor`        | Infix   | `!|`   | 3          |
+| `Or`         | Infix   | `||`   | 3          |
+| `Sub`        | Infix   | `-`    | 3          |
+| `Xnor`       | Infix   | `!^`   | 3          |
+| `Xor`        | Infix   | `^`    | 3          |
+| `Buffer`     | Infix   | `[`    | 2          |
+| `Dependency` | Infix   | `@`    | 1          |
+| `Eq`         | Infix   | `==`   | 1          |
+| `Field`      | Infix   | `:`    | 1          |
+| `Gt`         | Infix   | `>`    | 1          |
+| `Gte`        | Infix   | `>=`   | 1          |
+| `If`         | Infix   | `:?`   | 1          |
+| `Lt`         | Infix   | `<`    | 1          |
+| `Lte`        | Infix   | `<=`   | 1          |
+| `Neq`        | Infix   | `!=`   | 1          |
+| `AnyOf`      | Infix   | `&`    | 0          |
+| `Call`       | Infix   | `::`   | 0          |
+| `Either`     | Infix   | `|`    | 0          |
+| `From`       | Prefix  | `<--`  | 0          |
+| `Import`     | Infix   | `<-`   | 0          |
+| `Tuple`      | Infix   | `,`    | 0          |
+
 
 ## Functions
 
