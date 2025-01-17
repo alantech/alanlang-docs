@@ -253,23 +253,290 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### Functions for (potentially) every type
 
-TODO
+| Name       | Type               | Description                |
+| :--------- | :----------------- | :---------------------------------------------------------- |
+| `clone{T}` | `T -> T`           | Creates a copy of the data                                  |
+| `void{T}`  | `T -> void`        | Consumes a value, useful for one-line side-effect functions |
+| `void`     | `() -> void`       | Explicitly returns nothing                                  |
+| `store{T}` | `(Mut{T}, T) -> T` | Replaces the first arg with the second, returning the first |
+
 
 ### Fallbile, Maybe, and Either functions
 
-TODO
+| Name          | Type                | Description                                     | Explicit |
+| :------------ | :------------------ | :---------------------------------------------- | :------: |
+| `Maybe{T}`    | `T -> T?`           | Wraps a value in a `Maybe{T}`                   | ❌       |
+| `Maybe{T}`    | `() -> T?`          | Wraps a `void` in a `Maybe{T}`                  | ❌       |
+| `Maybe{T}`    | `T! -> T?`          | Converts a `Fallible` into a `Maybe`            | ✅       |
+| `Fallible{T}` | `T -> T!`           | Wraps a value in a `Fallible{T}`                | ❌       |
+| `Fallible{T}` | `Error -> T!`       | Wraps an `Error` in a `Fallible{T}`             | ❌       |
+| `Fallible{T}` | `(T?, Error) -> T!` | Converts a `Maybe` into a `Fallible`            | ✅       |
+| `getOr{T, U}` | `(U, T) -> T`       | Converts a value of type `U` to `T` or defaults | ✅       |
+| `getOr{T}`    | `(T?, T) -> T`      | Unwraps a `Maybe{T}` or returns a default `T`   | ✅       |
+| `getOr{T}`    | `(T!, T) -> T`      | Unwraps a `Fallible{T}` or returns a default `T`| ✅       |
+| `getOrExit{T}`| `T! -> T`           | Unwraps a `Fallible{T}` or halts the program    | ✅       |
+| `getOrExit{T}`| `T? -> T`           | Unwraps a `Maybe{T}` or halts the program       | ✅       |
+| `Error{T}`    | `string -> T!`      | Turns an error message into a `Fallible{T}`     | ✅       |
+| `Error`       | `string -> Error`   | Turns an error message into an `Error`          | ✅       |
+| `exists{T}`   | `T? -> bool`        | Returns whether a `Maybe{T}` has a value        | ✅       |
+| `string`      | `Error -> string`   | Returns the error message from the `Error`      | ✅       |
 
 ### Primitive type casting functions
 
-TODO
+| Name   | Type             | Description                                                        |
+| :----- | :--------------- | :----------------------------------------------------------------- |
+| `f32`  | `i8 -> f32`      | Casts the `i8` integer into an `f32`                               |
+| `f32`  | `i16 -> f32`     | Casts the `i16` integer into an `f32`                              |
+| `f32`  | `i32 -> f32`     | Casts the `i32` integer into an `f32`                              |
+| `f32`  | `i64 -> f32`     | Casts the `i64` integer into an `f32`                              |
+| `f32`  | `u8 -> f32`      | Casts the `u8` integer into an `f32`                               |
+| `f32`  | `u16 -> f32`     | Casts the `u16` integer into an `f32`                              |
+| `f32`  | `u32 -> f32`     | Casts the `u32` integer into an `f32`                              |
+| `f32`  | `u64 -> f32`     | Casts the `u64` integer into an `f32`                              |
+| `f32`  | `f32 -> f32`     | Returns the original `f32` back                                    |
+| `f32`  | `f64 -> f32`     | Casts the `f64` float into an `f32`                                |
+| `f32`  | `string -> f32!` | Parses the `string` for an `f32`, returns `f32!` in case it cannot |
+| `f64`  | `i8 -> f64`      | Casts the `i8` integer into an `f64`                               |
+| `f64`  | `i16 -> f64`     | Casts the `i16` integer into an `f64`                              |
+| `f64`  | `i32 -> f64`     | Casts the `i32` integer into an `f64`                              |
+| `f64`  | `i64 -> f64`     | Casts the `i64` integer into an `f64`                              |
+| `f64`  | `u8 -> f64`      | Casts the `u8` integer into an `f64`                               |
+| `f64`  | `u16 -> f64`     | Casts the `u16` integer into an `f64`                              |
+| `f64`  | `u32 -> f64`     | Casts the `u32` integer into an `f64`                              |
+| `f64`  | `u64 -> f64`     | Casts the `u64` integer into an `f64`                              |
+| `f64`  | `f32 -> f64`     | Casts the `f32` float into an `f64`                                |
+| `f64`  | `f64 -> f64`     | Returns the original `f64` back                                    |
+| `f64`  | `string -> f64!` | Parses the `string` for an `f64`, returns `f64!` in case it cannot |
+| `u8`   | `i8 -> u8`       | Casts the `i8` integer into a `u8`                                 |
+| `u8`   | `i16 -> u8`      | Casts the `i16` integer into a `u8`                                |
+| `u8`   | `i32 -> u8`      | Casts the `i32` integer into a `u8`                                |
+| `u8`   | `i64 -> u8`      | Casts the `i64` integer into a `u8`                                |
+| `u8`   | `u8 -> u8`       | Returns the original `u8` back                                     |
+| `u8`   | `u16 -> u8`      | Casts the `u16` itneger into a `u8`                                |
+| `u8`   | `u32 -> u8`      | Casts the `u32` integer into a `u8`                                |
+| `u8`   | `u64 -> u8`      | Casts the `u64` integer into a `u8`                                |
+| `u8`   | `f32 -> u8`      | Casts the `f32` float into a `u8`                                  |
+| `u8`   | `f64 -> u8`      | Casts the `f64` float into a `u8`                                  |
+| `u8`   | `string -> u8!`  | Parses the `string` for a `u8`, returns `u8!` in case it cannot    |
+| `u16`  | `i8 -> u16`      | Casts the `i8` integer into a `u16`                                |
+| `u16`  | `i16 -> u16`     | Casts the `i16` integer into a `u16`                               |
+| `u16`  | `i32 -> u16`     | Casts the `i32` integer into a `u16`                               |
+| `u16`  | `i64 -> u16`     | Casts the `i64` integer into a `u16`                               |
+| `u16`  | `u8 -> u16`      | Casts the `u8` itneger into a `u16`                                |
+| `u16`  | `u16 -> u16`     | Returns the original `u16` back                                    |
+| `u16`  | `u32 -> u16`     | Casts the `u32` integer into a `u16`                               |
+| `u16`  | `u64 -> u16`     | Casts the `u64` integer into a `u16`                               |
+| `u16`  | `f32 -> u16`     | Casts the `f32` float into a `u16`                                 |
+| `u16`  | `f64 -> u16`     | Casts the `f64` float into a `u16`                                 |
+| `u16`  | `string -> u16!` | Parses the `string` for a `u16`, returns `u16!` in case it cannot  |
+| `u32`  | `i8 -> u32`      | Casts the `i8` integer into a `u32`                                |
+| `u32`  | `i16 -> u32`     | Casts the `i16` integer into a `u32`                               |
+| `u32`  | `i32 -> u32`     | Casts the `i32` integer into a `u32`                               |
+| `u32`  | `i64 -> u32`     | Casts the `i64` integer into a `u32`                               |
+| `u32`  | `u8 -> u32`      | Casts the `u8` itneger into a `u32`                                |
+| `u32`  | `u16 -> u32`     | Casts the `u16` integer into a `u32`                               |
+| `u32`  | `u32 -> u32`     | Returns the original `u32` back                                    |
+| `u32`  | `u64 -> u32`     | Casts the `u64` integer into a `u32`                               |
+| `u32`  | `f32 -> u32`     | Casts the `f32` float into a `u32`                                 |
+| `u32`  | `f64 -> u32`     | Casts the `f64` float into a `u32`                                 |
+| `u32`  | `string -> u32!` | Parses the `string` for a `u32`, returns `u32!` in case it cannot  |
+| `u64`  | `i8 -> u64`      | Casts the `i8` integer into a `u64`                                |
+| `u64`  | `i16 -> u64`     | Casts the `i16` integer into a `u64`                               |
+| `u64`  | `i32 -> u64`     | Casts the `i32` integer into a `u64`                               |
+| `u64`  | `i64 -> u64`     | Casts the `i64` integer into a `u64`                               |
+| `u64`  | `u8 -> u64`      | Casts the `u8` itneger into a `u64`                                |
+| `u64`  | `u16 -> u64`     | Casts the `u16` integer into a `u64`                               |
+| `u64`  | `u32 -> u64`     | Casts the `u32` integer into a `u64`                               |
+| `u64`  | `u64 -> u64`     | Returns the original `u64` back                                    |
+| `u64`  | `f32 -> u64`     | Casts the `f32` float into a `u64`                                 |
+| `u64`  | `f64 -> u64`     | Casts the `f64` float into a `u64`                                 |
+| `u64`  | `string -> u64!` | Parses the `string` for a `u64`, returns `u64!` in case it cannot  |
+| `i8`   | `i8 -> i8`       | Returns the original `i8` back                                     |
+| `i8`   | `i16 -> i8`      | Casts the `i16` integer into a `i8`                                |
+| `i8`   | `i32 -> i8`      | Casts the `i32` integer into a `i8`                                |
+| `i8`   | `i64 -> i8`      | Casts the `i64` integer into a `i8`                                |
+| `i8`   | `u8 -> i8`       | Casts the `u8` integer into a `i8`                                 |
+| `i8`   | `u16 -> i8`      | Casts the `u16` itneger into a `i8`                                |
+| `i8`   | `u32 -> i8`      | Casts the `u32` integer into a `i8`                                |
+| `i8`   | `u64 -> i8`      | Casts the `u64` integer into a `i8`                                |
+| `i8`   | `f32 -> i8`      | Casts the `f32` float into a `i8`                                  |
+| `i8`   | `f64 -> i8`      | Casts the `f64` float into a `i8`                                  |
+| `i8`   | `string -> i8!`  | Parses the `string` for a `i8`, returns `i8!` in case it cannot    |
+| `i16`  | `i8 -> i16`      | Casts the `i8` integer into a `i16`                                |
+| `i16`  | `i16 -> i16`     | Returns the original `i16` back                                    |
+| `i16`  | `i32 -> i16`     | Casts the `i32` integer into a `i16`                               |
+| `i16`  | `i64 -> i16`     | Casts the `i64` integer into a `i16`                               |
+| `i16`  | `u8 -> i16`      | Casts the `u8` integer into a `i16`                                |
+| `i16`  | `u16 -> i16`     | Casts the `u16` itneger into a `i16`                               |
+| `i16`  | `u32 -> i16`     | Casts the `u32` integer into a `i16`                               |
+| `i16`  | `u64 -> i16`     | Casts the `u64` integer into a `i16`                               |
+| `i16`  | `f32 -> i16`     | Casts the `f32` float into a `i16`                                 |
+| `i16`  | `f64 -> i16`     | Casts the `f64` float into a `i16`                                 |
+| `i16`  | `string -> i16!` | Parses the `string` for a `i16`, returns `i16!` in case it cannot  |
+| `i32`  | `i8 -> i32`      | Casts the `i8` integer into a `i32`                                |
+| `i32`  | `i16 -> i32`     | Casts the `i16` integer into a `i32`                               |
+| `i32`  | `i32 -> i32`     | Returns the original `i32` back                                    |
+| `i32`  | `i64 -> i32`     | Casts the `i64` integer into a `i32`                               |
+| `i32`  | `u8 -> i32`      | Casts the `u8` integer into a `i32`                                |
+| `i32`  | `u16 -> i32`     | Casts the `u16` itneger into a `i32`                               |
+| `i32`  | `u32 -> i32`     | Casts the `u32` integer into a `i32`                               |
+| `i32`  | `u64 -> i32`     | Casts the `u64` integer into a `i32`                               |
+| `i32`  | `f32 -> i32`     | Casts the `f32` float into a `i32`                                 |
+| `i32`  | `f64 -> i32`     | Casts the `f64` float into a `i32`                                 |
+| `i32`  | `string -> i32!` | Parses the `string` for a `i32`, returns `i32!` in case it cannot  |
+| `i64`  | `i8 -> i64`      | Casts the `i8` integer into a `i64`                                |
+| `i64`  | `i16 -> i64`     | Casts the `i16` integer into a `i64`                               |
+| `i64`  | `i32 -> i64`     | Casts the `i32` integer into a `i64`                               |
+| `i64`  | `i64 -> i64`     | Returns the original `i64` back                                    |
+| `i64`  | `u8 -> i64`      | Casts the `u8` integer into a `i64`                                |
+| `i64`  | `u16 -> i64`     | Casts the `u16` itneger into a `i64`                               |
+| `i64`  | `u32 -> i64`     | Casts the `u32` integer into a `i64`                               |
+| `i64`  | `u64 -> i64`     | Casts the `u64` integer into a `i64`                               |
+| `i64`  | `f32 -> i64`     | Casts the `f32` float into a `i64`                                 |
+| `i64`  | `f64 -> i64`     | Casts the `f64` float into a `i64`                                 |
+| `i64`  | `string -> i64!` | Parses the `string` for a `i64`, returns `i64!` in case it cannot  |
+| `bool` | `i8 -> bool`     | Casts the `i8` to a `bool`                                         |
+| `bool` | `i16 -> bool`    | Casts the `i16` to a `bool`                                        |
+| `bool` | `i32 -> bool`    | Casts the `i32` to a `bool`                                        |
+| `bool` | `i64 -> bool`    | Casts the `i64` to a `bool`                                        |
+| `bool` | `u8 -> bool`     | Casts the `u8` to a `bool`                                         |
+| `bool` | `u16 -> bool`    | Casts the `u16` to a `bool`                                        |
+| `bool` | `u32 -> bool`    | Casts the `u32` to a `bool`                                        |
+| `bool` | `u64 -> bool`    | Casts the `u64` to a `bool`                                        |
+| `bool` | `f32 -> bool`    | Casts the `f32` to a `bool`                                        |
+| `bool` | `f64 -> bool`    | Casts the `f64` to a `bool`                                        |
+| `bool` | `string -> bool` | Casts the `string` to a `bool` (`'true'` is `true`, else `false`)  |
 
 ### Boolean-related functions
 
-TODO
+| Name    | Type                               | Description                                                   |
+| :------ | :--------------------------------- | :------------------------------------------------------------ |
+| `and`   | `(bool, bool) -> bool`             | Boolean AND (`true` if both inputs `true`)                    |
+| `or`    | `(bool, bool) -> bool`             | Boolean OR  (`true` if any input `true`)                      |
+| `xor`   | `(bool, bool) -> bool`             | Boolean XOR (`true` if only one input `true`)                 |
+| `not`   | `bool -> bool`                     | Boolean NOT (flips `true` and `false`)                        |
+| `nand`  | `(bool, bool) -> bool`             | Boolean NAND (`true` if any input `false`)                    |
+| `nor`   | `(bool, bool) -> bool`             | Boolean NOR (`true` if both inputs `false`)                   |
+| `xnor`  | `(bool, bool) -> bool`             | Boolean XNOR (`true` if both inputs the same)                 |
+| `eq`    | `(bool, bool) -> bool`             | Equals (`true` if both inputs the same, see `xnor`)           |
+| `neq`   | `(bool, bool) -> bool`             | Not Equals (`true` if both inputs differ, see `xor`)          |
+| `if{T}` | `(bool, T) -> T?`                  | Returns a `Maybe{T}` that has the specified value or not      |
+| `if{T}` | `(bool, T, T) -> T`                | Returns the first or second `T` depending on the `bool`       |
+| `if{T}` | `(bool, () -> T) -> T?`            | Returns a `Maybe{T}` that may have the output of the callback |
+| `if{T}` | `(bool, () -> T, () -> T) -> T`    | Returns the first or second `T` function result               |
+| `if`    | `(bool, () -> ()) -> ()`           | Runs the side-effect function only if `true`                  |
+| `if`    | `(bool, () -> (), () -> ()) -> ()` | Runs either the first or second side-effect function          |
 
 ### Float-related functions
 
-TODO
+| Name          | Type                     | Description                                                              |
+| :------------ | :----------------------- | :----------------------------------------------------------------------- |
+| `add`         | `(f32, f32) -> f32`      | Adds two `f32`s together                                                 |
+| `sub`         | `(f32, f32) -> f32`      | Subtracts two `f32`s                                                     |
+| `mul`         | `(f32, f32) -> f32`      | Multiplies two `f32`s                                                    |
+| `div`         | `(f32, f32) -> f32`      | Divides two `f32`s                                                       |
+| `sqrt`        | `f32 -> f32`             | Returns the square root of an `f32`                                      |
+| `pow`         | `(f32, f32) -> f32`      | Raises the first `f32` to the power of the second                        |
+| `abs`         | `f32 -> f32`             | Returns the positive version of the `f32`                                |
+| `neg`         | `f32 -> f32`             | Multiplies the `f32` by `-1`                                             |
+| `eq`          | `(f32, f32) -> bool`     | Returns `true` if the two `f32`s are equal                               |
+| `neq`         | `(f32, f32) -> bool`     | Returns `true` if the two `f32`s are not equal                           |
+| `lt`          | `(f32, f32) -> bool`     | Returns `true` if the first `f32` is less than the second                |
+| `lte`         | `(f32, f32) -> bool`     | Returns `true` if the first `f32` is less than or equal to the second    |
+| `gt`          | `(f32, f32) -> bool`     | Returns `true` if the first `f32` is greater than the second             |
+| `gte`         | `(f32, f32) -> bool`     | Returns `true` if the first `f32` is greater than or equal to the second |
+| `min`         | `(f32, f32) -> f32`      | Returns the smaller `f32`                                                |
+| `max`         | `(f32, f32) -> f32`      | Returns the larger `f32`                                                 |
+| `clamp`       | `(f32, f32, f32) -> f32` | Clamps the first `f32` to be above the second and below the third        |
+| `saturate`    | `f32 -> f32`             | Clamps the `f32` between `0` and `1`                                     |
+| `floor`       | `f32 -> f32`             | Rounds the `f32` down to the nearest integer                             |
+| `ceil`        | `f32 -> f32`             | Rounds the `f32` up to the nearest integer                               |
+| `acos`        | `f32 -> f32`             | Calculates the arccosine of the `f32`                                    |
+| `acosh`       | `f32 -> f32`             | Calculates the hyperbolic arccosine of the `f32`                         |
+| `asin`        | `f32 -> f32`             | Calculates the arcsine of the `f32`                                      |
+| `asinh`       | `f32 -> f32`             | Calculates the hyperbolic arcsine of the `f32`                           |
+| `atan`        | `f32 -> f32`             | Calculates the arctangent of the `f32`                                   |
+| `atan2`       | `(f32, f32) -> f32`      | Calculates the arctangent of the two sides defined by the `f32`s         |
+| `cos`         | `f32 -> f32`             | Calculates the cosine of the `f32`                                       |
+| `cosh`        | `f32 -> f32`             | Calculates the hyperbolic cosine of the `f32`                            |
+| `sin`         | `f32 -> f32`             | Calculates the sine of the `f32`                                         |
+| `sinh`        | `f32 -> f32`             | Calculates the hyperbolic sine of the `f32`                              |
+| `tan`         | `f32 -> f32`             | Calculates the tangent of the `f32`                                      |
+| `tanh`        | `f32 -> f32`             | Calculates the hyperbolic tangent of the `f32`                           |
+| `exp`         | `f32 -> f32`             | Raises `e` to the power of the `f32`                                     |
+| `ln`          | `f32 -> f32`             | Calculates the natural log of the `f32`                                  |
+| `log2`        | `f32 -> f32`             | Calculates the log base 2 of the `f32`                                   |
+| `log10`       | `f32 -> f32`             | Calculates the log base 10 of the `f32`                                  |
+| `sec`         | `f32 -> f32`             | Calculates the secant of the `f32`                                       |
+| `csc`         | `f32 -> f32`             | Calculates the cosecant of the `f32`                                     |
+| `cot`         | `f32 -> f32`             | Calculates the cotangent of the `f32`                                    |
+| `asec`        | `f32 -> f32`             | Calculates the arcsecant of the `f32`                                    |
+| `acsc`        | `f32 -> f32`             | Calculates the arccosecant of the `f32`                                  |
+| `acot`        | `f32 -> f32`             | Calculates the arccotangent of the `f32`                                 |
+| `sech`        | `f32 -> f32`             | Calculates the hyperbolic secant of the `f32`                            |
+| `csch`        | `f32 -> f32`             | Calculates the hyperbolic cosecant of the `f32`                          |
+| `coth`        | `f32 -> f32`             | Calculates the hyperbolic cotangent of the `f32`                         |
+| `asech`       | `f32 -> f32`             | Calculates the hyperbolic arcsecant of the `f32`                         |
+| `acsch`       | `f32 -> f32`             | Calculates the hyperbolic arccosecant of the `f32`                       |
+| `acoth`       | `f32 -> f32`             | Calculates the hyperbolic arccotangent of the `f32`                      |
+| `round`       | `f32 -> f32`             | Rounds the number to the nearest integer, ties break even                |
+| `magnitude`   | `f32 -> f32`             | Returns the positive version of the `f32`                                |
+| `inverseSqrt` | `f32 -> f32`             | Calculates the inverse square root (`1/sqrt(x)`) of the `f32`            |
+| `fma`         | `(f32, f32, f32) -> f32` | Calculates the fused multiply-add of the three `f32`s                    |
+| `fract`       | `f32 -> f32`             | Calculates the fractional component of the `f32`                         |
+| `add`         | `(f64, f64) -> f64`      | Adds two `f64`s together                                                 |
+| `sub`         | `(f64, f64) -> f64`      | Subtracts two `f64`s                                                     |
+| `mul`         | `(f64, f64) -> f64`      | Multiplies two `f64`s                                                    |
+| `div`         | `(f64, f64) -> f64`      | Divides two `f64`s                                                       |
+| `sqrt`        | `f64 -> f64`             | Returns the square root of an `f64`                                      |
+| `pow`         | `(f64, f64) -> f64`      | Raises the first `f64` to the power of the second                        |
+| `abs`         | `f64 -> f64`             | Returns the positive version of the `f64`                                |
+| `neg`         | `f64 -> f64`             | Multiplies the `f64` by `-1`                                             |
+| `eq`          | `(f64, f64) -> bool`     | Returns `true` if the two `f64`s are equal                               |
+| `neq`         | `(f64, f64) -> bool`     | Returns `true` if the two `f64`s are not equal                           |
+| `lt`          | `(f64, f64) -> bool`     | Returns `true` if the first `f64` is less than the second                |
+| `lte`         | `(f64, f64) -> bool`     | Returns `true` if the first `f64` is less than or equal to the second    |
+| `gt`          | `(f64, f64) -> bool`     | Returns `true` if the first `f64` is greater than the second             |
+| `gte`         | `(f64, f64) -> bool`     | Returns `true` if the first `f64` is greater than or equal to the second |
+| `min`         | `(f64, f64) -> f64`      | Returns the smaller `f64`                                                |
+| `max`         | `(f64, f64) -> f64`      | Returns the larger `f64`                                                 |
+| `clamp`       | `(f64, f64, f64) -> f64` | Clamps the first `f64` to be above the second and below the third        |
+| `saturate`    | `f64 -> f64`             | Clamps the `f64` between `0` and `1`                                     |
+| `floor`       | `f64 -> f64`             | Rounds the `f64` down to the nearest integer                             |
+| `ceil`        | `f64 -> f64`             | Rounds the `f64` up to the nearest integer                               |
+| `acos`        | `f64 -> f64`             | Calculates the arccosine of the `f64`                                    |
+| `acosh`       | `f64 -> f64`             | Calculates the hyperbolic arccosine of the `f64`                         |
+| `asin`        | `f64 -> f64`             | Calculates the arcsine of the `f64`                                      |
+| `asinh`       | `f64 -> f64`             | Calculates the hyperbolic arcsine of the `f64`                           |
+| `atan`        | `f64 -> f64`             | Calculates the arctangent of the `f64`                                   |
+| `atan2`       | `(f64, f64) -> f64`      | Calculates the arctangent of the two sides defined by the `f64`s         |
+| `cos`         | `f64 -> f64`             | Calculates the cosine of the `f64`                                       |
+| `cosh`        | `f64 -> f64`             | Calculates the hyperbolic cosine of the `f64`                            |
+| `sin`         | `f64 -> f64`             | Calculates the sine of the `f64`                                         |
+| `sinh`        | `f64 -> f64`             | Calculates the hyperbolic sine of the `f64`                              |
+| `tan`         | `f64 -> f64`             | Calculates the tangent of the `f64`                                      |
+| `tanh`        | `f64 -> f64`             | Calculates the hyperbolic tangent of the `f64`                           |
+| `exp`         | `f64 -> f64`             | Raises `e` to the power of the `f64`                                     |
+| `ln`          | `f64 -> f64`             | Calculates the natural log of the `f64`                                  |
+| `log2`        | `f64 -> f64`             | Calculates the log base 2 of the `f64`                                   |
+| `log10`       | `f64 -> f64`             | Calculates the log base 10 of the `f64`                                  |
+| `sec`         | `f64 -> f64`             | Calculates the secant of the `f64`                                       |
+| `csc`         | `f64 -> f64`             | Calculates the cosecant of the `f64`                                     |
+| `cot`         | `f64 -> f64`             | Calculates the cotangent of the `f64`                                    |
+| `asec`        | `f64 -> f64`             | Calculates the arcsecant of the `f64`                                    |
+| `acsc`        | `f64 -> f64`             | Calculates the arccosecant of the `f64`                                  |
+| `acot`        | `f64 -> f64`             | Calculates the arccotangent of the `f64`                                 |
+| `sech`        | `f64 -> f64`             | Calculates the hyperbolic secant of the `f64`                            |
+| `csch`        | `f64 -> f64`             | Calculates the hyperbolic cosecant of the `f64`                          |
+| `coth`        | `f64 -> f64`             | Calculates the hyperbolic cotangent of the `f64`                         |
+| `asech`       | `f64 -> f64`             | Calculates the hyperbolic arcsecant of the `f64`                         |
+| `acsch`       | `f64 -> f64`             | Calculates the hyperbolic arccosecant of the `f64`                       |
+| `acoth`       | `f64 -> f64`             | Calculates the hyperbolic arccotangent of the `f64`                      |
+| `round`       | `f64 -> f64`             | Rounds the number to the nearest integer, ties break even                |
+| `magnitude`   | `f64 -> f64`             | Returns the positive version of the `f64`                                |
+| `inverseSqrt` | `f64 -> f64`             | Calculates the inverse square root (`1/sqrt(x)`) of the `f64`            |
+| `fma`         | `(f64, f64, f64) -> f64` | Calculates the fused multiply-add of the three `f64`s                    |
+| `fract`       | `f64 -> f64`             | Calculates the fractional component of the `f64`                         |
 
 ### Unsigned Integer-related functions
 
