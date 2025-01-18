@@ -814,7 +814,40 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### String-related functions
 
-TODO
+| Name      | Type                                 | Description                                                                        |
+| :-------- | :----------------------------------- | :--------------------------------------------------------------------------------- |
+| `string`  | `f32 -> string`                      | Converts the `f32` to a `string`                                                   |
+| `string`  | `f64 -> string`                      | Converts the `f64` to a `string`                                                   |
+| `string`  | `u8 -> string`                       | Converts the `u8` to a `string`                                                    |
+| `string`  | `u16 -> string`                      | Converts the `u16` to a `string`                                                   |
+| `string`  | `u32 -> string`                      | Converts the `u32` to a `string`                                                   |
+| `string`  | `u64 -> string`                      | Converts the `u64` to a `string`                                                   |
+| `string`  | `i8 -> string`                       | Converts the `i8` to a `string`                                                    |
+| `string`  | `i16 -> string`                      | Converts the `i16` to a `string`                                                   |
+| `string`  | `i32 -> string`                      | Converts the `i32` to a `string`                                                   |
+| `string`  | `i64 -> string`                      | Converts the `i64` to a `string`                                                   |
+| `string`  | `(f32, i64) -> string`               | Converts the `f32` to a string with the number of decimals specified by the `i64`  |
+| `string`  | `(f64, i64) -> string`               | Converts the `f64` to a string with the number of decimals specified by the `i64`  |
+| `string`  | `bool -> string`                     | Converts the `bool` to a `string`                                                  |
+| `string`  | `string -> string`                   | Returns the original `string`                                                      |
+| `concat`  | `(string, string) -> string`         | Concatenates the two `string`s into a new `string`                                 |
+| `repeat`  | `(string, i64) -> string`            | Repeats the `string` the number of times specified by the `i64`                    |
+| `replace` | `(string, string, string) -> string` | Replaces instances of the second `string` with the third in the first              |
+| `split`   | `(string, string) -> string[]`       | Splits the first `string` by the second, returning an array of smaller `string`s   |
+| `len`     | `string -> i64`                      | Returns the length of the `string`                                                 |
+| `get`     | `(string, i64) -> string!`           | Returns the character in the `string` at the index specified by the `i64` or fails |
+| `trim`    | `string -> string`                   | Removes whitespace from the beginning and end of the `string`                      |
+| `index`   | `(string, string) -> i64!`           | Returns the index where the second `string` starts in the first or fails           |
+| `eq`      | `(string, string) -> bool`           | Returns `true` if the two `string`s are the same                                   |
+| `neq`     | `(string, string) -> bool`           | Returns `true` if the two `string`s differ                                         |
+| `lt`      | `(string, string) -> bool`           | Returns `true` if the first `string` sorts earlier than the second                 |
+| `lte`     | `(string, string) -> bool`           | Returns `true` if the two `strings`s are the same or the first sorts earlier       |
+| `gt`      | `(string, string) -> bool`           | Returns `true` if the first `string` sorts later than the second                   |
+| `gte`     | `(string, string) -> bool`           | Returns `true` if the two `string`s are the same or the first sorts later          |
+| `min`     | `(string, string) -> string`         | Returns the `string` that sorts earlier                                            |
+| `max`     | `(string, string) -> string`         | Returns the `string` that sorts later                                              |
+| `join`    | `(string[], string) -> string`       | Joins the array of `string[]`s by the `string` into a new `string`                 |
+| `join{S}` | `(string[S], string) -> string`      | Joins the buffer of `string[S]`s by the `string` into a new `string`               |
 
 ### Array-related functions
 
