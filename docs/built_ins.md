@@ -673,7 +673,144 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### Signed Integer-related functions
 
-TODO
+| Name          | Type                          | Description                                                                         |
+| :------------ | :---------------------------- | :---------------------------------------------------------------------------------- |
+| `add`         | `(i8, i8) -> i8`              | Adds two `i8`s together. Wraps on overflow                                          |
+| `sub`         | `(i8, i8) -> i8`              | Subtracts two `i8`s. Wraps on overflow                                              |
+| `mul`         | `(i8, i8) -> i8`              | Multiplies two `i8`s. Wraps on overflow                                             |
+| `div`         | `(i8, i8) -> i8`              | Divides two `i8`s. Wraps on overflow                                                |
+| `mod`         | `(i8, i8) -> i8`              | Returns the modulus (remainder) of the first `i8` divided by the second             |
+| `pow`         | `(i8, i8) -> i8`              | Raises the first `i8` to the power of the second                                    |
+| `abs`         | `i8 -> i8`                    | Returns the positive version of the `i8`                                            |
+| `neg`         | `i8 -> i8`                    | Multiplies the `i8` by `-1`                                                         |
+| `and`         | `(i8, i8) -> i8`              | Performs the bitwise AND operation                                                  |
+| `or`          | `(i8, i8) -> i8`              | Performs the bitwise OR operation                                                   |
+| `xor`         | `(i8, i8) -> i8`              | Performs the bitwise XOR operation                                                  |
+| `not`         | `i8 -> i8`                    | Performs the bitwise NOT operation                                                  |
+| `nand`        | `(i8, i8) -> i8`              | Performs the bitwise NAND operation                                                 |
+| `nor`         | `(i8, i8) -> i8`              | Performs the bitwise NOR operation                                                  |
+| `xnor`        | `(i8, i8) -> i8`              | Performs the bitwise XNOR operation                                                 |
+| `eq`          | `(i8, i8) -> bool`            | Returns `true` if both `i8`s are the same                                           |
+| `neq`         | `(i8, i8) -> bool`            | Returns `true` if both `i8`s differ                                                 |
+| `lt`          | `(i8, i8) -> bool`            | Returns `true` if the first `i8` is less than the second                            |
+| `lte`         | `(i8, i8) -> bool`            | Returns `true` if the first `i8` is less than or equal to the second                |
+| `gt`          | `(i8, i8) -> bool`            | Returns `true` if the first `i8` is greater than the second                         |
+| `gte`         | `(i8, i8) -> bool`            | Returns `true` if the first `i8` is greater than or equal to the second             |
+| `min`         | `(i8, i8) -> i8`              | Returns the smaller `i8`                                                            |
+| `max`         | `(i8, i8) -> i8`              | Returns the larger `i8`                                                             |
+| `clamp`       | `(i8, i8, i8) -> i8`          | Clamps the first `i8` to be above the second and below the third                    |
+| `shl`         | `(i8, i8) -> i8`              | Shifts the first `i8` left the number of places specified by the second             |
+| `shr`         | `(i8, i8) -> i8`              | Shifts the first `i8` right the number of places specified by the second            |
+| `wrl`         | `(i8, i8) -> i8`              | Wrapping shifts the first `i8` left the number of place specified by the second     |
+| `wrr`         | `(i8, i8) -> i8`              | Wrapping shifts the first `i8` right the number of place specified by the second    |
+| `clz`         | `i8 -> i8`                    | Returns the number of leading zeroes for the `i8`                                   |
+| `ones`        | `i8 -> i8`                    | Returns the number of one bits in the `i8`                                          |
+| `ctz`         | `i8 -> i8`                    | Returns the number of trailing zeroes for the `i8`                                  |
+| `reverseBits` | `i8 -> i8`                    | Returns the `i8` with its bits in reverse order                                     |
+| `extractBits` | `(i8, i8, i8) -> i8`          | From the first `i8`, start at the bit specified by the second extract to the third  |
+| `insertBits`  | `(i8, i8, i8, i8) -> i8`      | Into the first `i8` insert bits from the second starting at the bit specified by the third until the fourth |
+| `add`         | `(i16, i16) -> i16`           | Adds two `i16`s together. Wraps on overflow                                         |
+| `sub`         | `(i16, i16) -> i16`           | Subtracts two `i16`s. Wraps on overflow                                             |
+| `mul`         | `(i16, i16) -> i16`           | Multiplies two `i16`s. Wraps on overflow                                            |
+| `div`         | `(i16, i16) -> i16`           | Divides two `i16`s. Wraps on overflow                                               |
+| `mod`         | `(i16, i16) -> i16`           | Returns the modulus (remainder) of the first `i16` divided by the second            |
+| `pow`         | `(i16, i16) -> i16`           | Raises the first `i16` to the power of the second                                   |
+| `abs`         | `i16 -> i16`                  | Returns the positive version of the `i16`                                           |
+| `neg`         | `i16 -> i16`                  | Multiplies the `i16` by `-1`                                                        |
+| `and`         | `(i16, i16) -> i16`           | Performs the bitwise AND operation                                                  |
+| `or`          | `(i16, i16) -> i16`           | Performs the bitwise OR operation                                                   |
+| `xor`         | `(i16, i16) -> i16`           | Performs the bitwise XOR operation                                                  |
+| `not`         | `i16 -> i16`                  | Performs the bitwise NOT operation                                                  |
+| `nand`        | `(i16, i16) -> i16`           | Performs the bitwise NAND operation                                                 |
+| `nor`         | `(i16, i16) -> i16`           | Performs the bitwise NOR operation                                                  |
+| `xnor`        | `(i16, i16) -> i16`           | Performs the bitwise XNOR operation                                                 |
+| `eq`          | `(i16, i16) -> bool`          | Returns `true` if both `i16`s are the same                                          |
+| `neq`         | `(i16, i16) -> bool`          | Returns `true` if both `i16`s differ                                                |
+| `lt`          | `(i16, i16) -> bool`          | Returns `true` if the first `i16` is less than the second                           |
+| `lte`         | `(i16, i16) -> bool`          | Returns `true` if the first `i16` is less than or equal to the second               |
+| `gt`          | `(i16, i16) -> bool`          | Returns `true` if the first `i16` is greater than the second                        |
+| `gte`         | `(i16, i16) -> bool`          | Returns `true` if the first `i16` is greater than or equal to the second            |
+| `min`         | `(i16, i16) -> i16`           | Returns the smaller `i16`                                                           |
+| `max`         | `(i16, i16) -> i16`           | Returns the larger `i16`                                                            |
+| `clamp`       | `(i16, i16, i16) -> i16`      | Clamps the first `i16` to be above the second and below the third                   |
+| `shl`         | `(i16, i16) -> i16`           | Shifts the first `i16` left the number of places specified by the second            |
+| `shr`         | `(i16, i16) -> i16`           | Shifts the first `i16` right the number of places specified by the second           |
+| `wrl`         | `(i16, i16) -> i16`           | Wrapping shifts the first `i16` left the number of place specified by the second    |
+| `wrr`         | `(i16, i16) -> i16`           | Wrapping shifts the first `i16` right the number of place specified by the second   |
+| `clz`         | `i16 -> i16`                  | Returns the number of leading zeroes for the `i16`                                  |
+| `ones`        | `i16 -> i16`                  | Returns the number of one bits in the `i16`                                         |
+| `ctz`         | `i16 -> i16`                  | Returns the number of trailing zeroes for the `i16`                                 |
+| `reverseBits` | `i16 -> i16`                  | Returns the `i16` with its bits in reverse order                                    |
+| `extractBits` | `(i16, i16, i16) -> i16`      | From the first `i16`, start at the bit specified by the second extract to the third |
+| `insertBits`  | `(i16, i16, i16, i16) -> i16` | Into the first `i16` insert bits from the second starting at the bit specified by the third until the fourth |
+| `add`         | `(i32, i32) -> i32`           | Adds two `i32`s together. Wraps on overflow                                         |
+| `sub`         | `(i32, i32) -> i32`           | Subtracts two `i32`s. Wraps on overflow                                             |
+| `mul`         | `(i32, i32) -> i32`           | Multiplies two `i32`s. Wraps on overflow                                            |
+| `div`         | `(i32, i32) -> i32`           | Divides two `i32`s. Wraps on overflow                                               |
+| `mod`         | `(i32, i32) -> i32`           | Returns the modulus (remainder) of the first `i32` divided by the second            |
+| `pow`         | `(i32, i32) -> i32`           | Raises the first `i32` to the power of the second                                   |
+| `abs`         | `i32 -> i32`                  | Returns the positive version of the `i32`                                           |
+| `neg`         | `i32 -> i32`                  | Multiplies the `i32` by `-1`                                                        |
+| `and`         | `(i32, i32) -> i32`           | Performs the bitwise AND operation                                                  |
+| `or`          | `(i32, i32) -> i32`           | Performs the bitwise OR operation                                                   |
+| `xor`         | `(i32, i32) -> i32`           | Performs the bitwise XOR operation                                                  |
+| `not`         | `i32 -> i32`                  | Performs the bitwise NOT operation                                                  |
+| `nand`        | `(i32, i32) -> i32`           | Performs the bitwise NAND operation                                                 |
+| `nor`         | `(i32, i32) -> i32`           | Performs the bitwise NOR operation                                                  |
+| `xnor`        | `(i32, i32) -> i32`           | Performs the bitwise XNOR operation                                                 |
+| `eq`          | `(i32, i32) -> bool`          | Returns `true` if both `i32`s are the same                                          |
+| `neq`         | `(i32, i32) -> bool`          | Returns `true` if both `i32`s differ                                                |
+| `lt`          | `(i32, i32) -> bool`          | Returns `true` if the first `i32` is less than the second                           |
+| `lte`         | `(i32, i32) -> bool`          | Returns `true` if the first `i32` is less than or equal to the second               |
+| `gt`          | `(i32, i32) -> bool`          | Returns `true` if the first `i32` is greater than the second                        |
+| `gte`         | `(i32, i32) -> bool`          | Returns `true` if the first `i32` is greater than or equal to the second            |
+| `min`         | `(i32, i32) -> i32`           | Returns the smaller `i32`                                                           |
+| `max`         | `(i32, i32) -> i32`           | Returns the larger `i32`                                                            |
+| `clamp`       | `(i32, i32, i32) -> i32`      | Clamps the first `i32` to be above the second and below the third                   |
+| `shl`         | `(i32, i32) -> i32`           | Shifts the first `i32` left the number of places specified by the second            |
+| `shr`         | `(i32, i32) -> i32`           | Shifts the first `i32` right the number of places specified by the second           |
+| `wrl`         | `(i32, i32) -> i32`           | Wrapping shifts the first `i32` left the number of place specified by the second    |
+| `wrr`         | `(i32, i32) -> i32`           | Wrapping shifts the first `i32` right the number of place specified by the second   |
+| `clz`         | `i32 -> i32`                  | Returns the number of leading zeroes for the `i32`                                  |
+| `ones`        | `i32 -> i32`                  | Returns the number of one bits in the `i32`                                         |
+| `ctz`         | `i32 -> i32`                  | Returns the number of trailing zeroes for the `i32`                                 |
+| `reverseBits` | `i32 -> i32`                  | Returns the `i32` with its bits in reverse order                                    |
+| `extractBits` | `(i32, i32, i32) -> i32`      | From the first `i32`, start at the bit specified by the second extract to the third |
+| `insertBits`  | `(i32, i32, i32, i32) -> i32` | Into the first `i32` insert bits from the second starting at the bit specified by the third until the fourth |
+| `add`         | `(i64, i64) -> i64`           | Adds two `i64`s together. Wraps on overflow                                         |
+| `sub`         | `(i64, i64) -> i64`           | Subtracts two `i64`s. Wraps on overflow                                             |
+| `mul`         | `(i64, i64) -> i64`           | Multiplies two `i64`s. Wraps on overflow                                            |
+| `div`         | `(i64, i64) -> i64`           | Divides two `i64`s. Wraps on overflow                                               |
+| `mod`         | `(i64, i64) -> i64`           | Returns the modulus (remainder) of the first `i64` divided by the second            |
+| `pow`         | `(i64, i64) -> i64`           | Raises the first `i64` to the power of the second                                   |
+| `abs`         | `i64 -> i64`                  | Returns the positive version of the `i64`                                           |
+| `neg`         | `i64 -> i64`                  | Multiplies the `i64` by `-1`                                                        |
+| `and`         | `(i64, i64) -> i64`           | Performs the bitwise AND operation                                                  |
+| `or`          | `(i64, i64) -> i64`           | Performs the bitwise OR operation                                                   |
+| `xor`         | `(i64, i64) -> i64`           | Performs the bitwise XOR operation                                                  |
+| `not`         | `i64 -> i64`                  | Performs the bitwise NOT operation                                                  |
+| `nand`        | `(i64, i64) -> i64`           | Performs the bitwise NAND operation                                                 |
+| `nor`         | `(i64, i64) -> i64`           | Performs the bitwise NOR operation                                                  |
+| `xnor`        | `(i64, i64) -> i64`           | Performs the bitwise XNOR operation                                                 |
+| `eq`          | `(i64, i64) -> bool`          | Returns `true` if both `i64`s are the same                                          |
+| `neq`         | `(i64, i64) -> bool`          | Returns `true` if both `i64`s differ                                                |
+| `lt`          | `(i64, i64) -> bool`          | Returns `true` if the first `i64` is less than the second                           |
+| `lte`         | `(i64, i64) -> bool`          | Returns `true` if the first `i64` is less than or equal to the second               |
+| `gt`          | `(i64, i64) -> bool`          | Returns `true` if the first `i64` is greater than the second                        |
+| `gte`         | `(i64, i64) -> bool`          | Returns `true` if the first `i64` is greater than or equal to the second            |
+| `min`         | `(i64, i64) -> i64`           | Returns the smaller `i64`                                                           |
+| `max`         | `(i64, i64) -> i64`           | Returns the larger `i64`                                                            |
+| `clamp`       | `(i64, i64, i64) -> i64`      | Clamps the first `i64` to be above the second and below the third                   |
+| `shl`         | `(i64, i64) -> i64`           | Shifts the first `i64` left the number of places specified by the second            |
+| `shr`         | `(i64, i64) -> i64`           | Shifts the first `i64` right the number of places specified by the second           |
+| `wrl`         | `(i64, i64) -> i64`           | Wrapping shifts the first `i64` left the number of place specified by the second    |
+| `wrr`         | `(i64, i64) -> i64`           | Wrapping shifts the first `i64` right the number of place specified by the second   |
+| `clz`         | `i64 -> i64`                  | Returns the number of leading zeroes for the `i64`                                  |
+| `ones`        | `i64 -> i64`                  | Returns the number of one bits in the `i64`                                         |
+| `ctz`         | `i64 -> i64`                  | Returns the number of trailing zeroes for the `i64`                                 |
+| `reverseBits` | `i64 -> i64`                  | Returns the `i64` with its bits in reverse order                                    |
+| `extractBits` | `(i64, i64, i64) -> i64`      | From the first `i64`, start at the bit specified by the second extract to the third |
+| `insertBits`  | `(i64, i64, i64, i64) -> i64` | Into the first `i64` insert bits from the second starting at the bit specified by the third until the fourth |
 
 ### String-related functions
 
