@@ -898,7 +898,45 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### Buffer-related functions
 
-TODO
+| Name                   | Type                                 | Description                                                                                                                                   | Explicit |
+| :--------------------- | :----------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------- | :------- |
+| `Buffer{T, S}`         | `T -> T[S]`                          | Creates a fixed buffer with all `S` elements set to the `T` value                                                                             | ❌       |
+| `Buffer{T, S}`         | `(T, ...) -> T[S]`                   | Creates a fixed buffer with the `T` values set. Argument length must match buffer size                                                        | ❌       |
+| `.0, .1, etc`          | `T[S] -> T`                          | Explicit property-based buffer value lookups guaranteed to return the value, as it is a compile-time failure to access out-of-bounds indexes  | ❌       |
+| `get{T, S}`            | `(T[S], i64) -> T?`                  | Returns the value at the specified index, or `void` if out-of-bounds. Can also be written `buf[idx]`                                          | ✅       |
+| `map{T, S, U}`         | `(T[S], T -> U) -> U[S]`             | Maps the elements of the `T[S]` buffer into a `U[S]` buffer using the `T -> U` function                                                       | ✅       |
+| `map{T, S, U}`         | `(T[S], (T, i64) -> U) -> U[S]`      | Maps the elements and indexes of the `T[S]` buffer into a `U[S]` buffer using the `(T, i64) -> U` function                                    | ✅       |
+| `reduce{T, S}`         | `(T[S], (T, T) -> T) -> T?`          | Combines the `T[S]` elements into a singular `T` value. Returns `void` if `S` is `0`                                                          | ✅       |
+| `reduce{T, S, U}`      | `(T[S], U, (U, T) -> U) -> U`        | Combines the `T[S]` elements and an initial `U` value into a new `U` value                                                                    | ✅       |
+| `has{T, S}`            | `(T[S], T) -> bool`                  | Returns `true` if the `T` value is anywhere within the `T[S]` buffer                                                                          | ✅       |
+| `has{T, S}`            | `(T[S], T -> bool) -> bool`          | Returns `true` if any `T` value in the `T[S]` returns `true` when passed to the `T -> bool` function                                          | ✅       |
+| `find{T, S}`           | `(T[S], T -> bool) -> T?`            | Returns the first `T` value that returns `true` when passed to the `T -> bool` function. Returns `void otherwise                              | ✅       |
+| `every{T, S}`          | `(T[S], T -> bool) -> bool`          | Returns `true` if every `T` value returns `true` when passed to the `T -> bool` function                                                      | ✅       |
+| `concatInner{T, S, N}` | `(Mut{T[S + N]}, T[S], T[N]) -> ()`  | Replaces the values in `T[S + N]` with the values in `T[S]` and `T[N]`. Likely won't be used directly                                         | ✅       |
+| `concat{T, S, N}`      | `(T[S], T[N]) -> T[S + N]`           | Concatenates two buffers together, creating a new buffer with a fixed length derived from the input buffer lengths                            | ✅       |
+| `repeat{T, S}`         | `(T[S], i64) -> T[]`                 | Repeats the input buffer the number of times specified in the `i64` into a new `T[]`. Length is determined at runtime so it must be an array  | ✅       |
+| `store{T, S}`          | `(Mut{T[S]}, i64, T) -> T!`          | Stores the new `T` value in the index specified by the `i64` into the `T[S]`. As buffers do not grow, it returns the old value, or an `Error` | ✅       |
+| `cross`                | `(f32[3], f32[3]) -> f32[3]`         | Computes the cross product of two 3-element vectors                                                                                           | ✅       |
+| `cross`                | `(f64[3], f64[3]) -> f64[3]`         | Computes the cross product of two 3-element vectors                                                                                           | ✅       |
+| `dot{I}`               | `(I[2], I[2]) -> I`                  | Computes the dot product of the 2-element vectors. `I` must implement `add` and `mul`                                                         | ✅       |
+| `dot{I}`               | `(I[3], I[3]) -> I`                  | Computes the dot product of the 3-element vectors. `I` must implement `add` and `mul`                                                         | ✅       |
+| `dot{I}`               | `(I[4], I[4]) -> I`                  | Computes the dot product of the 4-element vectors. `I` must implement `add` and `mul`                                                         | ✅       |
+| `swap{T, S}`           | `(Mut{T[S]}, i64, i64) -> void!`     | Swaps the values at the two specified indexes. Returns an `Error` if either index is out-of-bounds                                            | ✅       |
+| `sort{T, S}`           | `(Mut{T[S]}, (T, T) -> i8) -> ()`    | Sorts the buffer using the provided sorting function. `0` means the elements are equal, negative for keeping the order, positive for swap     | ✅       |
+| `sort{T, S}`           | `Mut{T[S]} -> void`                  | Sorts the buffer using the `T` type's built-in ordering logic. Requires `eq` and `lt` to have been implemented for the type                   | ✅       |
+| `magnitude{S}`         | `f32[S] -> f32`                      | Computes the magnitude of the vector represented by the `f32[S]`                                                                              | ✅       |
+| `magnitude{S}`         | `f64[S] -> f64`                      | Computes the magnitude of the vector represented by the `f64[S]`                                                                              | ✅       |
+| `normalize{S}`         | `f32[S] -> f32[S]`                   | Converts the vector represented by the buffer into a unit vector (magnitude of `1`)                                                           | ✅       |
+| `normalize{S}`         | `f64[S] -> f64[S]`                   | Converts the vector represented by the buffer into a unit vector (magnitude of `1`)                                                           | ✅       |
+| `inverseSqrt{S}`       | `f32[S] -> f32[S]`                   | Calculates the inverse square root for all elements of the buffer                                                                             | ✅       |
+| `inverseSqrt{S}`       | `f64[S] -> f64[S]`                   | Calculates the inverse square root for all elements of the buffer                                                                             | ✅       |
+| `fma{S}`               | `(f32[S], f32[S], f32[S]) -> f32[S]` | Calculates the fused multiply add operation for all three buffers                                                                             | ✅       |
+| `fma{S}`               | `(f64[S], f64[S], f64[S]) -> f64[S]` | Calculates the fused multiply add operation for all three buffers                                                                             | ✅       |
+| `fract{S}`             | `f32[S] -> f32[S]`                   | Returns the fractional component of each `f32` element in the array                                                                           | ✅       |
+| `fract{S}`             | `f64[S] -> f64[S]`                   | Returns the fractional component of each `f64` element in the array                                                                           | ✅       |
+| `determinant{T}`       | `T[4] -> T`                          | Calculates the determinant of a 2x2 matrix. `T` must implement `add`, `sub`, and `mul`                                                        | ✅       |
+| `determinant{T}`       | `T[9] -> T`                          | Calculates the determinant of a 3x3 matrix. `T` must implement `add`, `sub`, and `mul`                                                        | ✅       |
+| `determinant{T}`       | `T[16] -> T`                         | Calculates the determinant of a 4x4 matrix. `T` must implement `add`, `sub`, and `mul`                                                        | ✅       |
 
 ### Dictionary-related functions
 
