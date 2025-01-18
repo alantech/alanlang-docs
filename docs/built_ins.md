@@ -851,7 +851,50 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### Array-related functions
 
-TODO
+| Name           | Type                               | Description                                                                                                                              | Explicit |
+| :------------- | :--------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- | :------: |
+| `Array{T}`     | `(T, ...) -> T[]`                  | Built-in Array constructor function. Can also be written `[T, ...]`                                                                      | ❌       |
+| `len{T}`       | `T[] -> i64`                       | Returns the number of elements in the `Array{T}`                                                                                         | ✅       |
+| `get{T}`       | `(T[], i64) -> T?`                 | Returns the value at the index specified by the `i64`, otherwise `void`. May also be written `arr[idx]`                                  | ✅       |
+| `push{T}`      | `(Mut{T[]}, T) -> ()`              | Appends the provided `T` to the end of the `T[]`                                                                                         | ✅       |
+| `pop{T}`       | `Mut{T[]} -> T?`                   | Removes the last `T` from the `T[]` and returns it, or `void` if empty                                                                   | ✅       |
+| `map{T, U}`    | `(T[], T -> U) -> U[]`             | Creates a new `U[]` array by calling the `T -> U` function on each of `T[]`'s elements                                                   | ✅       |
+| `map{T, U}`    | `(T[], (T, i64) -> U) -> U[]`      | Creates a new `U[]` array by calling the `(T, i64) -> U` function on each of `T[]`'s elements with its index                             | ✅       |
+| `parmap{T, U}` | `(T[], T -> U) -> U[]`             | (Rust-only for now) Creates a new `U[]` by dividing `T[]` across all CPU cores and running in parallel                                   | ✅       |
+| `filter{T}`    | `(T[], T -> bool) -> T[]`          | Creates a new array including only the elements that evaluated to `true` when passed to the `T -> bool` function                         | ✅       |
+| `filter{T}`    | `(T[], (T, i64) -> bool) -> T[]`   | Creates a new array including only the elements that evaluated to `true` when passed with their index to the `(T, i64) -> bool` function | ✅       |
+| `reduce{T}`    | `(T[], (T, T) -> T) -> T?`         | Combines the elements of `T[]` into a singular `T` using the `(T, T) -> T` function. Returns `void` if empty                             | ✅       |
+| `reduce{T}`    | `(T[], (T, T, i64) -> T) -> T?`    | Combines the elements of `T[]` into a singular `T` using the `(T, T, i64) -> T` function and element indexes. Returns `void` if empty    | ✅       |
+| `reduce{T, U}` | `(T[], U, (U, T) -> U) -> U`       | Combines the elements of `T[]` into a singular `U` using the `(U, T) -> U` function and an initial `U` value                             | ✅       |
+| `reduce{T, U}` | `(T[], U, (U, T, i64) -> U) -> U`  | Combines the elements of `T[]` into a singular `U` using the `(U, T, i64) -> U` function, element indexes, and an initial `U` value      | ✅       |
+| `concat{T}`    | `(T[], T[]) -> T[]`                | Concatenates two `T[]` arrays into a new `T[]` array                                                                                     | ✅       |
+| `append{T}`    | `(Mut{T[]}, T[]) -> ()`            | Appends the contents of the second `T[]` into the first. Mutates the first but does not change the second                                | ✅       |
+| `filled{T}`    | `(T, i64) -> T[]`                  | Creates a `T[]` with the number of elements specified by the `i64` all with the value specified by the `T`                               | ✅       |
+| `has{T}`       | `(T[], T) -> bool`                 | Returns `true` if the value in `T` exists within the `T[]`                                                                               | ✅       |
+| `has{T}`       | `(T[], T -> bool) -> bool`         | Returns `true` if any value in `T[]` returns `true` when passed to the `T -> bool` function                                              | ✅       |
+| `find{T}`      | `(T[], T -> bool) -> T?`           | Returns the first `T` from the `T[]` that returns `true` when passed to the `T -> bool` function. Otherwise returns `void`               | ✅       |
+| `index{T}`     | `(T[], T) -> i64?`                 | Returns the first index that the `T` value is found in the `T[]`. Otherwise returns `void`                                               | ✅       |
+| `index{T}`     | `(T[], T -> bool) -> i64?`         | Returns the first index that returns `true` when the `T` value is passed to the `T -> bool` function. Otherwise returns `void`           | ✅       |
+| `index{T}`     | `(T[], (T, i64) -> bool) -> i64?`  | Returns the first index that returns `true` when the `T` value and index is passed to the `(T, i64) -> bool` function. Otherwise `void`  | ✅       |
+| `every{T}`     | `(T[], T -> bool) -> bool`         | Returns `true` if every element in the `T[]` returns `true` when passed to the `T -> bool` function                                      | ✅       |
+| `some{T}`      | `(T[], T -> bool) -> bool`         | Returns `true` if any element in the `T[]` returns `true` when passed to the `T -> bool` function                                        | ✅       |
+| `repeat{T}`    | `(T[], i64) -> T[]`                | Returns a new `T[]` that is the original `T[]` appended to itself the number of times specified by the `i64`                             | ✅       |
+| `store{T}`     | `(Mut{T[]}, i64, T) -> void!`      | Stores the `T` in the specified index (shifting later values forward). Returns an Error if the array is too small. AKA `arr[idx] = val`  | ✅       |
+| `delete{T}`    | `(Mut{T[]}, i64) -> T!`            | Deletes the `T` at the index specified in the `i64` from the `T[]` and returns it. If the index does not exist, it returns an `Error`    | ✅       |
+| `last{T}`      | `T[] -> T?`                        | Returns the last `T` value in the `T[]` without mutating it. If the array is empty it returns `void`                                     | ✅       |
+| `swap{T}`      | `(Mut{T[]}, i64, i64) -> void!`    | Swaps the values at the two specified indexes. Returns an `Error` if either index is invalid                                             | ✅       |
+| `sort{T}`      | `(Mut{T[]}, (T, T) -> i8) -> void` | Sorts the array using the provided sorting function. `0` means the elements are equal, negative for keep the order, positive for flip    | ✅       |
+| `sort{T}`      | `Mut{T[]} -> void`                 | Sorts the array using the `T` type's built-in ordering logic. Requires `eq` and `lt` to have been implemented for the type               | ✅       |
+| `magnitude`    | `f32[] -> f32`                     | Computes the magnitude of a vector represented by the array                                                                              | ✅       |
+| `magnitude`    | `f64[] -> f64`                     | Computes the magnitude of a vector represented by the array                                                                              | ✅       |
+| `normalize`    | `f32[] -> f32[]`                   | Converts the vector represented by the array into a unit vector (magnitude of `1`)                                                       | ✅       |
+| `normalize`    | `f64[] -> f64[]`                   | Converts the vector represented by the array into a unit vector (magnitude of `1`)                                                       | ✅       |
+| `inverseSqrt`  | `f32[] -> f32[]`                   | Calculates the inverse square root for all elements of the array                                                                         | ✅       |
+| `inverseSqrt`  | `f64[] -> f64[]`                   | Calculates the inverse square root for all elements of the array                                                                         | ✅       |
+| `fma`          | `(f32[], f32[], f32[]) -> f32[]!`  | Calculates the fused multiply add operation for all three arrays. Returns an `Error` if any of the array lengths do not match            | ✅       |
+| `fma`          | `(f64[], f64[], f64[]) -> f64[]!`  | Calculates the fused multiply add operation for all three arrays. Returns an `Error` if any of the array lengths do not match            | ✅       |
+| `fract`        | `f32[] -> f32[]`                   | Returns the fractional component of each `f32` element in the array                                                                      | ✅       |
+| `fract`        | `f64[] -> f64[]`                   | Returns the fractional component of each `f64` element in the array                                                                      | ✅       |
 
 ### Buffer-related functions
 
