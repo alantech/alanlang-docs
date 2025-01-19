@@ -978,7 +978,32 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### Tree-related functions
 
-TODO
+| Name           | Type                                                          | Description                                                                                                                   | Explicit |
+| :------------- | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------- | :------: |
+| `Tree{T}`      | `(Array{T}, Array{Maybe{i64}}, Array{Array{i64}}) -> Tree{T}` | Constructs a new tree by manually defining its internals. You probably don't want this                                        | ❌       |
+| `Node{T}`      | `(i64, Tree{T}) -> Node{T}`                                   | Constructs a new node by manually specifying the node id and the tree it references. You probably don't want this             | ❌       |
+| `Tree{T}`      | `T -> Tree{T}`                                                | Constructs a new tree with the provided `T` value as the root node                                                            | ✅       |
+| `Tree{T}`      | `Node{T} -> Tree{T}`                                          | Returns the tree the node is associated with                                                                                  | ✅       |
+| `rootNode{T}`  | `Tree{T} -> Node{T}`                                          | Returns the root node of the provided tree                                                                                    | ✅       |
+| `len{T}`       | `Tree{T} -> i64`                                              | Returns the number of nodes in the tree                                                                                       | ✅       |
+| `Node{T}`      | `(Tree{T}, i64) -> Node{T}?`                                  | Constructs a new node for the specified node id, but will return `void` if the node id doesn't exist                          | ✅       |
+| `parent{T}`    | `Node{T} -> Node{T}?`                                         | Returns the parent node of the current node, or `void` if the current node is the root node                                   | ✅       |
+| `children{T}`  | `Node{T} -> Node{T}[]`                                        | Returns an array of nodes that are children of the current node                                                               | ✅       |
+| `children{T}`  | `Tree{T} -> Node{T}[]`                                        | Returns an array of nodes that are children of the root node of the tree                                                      | ✅       |
+| `addChild{T}`  | `(Node{T}, T) -> Node{T}`                                     | Adds the provided `T` as a child of the provided node, returning the new node for that value                                  | ✅       |
+| `addChild{T}`  | `(Node{T}, Tree{T}) -> Node{T}`                               | Adds the provided tree as a child of the provided node, returning the new node that represents the root node of the tree      | ✅       |
+| `addChild{T}`  | `(Tree{T}, T) -> Node{T}`                                     | Adds the provided `T` as a child of the root node of the provided tree, returning the new node for that value                 | ✅       |
+| `getOr{T}`     | `(Node{T}, T) -> T`                                           | Returns the value the node points to or the default `T` value provided if the node is invalid                                 | ✅       |
+| `Array{T}`     | `Tree{T} -> Array{Node{T}}`                                   | Returns an array of all nodes in the tree                                                                                     | ✅       |
+| `map{T, U}`    | `(Tree{T}, Node{T} -> Node{U}) -> Tree{U}`                    | Maps a tree from type `T` to `U` using a function that converts from one node type to the other                               | ✅       |
+| `map{T, U}`    | `(Tree{T}, (Node{T}, i64) -> Node{U}) -> Tree{U}`             | Maps a tree from type `T` to `U` using a function that converts from one node type (and node id) to the other                 | ✅       |
+| `every{T}`     | `(Tree{T}, Node{T} -> bool) -> bool`                          | Returns `true` if every node in the tree returns `true` when passed to the provided function                                  | ✅       |
+| `some{T}`      | `(Tree{T}, Node{T} -> bool) -> bool`                          | Returns `true` if any node in the tree returns `true` when passed to the provided function                                    | ✅       |
+| `reduce{T}`    | `(Tree{T}, (Node{T}, Node{T}) -> Node{T}) -> Node{T}?`        | Reduces the entire tree to a singular node using the provided function, or `void` if the tree is empty                        | ✅       |
+| `reduce{T}`    | `(Tree{T}, (Node{T}, Node{T}, i64) -> Node{T}) -> Node{T}?`   | Reduces the entire tree to a singular node using the provided function and node index, or `void` if the tree is empty         | ✅       |
+| `reduce{T, U}` | `(Tree{T}, U, (U, Node{T}) -> U) -> U`                        | Reduces the entire tree to a singular `U` value, or returns the initial `U` value if the tree is empty                        | ✅       |
+| `reduce{T, U}` | `(Tree{T}, U, (U, Node{T}, i64) -> U) -> U`                   | Reduces the entire tree to a singular `U` value using the node indexes, or returns the initial `U` value if the tree is empty | ✅       |
+| `find{T}`      | `(Tree{T}, Node{T} -> bool) -> Node{T}?`                      | Finds the first node in the tree that returns `true` when passed to the provided function, otherwise `void`                   | ✅       |
 
 ### Thread-related functions
 
