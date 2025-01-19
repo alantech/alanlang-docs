@@ -947,7 +947,7 @@ For clarity, the table of functions will be broken up into broad categories, and
 | `Dict{K, V}`   | `Array{(K, V)} -> Dict{K, V}`            | Construct a new dictionary from an array of key-value tuples                                                   |
 | `has{K, V}`    | `(Dict{K, V}, K) -> bool`                | Returns `true` if the `K` value is used as a key                                                               |
 | `get{K, V}`    | `(Dict{K, V}, K) -> V?`                  | Returns the value if the `K` value is used as a key, otherwise returns `void`. Can also be written `dict[key]` |
-| `store{K, V}`  | `(Dict{K, V}, K, V) -> void`             | Stores the value `V` referenceable by the key `K`. Can also be written `dict[key] = val`                       |
+| `store{K, V}`  | `(Mut{Dict{K, V}}, K, V) -> void`        | Stores the value `V` referenceable by the key `K`. Can also be written `dict[key] = val`                       |
 | `len{K, V}`    | `Dict{K, V} -> i64`                      | Returns the number of key-value pairs in the dictionary                                                        |
 | `keys{K, V}`   | `Dict{K, V} -> K[]`                      | Returns an array of all of the keys in the dictionary. The array is in insertion order                         |
 | `vals{K, V}`   | `Dict{K, V} -> V[]`                      | Returns an array of all of the values in the dictionary. The array is in insertion order                       |
@@ -956,7 +956,25 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### Set-related functions
 
-TODO
+| Name                     | Type                              | Description                                                                                                            |
+| :----------------------- | :-------------------------------- | :--------------------------------------------------------------------------------------------------------------------- |
+| `Set{V}`                 | `() -> Set{V}`                    | Constructs a new set                                                                                                   |
+| `Set{V}`                 | `V -> Set{V}`                     | Constructs a new set with an initial value                                                                             |
+| `Set{V}`                 | `V[] -> Set{V}`                   | Constructs a new set from an array of values                                                                           |
+| `store{V}`               | `(Mut{Set{V}}, V) -> ()`          | Stores the value `V` in the set. Can be written as `set = val` but please don't                                        |
+| `has{V}`                 | `(Set{V}, V) -> bool`             | Returns `true` if the value `V` is in the set                                                                          |
+| `len{V}`                 | `Set{V} -> i64`                   | Returns the number of values in the set                                                                                |
+| `Array{V}`               | `Set{V} -> V[]`                   | Returns an array of values in the set. No guarantee on ordering                                                        |
+| `union{V}`               | `(Set{V}, Set{V}) -> Set{V}`      | Returns a new set that is the union of the input sets (all values from both sets, deduplicated)                        |
+| `or{V}`                  | `(Set{V}, Set{V}) -> Set{V}`      | An alias for `union{V}` (for binding to the `||` operator)                                                             |
+| `intersect{V}`           | `(Set{V}, Set{V}) -> Set{V}`      | Returns a new set that is the intersection of the input sets (only values in both sets)                                |
+| `and{V}`                 | `(Set{V}, Set{V}) -> Set{V}`      | An alias for `intersect{V}` (for binding to the `&&` operator)                                                         |
+| `difference{V}`          | `(Set{V}, Set{V}) -> Set{V}`      | Returns a new set that is the difference of the input sets (only values only in the first set)                         |
+| `div{V}`                 | `(Set{V}, Set{V}) -> Set{V}`      | An alias for `difference{V}` (for binding to the `/` operator)                                                         |
+| `symmetricDifference{V}` | `(Set{V}, Set{V}) -> Set{V}`      | Returns a new set that is the symmetric difference of the input sets (all values from both sets, except those in both) |
+| `xor{V}`                 | `(Set{V}, Set{V}) -> Set{V}`      | An alias for `symmetricDifference{V}` (for binding to the `^` operator)                                                |
+| `product{V}`             | `(Set{V}, Set{V}) -> Set{(V, V)}` | Returns a new set that is the product of the input sets (tuples of all values from each set paired together)           |
+| `mul{V}`                 | `(Set{V}, Set{V}) -> Set{(V, V)}` | An alias for `product{V}` (for binding to the `*` operator)                                                            |
 
 ### Tree-related functions
 
