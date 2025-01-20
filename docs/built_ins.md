@@ -1123,7 +1123,7 @@ For clarity, the table of functions will be broken up into broad categories, and
 | `gbool{T}`                | `T -> gbool`                                            | Converts the input type into a `bool` and then converts that into a `gbool`                                     | ✅       |
 | `len`                     | `GBuffer -> gu32`                                       | Returns the length of the specified GPU buffer as a `gu32` to use in GPGPU computation                          | ✅       |
 
-### GPGPU Vector functions
+### GPGPU Vector Constructor functions
 
 | Name                   | Type                                                     | Description                                                                                                                                            | Explicit |
 | :--------------------- | :------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- | :------: |
@@ -1195,9 +1195,55 @@ For clarity, the table of functions will be broken up into broad categories, and
 | `gFor{T}`              | `(T, T) -> gvec3u`                                       | Converts the `T` values to `u32` and constructs a global invocation id. The `Z` value is set to `1`                                                    | ✅       |
 | `gFor{T}`              | `T -> gvec3u`                                            | Converts the `T` value to `u32` and constructs a global invocation id. The `Y` and `Z` values are set to `1`                                           | ✅       |
 
-### GPGPU Matrix functions
+### GPGPU Matrix Constructor functions
 
-TODO
+| Name          | Type                                                                                                           | Description                                                               | Explicit |
+| :------------ | :------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------ | :------: |
+| `gmat2x2f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat2x2f`                                                     | Manually construct a GPU 2x2 matrix. You probably won't use this directly | ❌       |
+| `gmat2x3f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat2x2f`                                                     | Manually construct a GPU 2x3 matrix. You probably won't use this directly | ❌       |
+| `gmat2x4f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat2x2f`                                                     | Manually construct a GPU 2x4 matrix. You probably won't use this directly | ❌       |
+| `gmat3x2f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat3x2f`                                                     | Manually construct a GPU 3x2 matrix. You probably won't use this directly | ❌       |
+| `gmat3x3f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat3x2f`                                                     | Manually construct a GPU 3x3 matrix. You probably won't use this directly | ❌       |
+| `gmat3x4f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat3x2f`                                                     | Manually construct a GPU 3x4 matrix. You probably won't use this directly | ❌       |
+| `gmat4x2f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat4x2f`                                                     | Manually construct a GPU 4x2 matrix. You probably won't use this directly | ❌       |
+| `gmat4x3f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat4x2f`                                                     | Manually construct a GPU 4x3 matrix. You probably won't use this directly | ❌       |
+| `gmat4x4f`    | `(string, Dict{string, string}, Set{GBuffer}) -> gmat4x2f`                                                     | Manually construct a GPU 4x4 matrix. You probably won't use this directly | ❌       |
+| `gmat2x2f`    | `() -> gmat2x2f`                                                                                               | Returns a default GPU 2x2 matrix                                          | ✅       |
+| `gmat2x2f`    | `(gvec2f, gvec2f) -> gmat2x2f`                                                                                 | Returns a GPU 2x2 matrix assembled from two vector columns                | ✅       |
+| `gmat2x2f{I}` | `(I, I, I, I) -> gmat2x2f`                                                                                     | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat2x2f`    | `(gf32, gf32, gf32, gf32) -> gmat2x2f`                                                                         | Returns a GPU 2x2 matrix assembled from `gf32` values in column order     | ✅       |
+| `gmat2x3f`    | `() -> gmat2x3f`                                                                                               | Returns a default GPU 2x3 matrix                                          | ✅       |
+| `gmat2x3f`    | `(gvec3f, gvec3f) -> gmat2x3f`                                                                                 | Returns a GPU 2x3 matrix assembled from two vector columns                | ✅       |
+| `gmat2x3f{I}` | `(I, I, I, I, I, I) -> gmat2x3f`                                                                               | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat2x3f`    | `(gf32, gf32, gf32, gf32, gf32, gf32) -> gmat2x3f`                                                             | Returns a GPU 2x3 matrix assembled from `gf32` values in column order     | ✅       |
+| `gmat2x4f`    | `() -> gmat2x4f`                                                                                               | Returns a default GPU 2x4 matrix                                          | ✅       |
+| `gmat2x4f`    | `(gvec4f, gvec4f) -> gmat2x4f`                                                                                 | Returns a GPU 2x4 matrix assembled from two vector columns                | ✅       |
+| `gmat2x4f{I}` | `(I, I, I, I, I, I, I, I) -> gmat2x4f`                                                                         | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat2x4f`    | `(gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32) -> gmat2x4f`                                                 | Returns a GPU 2x4 matrix assembled from `gf32` values in column order     | ✅       |
+| `gmat3x2f`    | `() -> gmat3x2f`                                                                                               | Returns a default GPU 3x2 matrix                                          | ✅       |
+| `gmat3x2f`    | `(gvec2f, gvec2f, gvec2f) -> gmat3x2f`                                                                         | Returns a GPU 3x2 matrix assembled from three vector columns              | ✅       |
+| `gmat3x2f{I}` | `(I, I, I, I, I, I) -> gmat3x2f`                                                                               | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat3x2f`    | `(gf32, gf32, gf32, gf32, gf32, gf32) -> gmat3x2f`                                                             | Returns a GPU 3x2 matrix assembled from `gf32` values in column order     | ✅       |
+| `gmat3x3f`    | `() -> gmat3x3f`                                                                                               | Returns a default GPU 3x3 matrix                                          | ✅       |
+| `gmat3x3f`    | `(gvec3f, gvec3f, gvec3f) -> gmat3x3f`                                                                         | Returns a GPU 3x3 matrix assembled from three vector columns              | ✅       |
+| `gmat3x3f{I}` | `(I, I, I, I, I, I, I, I, I) -> gmat3x3f`                                                                      | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat3x3f`    | `(gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32) -> gmat3x3f`                                           | Returns a GPU 3x3 matrix assembled from `gf32` values in column order     | ✅       |
+| `gmat3x4f`    | `() -> gmat3x4f`                                                                                               | Returns a default GPU 3x4 matrix                                          | ✅       |
+| `gmat3x4f`    | `(gvec4f, gvec4f, gvec4f) -> gmat3x4f`                                                                         | Returns a GPU 3x4 matrix assembled from three vector columns              | ✅       |
+| `gmat3x4f{I}` | `(I, I, I, I, I, I, I, I, I, I, I, I) -> gmat3x4f`                                                             | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat3x4f`    | `(gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32) -> gmat3x4f`                         | Returns a GPU 3x4 matrix assembled from `gf32` values in column order     | ✅       |
+| `gmat4x2f`    | `() -> gmat4x2f`                                                                                               | Returns a default GPU 4x2 matrix                                          | ✅       |
+| `gmat4x2f`    | `(gvec2f, gvec2f, gvec2f, gvec2f) -> gmat4x2f`                                                                 | Returns a GPU 4x2 matrix assembled from four vector columns               | ✅       |
+| `gmat4x2f{I}` | `(I, I, I, I, I, I, I, I) -> gmat4x2f`                                                                         | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat4x2f`    | `(gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32) -> gmat4x2f`                                                 | Returns a GPU 4x2 matrix assembled from `gf32` values in column order     | ✅       |
+| `gmat4x3f`    | `() -> gmat4x3f`                                                                                               | Returns a default GPU 4x3 matrix                                          | ✅       |
+| `gmat4x3f`    | `(gvec3f, gvec3f, gvec3f, gvec3f) -> gmat4x3f`                                                                 | Returns a GPU 4x3 matrix assembled from four vector columns               | ✅       |
+| `gmat4x3f{I}` | `(I, I, I, I, I, I, I, I, I, I, I, I) -> gmat4x3f`                                                             | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat4x3f`    | `(gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32) -> gmat4x3f`                         | Returns a GPU 4x3 matrix assembled from `gf32` values in column order     | ✅       |
+| `gmat4x4f`    | `() -> gmat4x4f`                                                                                               | Returns a default GPU 4x4 matrix                                          | ✅       |
+| `gmat4x4f`    | `(gvec4f, gvec4f, gvec4f, gvec4f) -> gmat4x4f`                                                                 | Returns a GPU 4x4 matrix assembled from four vector columns               | ✅       |
+| `gmat4x4f{I}` | `(I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I) -> gmat4x4f`                                                 | Converts the input values to `gf32` and stores them column by column      | ✅       |
+| `gmat4x4f`    | `(gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32, gf32) -> gmat4x4f` | Returns a GPU 4x4 matrix assembled from `gf32` values in column order     | ✅       |
 
 ### GPGPU Accessor functions
 
