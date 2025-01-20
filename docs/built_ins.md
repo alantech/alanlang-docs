@@ -1038,15 +1038,47 @@ TODO
 
 ### Process Exit-related functions
 
-TODO
+| Name       | Type              | Description                                                               |
+| :--------- | :---------------- | :------------------------------------------------------------------------ |
+| `ExitCode` | `u8 -> ExitCode`  | Converts a `u8` into an exit code. `u8` directly maps to POSIX exit codes |
+| `ExitCode` | `u16 -> ExitCode` | Converts a `u16` into an exit code. Only the first 8-bits are used        |
+| `ExitCode` | `u32 -> ExitCode` | Converts a `u32` into an exit code. Only the first 8-bits are used        |
+| `ExitCode` | `u64 -> ExitCode` | Converts a `u64` into an exit code. Only the first 8-bits are used        |
+| `ExitCode` | `i8 -> ExitCode`  | Converts a `i8` into an exit code. Only the first 7-bits are used         |
+| `ExitCode` | `i16 -> ExitCode` | Converts a `i16` into an exit code. Only the first 8-bits are used        |
+| `ExitCode` | `i32 -> ExitCode` | Converts a `i32` into an exit code. Only the first 8-bits are used        |
+| `ExitCode` | `i64 -> ExitCode` | Converts a `i64` into an exit code. Only the first 8-bits are used        |
 
 ### Stdout/stderr-related functions
 
-TODO
+| Name        | Type           | Description                                                                                               |
+| :---------- | :------------- | :-------------------------------------------------------------------------------------------------------- |
+| `print{T}`  | `T -> ()`      | Converts the provided value into a string representation and feeds it to `stdout` with a newline appended |
+| `eprint{T}` | `T -> ()`      | Converts the provided value into a string representation and feeds it to `stderr` with a newline appended |
+| `stdout`    | `string -> ()` | Writes a raw string to `stdout` without any mutation                                                      |
+| `stderr`    | `string -> ()` | Writes a raw string to `stderr` without any mutation                                                      |
 
 ### Testing-related functions
 
-TODO
+!!! note
+
+    The testing functions only exist when running `alan test sourcefile.ln`. Under normal compilation these do not exist. The intention is to allow code to have a different behavior when compiled as a test and not require a separate set of test files.
+
+| Name        | Type                                               | Description                                                                                                                | Explicit |
+| :---------- | :------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------- | :------: |
+| `Testing`   | `Array{string} -> Testing`                         | Manual construction of a `Testing` type                                                                                    | ❌       |
+| `Testing`   | `() -> Testing`                                    | The normal way to initialize a new `Testing` type                                                                          | ✅       |
+| `describe`  | `string -> Testing`                                | Construction of a `Testing` type by a fluent describe block                                                                | ✅       |
+| `describe`  | `(string, Testing -> ()) -> Testing`               | Construction of a `Testing` type by a callback-style describe block                                                        | ✅       |
+| `describe`  | `(string, Testing -> Testing) -> Testing`          | Construction of a `Testing` type by a one-liner callback-style describe block                                              | ✅       |
+| `describe`  | `(Testing, string) -> Testing`                     | Adding a new fluent describe block to a `Testing` value                                                                    | ✅       |
+| `describe`  | `(Testing, string, Testing -> ()) -> Testing`      | Adding a new callback-style describe block to a `Testing` value                                                            | ✅       |
+| `describe`  | `(Testing, string, Testing -> Testing) -> Testing` | Adding a new one-liner callback-style describe block to a `Testing` value                                                  | ✅       |
+| `it`        | `(Testing, string) -> Testing`                     | Adding a new fluent it block to a `Testing` value                                                                          | ✅       |
+| `it`        | `(Testing, string, Testing -> ()) -> Testing`      | Adding a new callback-style it block to a `Testing` value                                                                  | ✅       |
+| `it`        | `(Testing, string, Testing -> Testing) -> Testing` | Adding a new one-liner call-back style it block to a `Testing` value                                                       | ✅       |
+| `assert{T}` | `(Testing, (T, T) -> bool, T, T) -> Testing`       | Adding an assertion to the `Testing` value. Second arg is the comparator fn for the actual (3rd) and expected (4th) values | ✅       |
+| `report`    | `Testing -> ()`                                    | Report the result of the test                                                                                              | ✅       |
 
 ## Operators
 
