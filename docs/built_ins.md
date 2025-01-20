@@ -407,6 +407,37 @@ For clarity, the table of functions will be broken up into broad categories, and
 | `bool` | `f64 -> bool`    | Casts the `f64` to a `bool`                                        |
 | `bool` | `string -> bool` | Casts the `string` to a `bool` (`'true'` is `true`, else `false`)  |
 
+### Bitcasting functions
+
+| Name    | Type         | Description                        |
+| :------ | :----------- | :--------------------------------- |
+| `asU8`  | `u8 -> u8`   | Returns the original value         |
+| `asU8`  | `i8 -> u8`   | Returns the `i8` byte as a `u8`    |
+| `asU16` | `u16 -> u16` | Returns the original value         |
+| `asU16` | `i16 -> u16` | Returns the `i16` byte as a `u16`  |
+| `asU32` | `u32 -> u32` | Returns the original value         |
+| `asU32` | `i32 -> u32` | Returns the `i32` byte as a `u32`  |
+| `asU32` | `f32 -> u32` | Returns the `f32` byte as a `u32`  |
+| `asU64` | `u64 -> u64` | Returns the original value         |
+| `asU64` | `i64 -> u64` | Returns the `i64` byte as a `u64`  |
+| `asU64` | `f64 -> u64` | Returns the `f64` byte as a `u64`  |
+| `asI8`  | `u8 -> i8`   | Returns the `u8` byte as an `i8`   |
+| `asI8`  | `i8 -> i8`   | Returns the original value         |
+| `asI16` | `u16 -> i16` | Returns the `u16` byte as an `i16` |
+| `asI16` | `i16 -> i16` | Returns the original value         |
+| `asI32` | `u32 -> i32` | Returns the `u32` byte as an `i32` |
+| `asI32` | `i32 -> i32` | Returns the original value         |
+| `asI32` | `f32 -> i32` | Returns the `f32` byte as an `i32` |
+| `asI64` | `u64 -> i64` | Returns the `u64` byte as an `i64` |
+| `asI64` | `i64 -> i64` | Returns the original value         |
+| `asI64` | `f64 -> i64` | Returns the `f64` byte as an `i64` |
+| `asF32` | `u32 -> f32` | Returns the `u32` byte as an `f32` |
+| `asF32` | `i32 -> f32` | Returns the `i32` byte as an `f32` |
+| `asF32` | `f32 -> f32` | Returns the original value         |
+| `asF64` | `u64 -> f64` | Returns the `u64` byte as an `f64` |
+| `asF64` | `i64 -> f64` | Returns the `i64` byte as an `f64` |
+| `asF64` | `f64 -> f64` | Returns the original value         |
+
 ### Boolean-related functions
 
 | Name    | Type                               | Description                                                   |
@@ -1032,7 +1063,55 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 TODO
 
-### Bitcasting functions
+### Ergonomic GPGPU functions
+
+TODO
+
+### GPGPU Primitive Type functions
+
+TODO
+
+### GPGPU Vector functions
+
+TODO
+
+### GPGPU Matrix functions
+
+TODO
+
+### GPGPU Accessor functions
+
+TODO
+
+### GPGPU Math functions
+
+TODO
+
+### GPGPU Comparison functions
+
+TODO
+
+### GPGPU Conditional functions
+
+TODO
+
+### GPGPU Boolean and Bitwise functions
+
+TODO
+
+### GPGPU Bitcasting functions
+
+TODO
+
+### CPU and GPGPU miscellaneous Vector functions
+
+TODO
+
+### GBuffer-specific functions
+
+TODO
+
+### GPU rendering-related functions
 
 TODO
 
