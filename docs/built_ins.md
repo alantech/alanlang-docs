@@ -1007,15 +1007,26 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### Thread-related functions
 
-TODO
+| Name   | Type        | Description                                                         |
+| :----- | :---------- | :------------------------------------------------------------------ |
+| `wait` | `i64 -> ()` | Sleeps the current thread for the specified number of milliseconds. |
 
 ### Time-related functions
 
-TODO
+| Name      | Type                  | Description                                                                             |
+| :-------- | :-------------------- | :-------------------------------------------------------------------------------------- |
+| `now`     | `() -> Instant`       | Returns a representation of the current time (opaque, Rust-only)                        |
+| `now`     | `() -> Performance`   | Returns a representation of the curent time (opaque, Javascript-only)                   |
+| `elapsed` | `Instant -> Duration` | Calculates the delta between the tagged time and now (opaque, Rust-only)                |
+| `elasped` | `Performance -> f64`  | Calculates the delta between the tagged time and now (`f64` seconds, Javascript-only)   |
+| `f64`     | `Duration -> f64`     | Converts the opaque duration into an `f64` in seconds, (Rust-only)                      |
 
 ### Uuid-related functions
 
-TODO
+| Name     | Type             | Description                                 |
+| :------- | :--------------- | :------------------------------------------ |
+| `uuid`   | `() -> uuid`     | Generates a new UUID (opaque)               |
+| `string` | `uuid -> string` | Creates a string representation of the UUID |
 
 ### GPU-related functions
 
