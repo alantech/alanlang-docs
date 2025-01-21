@@ -1247,7 +1247,1032 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### GPGPU Accessor functions
 
-TODO
+| Name      | Type                         | Description                                                                                               |
+| :-------- | :--------------------------- | :-------------------------------------------------------------------------------------------------------- |
+| `x`       | `gvec2u -> gu32`             | Accesses the first `u32` value from the 2-element vector                                                  |
+| `y`       | `gvec2u -> gu32`             | Accesses the second `u32` value from the 2-element vector                                                 |
+| `i`       | `gvec2u -> gu32`             | Accesses the first `u32` value from the 2-element vector                                                  |
+| `j`       | `gvec2u -> gu32`             | Accesses the second `u32` value from the 2-element vector                                                 |
+| `r`       | `gvec2u -> gu32`             | Accesses the first `u32` value from the 2-element vector                                                  |
+| `g`       | `gvec2u -> gu32`             | Accesses the second `u32` value from the 2-element vector                                                 |
+| `gvec22u` | `(gvec2u, string) -> gvec2u` | Manually construct a method intended to reorder the vector. You probably won't use this directly          |
+| `xy`      | `gvec2u -> gvec2u`           | Returns the original 2-element vector                                                                     |
+| `yx`      | `gvec2u -> gvec2u`           | Reverses the order of the 2-element vector                                                                |
+| `ij`      | `gvec2u -> gvec2u`           | Returns the original 2-element vector                                                                     |
+| `ji`      | `gvec2u -> gvec2u`           | Reverses the order of the 2-element vector                                                                |
+| `rg`      | `gvec2u -> gvec2u`           | Returns the original 2-element vector                                                                     |
+| `gr`      | `gvec2u -> gvec2u`           | Reverses the order of the 2-element vector                                                                |
+| `x`       | `gvec2i -> gi32`             | Accesses the first `i32` value from the 2-element vector                                                  |
+| `y`       | `gvec2i -> gi32`             | Accesses the second `i32` value from the 2-element vector                                                 |
+| `i`       | `gvec2i -> gi32`             | Accesses the first `i32` value from the 2-element vector                                                  |
+| `j`       | `gvec2i -> gi32`             | Accesses the second `i32` value from the 2-element vector                                                 |
+| `r`       | `gvec2i -> gi32`             | Accesses the first `i32` value from the 2-element vector                                                  |
+| `g`       | `gvec2i -> gi32`             | Accesses the second `i32` value from the 2-element vector                                                 |
+| `gvec22i` | `(gvec2i, string) -> gvec2i` | Manually construct a method intended to reorder the vector. You probably won't use this directly          |
+| `xy`      | `gvec2i -> gvec2i`           | Returns the original 2-element vector                                                                     |
+| `yx`      | `gvec2i -> gvec2i`           | Reverses the order of the 2-element vector                                                                |
+| `ij`      | `gvec2i -> gvec2i`           | Returns the original 2-element vector                                                                     |
+| `ji`      | `gvec2i -> gvec2i`           | Reverses the order of the 2-element vector                                                                |
+| `rg`      | `gvec2i -> gvec2i`           | Returns the original 2-element vector                                                                     |
+| `gr`      | `gvec2i -> gvec2i`           | Reverses the order of the 2-element vector                                                                |
+| `x`       | `gvec2f -> gf32`             | Accesses the first `f32` value from the 2-element vector                                                  |
+| `y`       | `gvec2f -> gf32`             | Accesses the second `f32` value from the 2-element vector                                                 |
+| `i`       | `gvec2f -> gf32`             | Accesses the first `f32` value from the 2-element vector                                                  |
+| `j`       | `gvec2f -> gf32`             | Accesses the second `f32` value from the 2-element vector                                                 |
+| `r`       | `gvec2f -> gf32`             | Accesses the first `f32` value from the 2-element vector                                                  |
+| `g`       | `gvec2f -> gf32`             | Accesses the second `f32` value from the 2-element vector                                                 |
+| `gvec22f` | `(gvec2f, string) -> gvec2f` | Manually construct a method intended to reorder the vector. You probably won't use this directly          |
+| `xy`      | `gvec2f -> gvec2f`           | Returns the original 2-element vector                                                                     |
+| `yx`      | `gvec2f -> gvec2f`           | Reverses the order of the 2-element vector                                                                |
+| `ij`      | `gvec2f -> gvec2f`           | Returns the original 2-element vector                                                                     |
+| `ji`      | `gvec2f -> gvec2f`           | Reverses the order of the 2-element vector                                                                |
+| `rg`      | `gvec2f -> gvec2f`           | Returns the original 2-element vector                                                                     |
+| `gr`      | `gvec2f -> gvec2f`           | Reverses the order of the 2-element vector                                                                |
+| `x`       | `gvec2b -> gbool`            | Accesses the first `bool` value from the 2-element vector                                                 |
+| `y`       | `gvec2b -> gbool`            | Accesses the second `bool` value from the 2-element vector                                                |
+| `i`       | `gvec2b -> gbool`            | Accesses the first `bool` value from the 2-element vector                                                 |
+| `j`       | `gvec2b -> gbool`            | Accesses the second `bool` value from the 2-element vector                                                |
+| `r`       | `gvec2b -> gbool`            | Accesses the first `bool` value from the 2-element vector                                                 |
+| `g`       | `gvec2b -> gbool`            | Accesses the second `bool` value from the 2-element vector                                                |
+| `gvec22b` | `(gvec2b, string) -> gvec2b` | Manually construct a method intended to reorder the vector. You probably won't use this directly          |
+| `xy`      | `gvec2b -> gvec2b`           | Returns the original 2-element vector                                                                     |
+| `yx`      | `gvec2b -> gvec2b`           | Reverses the order of the 2-element vector                                                                |
+| `ij`      | `gvec2b -> gvec2b`           | Returns the original 2-element vector                                                                     |
+| `ji`      | `gvec2b -> gvec2b`           | Reverses the order of the 2-element vector                                                                |
+| `rg`      | `gvec2b -> gvec2b`           | Returns the original 2-element vector                                                                     |
+| `gr`      | `gvec2b -> gvec2b`           | Reverses the order of the 2-element vector                                                                |
+| `x`       | `gvec3u -> gu32`             | Accesses value 0 from the 3-element vector                                                                |
+| `y`       | `gvec3u -> gu32`             | Accesses value 1 from the 3-element vector                                                                |
+| `z`       | `gvec3u -> gu32`             | Accesses value 2 from the 3-element vector                                                                |
+| `i`       | `gvec3u -> gu32`             | Accesses value 0 from the 3-element vector                                                                |
+| `j`       | `gvec3u -> gu32`             | Accesses value 1 from the 3-element vector                                                                |
+| `k`       | `gvec3u -> gu32`             | Accesses value 2 from the 3-element vector                                                                |
+| `r`       | `gvec3u -> gu32`             | Accesses value 0 from the 3-element vector                                                                |
+| `g`       | `gvec3u -> gu32`             | Accesses value 1 from the 3-element vector                                                                |
+| `b`       | `gvec3u -> gu32`             | Accesses value 2 from the 3-element vector                                                                |
+| `gvec32u` | `(gvec3u, string) -> gvec2u` | Manually constructs a method intended to extract a 2-element vector. You probably won't use this directly |
+| `xy`      | `gvec3u -> gvec2u`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `yx`      | `gvec3u -> gvec2u`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `xz`      | `gvec3u -> gvec2u`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `zx`      | `gvec3u -> gvec2u`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `yz`      | `gvec3u -> gvec2u`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `zy`      | `gvec3u -> gvec2u`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `ij`      | `gvec3u -> gvec2u`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `ji`      | `gvec3u -> gvec2u`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `ik`      | `gvec3u -> gvec2u`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `ki`      | `gvec3u -> gvec2u`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `jk`      | `gvec3u -> gvec2u`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `kj`      | `gvec3u -> gvec2u`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `rg`      | `gvec3u -> gvec2u`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `gr`      | `gvec3u -> gvec2u`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `rb`      | `gvec3u -> gvec2u`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `br`      | `gvec3u -> gvec2u`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `gb`      | `gvec3u -> gvec2u`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `bg`      | `gvec3u -> gvec2u`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `gvec33u` | `(gvec3u, string) -> gvec2u` | Manually construct a method intended to reorder the vector. You probably won't use this directly          |
+| `xyz`     | `gvec3u -> gvec3u`           | Returns the original 3-element vector                                                                     |
+| `xzy`     | `gvec3u -> gvec3u`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `yxz`     | `gvec3u -> gvec3u`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `yzx`     | `gvec3u -> gvec3u`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `zxy`     | `gvec3u -> gvec3u`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `zyx`     | `gvec3u -> gvec3u`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `ijk`     | `gvec3u -> gvec3u`           | Returns the original 3-element vector                                                                     |
+| `ikj`     | `gvec3u -> gvec3u`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `jik`     | `gvec3u -> gvec3u`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `jki`     | `gvec3u -> gvec3u`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `kij`     | `gvec3u -> gvec3u`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `kji`     | `gvec3u -> gvec3u`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `rgb`     | `gvec3u -> gvec3u`           | Returns the original 3-element vector                                                                     |
+| `rbg`     | `gvec3u -> gvec3u`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `grb`     | `gvec3u -> gvec3u`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `gbr`     | `gvec3u -> gvec3u`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `brg`     | `gvec3u -> gvec3u`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `bgr`     | `gvec3u -> gvec3u`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `x`       | `gvec3i -> gi32`             | Accesses value 0 from the 3-element vector                                                                |
+| `y`       | `gvec3i -> gi32`             | Accesses value 1 from the 3-element vector                                                                |
+| `z`       | `gvec3i -> gi32`             | Accesses value 2 from the 3-element vector                                                                |
+| `i`       | `gvec3i -> gi32`             | Accesses value 0 from the 3-element vector                                                                |
+| `j`       | `gvec3i -> gi32`             | Accesses value 1 from the 3-element vector                                                                |
+| `k`       | `gvec3i -> gi32`             | Accesses value 2 from the 3-element vector                                                                |
+| `r`       | `gvec3i -> gi32`             | Accesses value 0 from the 3-element vector                                                                |
+| `g`       | `gvec3i -> gi32`             | Accesses value 1 from the 3-element vector                                                                |
+| `b`       | `gvec3i -> gi32`             | Accesses value 2 from the 3-element vector                                                                |
+| `gvec32i` | `(gvec3i, string) -> gvec2i` | Manually constructs a method intended to extract a 2-element vector. You probably won't use this directly |
+| `xy`      | `gvec3i -> gvec2i`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `yx`      | `gvec3i -> gvec2i`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `xz`      | `gvec3i -> gvec2i`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `zx`      | `gvec3i -> gvec2i`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `yz`      | `gvec3i -> gvec2i`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `zy`      | `gvec3i -> gvec2i`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `ij`      | `gvec3i -> gvec2i`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `ji`      | `gvec3i -> gvec2i`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `ik`      | `gvec3i -> gvec2i`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `ki`      | `gvec3i -> gvec2i`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `jk`      | `gvec3i -> gvec2i`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `kj`      | `gvec3i -> gvec2i`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `rg`      | `gvec3i -> gvec2i`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `gr`      | `gvec3i -> gvec2i`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `rb`      | `gvec3i -> gvec2i`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `br`      | `gvec3i -> gvec2i`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `gb`      | `gvec3i -> gvec2i`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `bg`      | `gvec3i -> gvec2i`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `gvec33i` | `(gvec3i, string) -> gvec2i` | Manually construct a method intended to reorder the vector. You probably won't use this directly          |
+| `xyz`     | `gvec3i -> gvec3i`           | Returns the original 3-element vector                                                                     |
+| `xzy`     | `gvec3i -> gvec3i`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `yxz`     | `gvec3i -> gvec3i`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `yzx`     | `gvec3i -> gvec3i`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `zxy`     | `gvec3i -> gvec3i`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `zyx`     | `gvec3i -> gvec3i`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `ijk`     | `gvec3i -> gvec3i`           | Returns the original 3-element vector                                                                     |
+| `ikj`     | `gvec3i -> gvec3i`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `jik`     | `gvec3i -> gvec3i`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `jki`     | `gvec3i -> gvec3i`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `kij`     | `gvec3i -> gvec3i`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `kji`     | `gvec3i -> gvec3i`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `rgb`     | `gvec3i -> gvec3i`           | Returns the original 3-element vector                                                                     |
+| `rbg`     | `gvec3i -> gvec3i`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `grb`     | `gvec3i -> gvec3i`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `gbr`     | `gvec3i -> gvec3i`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `brg`     | `gvec3i -> gvec3i`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `bgr`     | `gvec3i -> gvec3i`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `x`       | `gvec3f -> gf32`             | Accesses value 0 from the 3-element vector                                                                |
+| `y`       | `gvec3f -> gf32`             | Accesses value 1 from the 3-element vector                                                                |
+| `z`       | `gvec3f -> gf32`             | Accesses value 2 from the 3-element vector                                                                |
+| `i`       | `gvec3f -> gf32`             | Accesses value 0 from the 3-element vector                                                                |
+| `j`       | `gvec3f -> gf32`             | Accesses value 1 from the 3-element vector                                                                |
+| `k`       | `gvec3f -> gf32`             | Accesses value 2 from the 3-element vector                                                                |
+| `r`       | `gvec3f -> gf32`             | Accesses value 0 from the 3-element vector                                                                |
+| `g`       | `gvec3f -> gf32`             | Accesses value 1 from the 3-element vector                                                                |
+| `b`       | `gvec3f -> gf32`             | Accesses value 2 from the 3-element vector                                                                |
+| `gvec32f` | `(gvec3f, string) -> gvec2f` | Manually constructs a method intended to extract a 2-element vector. You probably won't use this directly |
+| `xy`      | `gvec3f -> gvec2f`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `yx`      | `gvec3f -> gvec2f`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `xz`      | `gvec3f -> gvec2f`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `zx`      | `gvec3f -> gvec2f`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `yz`      | `gvec3f -> gvec2f`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `zy`      | `gvec3f -> gvec2f`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `ij`      | `gvec3f -> gvec2f`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `ji`      | `gvec3f -> gvec2f`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `ik`      | `gvec3f -> gvec2f`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `ki`      | `gvec3f -> gvec2f`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `jk`      | `gvec3f -> gvec2f`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `kj`      | `gvec3f -> gvec2f`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `rg`      | `gvec3f -> gvec2f`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `gr`      | `gvec3f -> gvec2f`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `rb`      | `gvec3f -> gvec2f`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `br`      | `gvec3f -> gvec2f`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `gb`      | `gvec3f -> gvec2f`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `bg`      | `gvec3f -> gvec2f`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `gvec33f` | `(gvec3f, string) -> gvec2f` | Manually construct a method intended to reorder the vector. You probably won't use this directly          |
+| `xyz`     | `gvec3f -> gvec3f`           | Returns the original 3-element vector                                                                     |
+| `xzy`     | `gvec3f -> gvec3f`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `yxz`     | `gvec3f -> gvec3f`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `yzx`     | `gvec3f -> gvec3f`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `zxy`     | `gvec3f -> gvec3f`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `zyx`     | `gvec3f -> gvec3f`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `ijk`     | `gvec3f -> gvec3f`           | Returns the original 3-element vector                                                                     |
+| `ikj`     | `gvec3f -> gvec3f`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `jik`     | `gvec3f -> gvec3f`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `jki`     | `gvec3f -> gvec3f`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `kij`     | `gvec3f -> gvec3f`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `kji`     | `gvec3f -> gvec3f`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `rgb`     | `gvec3f -> gvec3f`           | Returns the original 3-element vector                                                                     |
+| `rbg`     | `gvec3f -> gvec3f`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `grb`     | `gvec3f -> gvec3f`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `gbr`     | `gvec3f -> gvec3f`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `brg`     | `gvec3f -> gvec3f`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `bgr`     | `gvec3f -> gvec3f`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `x`       | `gvec3b -> gbool`            | Accesses value 0 from the 3-element vector                                                                |
+| `y`       | `gvec3b -> gbool`            | Accesses value 1 from the 3-element vector                                                                |
+| `z`       | `gvec3b -> gbool`            | Accesses value 2 from the 3-element vector                                                                |
+| `i`       | `gvec3b -> gbool`            | Accesses value 0 from the 3-element vector                                                                |
+| `j`       | `gvec3b -> gbool`            | Accesses value 1 from the 3-element vector                                                                |
+| `k`       | `gvec3b -> gbool`            | Accesses value 2 from the 3-element vector                                                                |
+| `r`       | `gvec3b -> gbool`            | Accesses value 0 from the 3-element vector                                                                |
+| `g`       | `gvec3b -> gbool`            | Accesses value 1 from the 3-element vector                                                                |
+| `b`       | `gvec3b -> gbool`            | Accesses value 2 from the 3-element vector                                                                |
+| `gvec32b` | `(gvec3b, string) -> gvec2b` | Manually constructs a method intended to extract a 2-element vector. You probably won't use this directly |
+| `xy`      | `gvec3b -> gvec2b`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `yx`      | `gvec3b -> gvec2b`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `xz`      | `gvec3b -> gvec2b`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `zx`      | `gvec3b -> gvec2b`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `yz`      | `gvec3b -> gvec2b`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `zy`      | `gvec3b -> gvec2b`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `ij`      | `gvec3b -> gvec2b`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `ji`      | `gvec3b -> gvec2b`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `ik`      | `gvec3b -> gvec2b`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `ki`      | `gvec3b -> gvec2b`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `jk`      | `gvec3b -> gvec2b`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `kj`      | `gvec3b -> gvec2b`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `rg`      | `gvec3b -> gvec2b`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `gr`      | `gvec3b -> gvec2b`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `rb`      | `gvec3b -> gvec2b`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `br`      | `gvec3b -> gvec2b`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `gb`      | `gvec3b -> gvec2b`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `bg`      | `gvec3b -> gvec2b`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `gvec33b` | `(gvec3b, string) -> gvec2b` | Manually construct a method intended to reorder the vector. You probably won't use this directly          |
+| `xyz`     | `gvec3b -> gvec3b`           | Returns the original 3-element vector                                                                     |
+| `xzy`     | `gvec3b -> gvec3b`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `yxz`     | `gvec3b -> gvec3b`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `yzx`     | `gvec3b -> gvec3b`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `zxy`     | `gvec3b -> gvec3b`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `zyx`     | `gvec3b -> gvec3b`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `ijk`     | `gvec3b -> gvec3b`           | Returns the original 3-element vector                                                                     |
+| `ikj`     | `gvec3b -> gvec3b`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `jik`     | `gvec3b -> gvec3b`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `jki`     | `gvec3b -> gvec3b`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `kij`     | `gvec3b -> gvec3b`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `kji`     | `gvec3b -> gvec3b`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `rgb`     | `gvec3b -> gvec3b`           | Returns the original 3-element vector                                                                     |
+| `rbg`     | `gvec3b -> gvec3b`           | Returns a vector using `[0, 2, 1]` ordering                                                               |
+| `grb`     | `gvec3b -> gvec3b`           | Returns a vector using `[1, 0, 2]` ordering                                                               |
+| `gbr`     | `gvec3b -> gvec3b`           | Returns a vector using `[1, 2, 0]` ordering                                                               |
+| `brg`     | `gvec3b -> gvec3b`           | Returns a vector using `[2, 0, 1]` ordering                                                               |
+| `bgr`     | `gvec3b -> gvec3b`           | Returns a vector using `[2, 1, 0]` ordering                                                               |
+| `x`       | `gvec4u -> gu32`             | Accesses value 0 from the 4-element vector                                                                |
+| `y`       | `gvec4u -> gu32`             | Accesses value 1 from the 4-element vector                                                                |
+| `z`       | `gvec4u -> gu32`             | Accesses value 2 from the 4-element vector                                                                |
+| `w`       | `gvec4u -> gu32`             | Accesses value 3 from the 4-element vector                                                                |
+| `i`       | `gvec4u -> gu32`             | Accesses value 0 from the 4-element vector                                                                |
+| `j`       | `gvec4u -> gu32`             | Accesses value 1 from the 4-element vector                                                                |
+| `k`       | `gvec4u -> gu32`             | Accesses value 2 from the 4-element vector                                                                |
+| `l`       | `gvec4u -> gu32`             | Accesses value 3 from the 4-element vector                                                                |
+| `r`       | `gvec4u -> gu32`             | Accesses value 0 from the 4-element vector                                                                |
+| `g`       | `gvec4u -> gu32`             | Accesses value 1 from the 4-element vector                                                                |
+| `b`       | `gvec4u -> gu32`             | Accesses value 2 from the 4-element vector                                                                |
+| `a`       | `gvec4u -> gu32`             | Accesses value 3 from the 4-element vector                                                                |
+| `gvec42u` | `(gvec4u, string) -> gvec2u` | Manually constructs a method intended to extract a 2-element vector. You probably won't use this directly |
+| `xy`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `yx`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `xz`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `zx`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `xw`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `wx`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `yz`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `zy`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `yw`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `wy`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `zw`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `wz`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `ij`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `ji`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `ik`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `ki`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `il`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `li`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `jk`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `kj`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `jl`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `lj`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `kl`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `lk`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `rg`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `gr`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `rb`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `br`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `ra`      | `gvec4u -> gvec2u`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `ar`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `gb`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `bg`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `ga`      | `gvec4u -> gvec2u`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `ag`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `ba`      | `gvec4u -> gvec2u`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `ab`      | `gvec4u -> gvec2u`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `gvec43u` | `(gvec4u, string) -> gvec3u` | Manually constructs a method intended to extract a 3-element vector. You probably won't use this directly |
+| `xyz`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `xyw`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `xzy`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `xzw`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `xwy`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `xwz`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `yxz`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `yxw`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `yzx`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `yzw`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `ywx`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `ywz`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `zxy`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `zxw`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `zyx`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `zyw`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `zwx`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `zwy`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `wxy`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `wxz`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `wyx`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `wyz`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `wzx`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `wzy`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `ijk`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `ijl`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `ikj`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `ikl`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `ilj`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `ilk`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `jik`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `jil`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `jki`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `jkl`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `jli`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `jlk`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `kij`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `kil`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `kji`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `kjl`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `kli`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `klj`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `lij`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `lik`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `lji`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `ljk`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `lki`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `lkj`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `rgb`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `rga`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `rbg`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `rba`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `rag`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `rab`     | `gvec4u -> gvec3u`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `grb`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `gra`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `gbr`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `gba`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `gar`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `gab`     | `gvec4u -> gvec3u`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `brg`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `bra`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `bgr`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `bgr`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `bar`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `bag`     | `gvec4u -> gvec3u`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `arg`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `arb`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `agr`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `agb`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `abr`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `abg`     | `gvec4u -> gvec3u`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `gvec44u` | `(gvec4u, string) -> gvec4u` | Manually constructs a method intended to extract a 4-element vector. You probably won't use this directly |
+| `xyzw`    | `gvec4u -> gvec4u`           | Returns the original 4-element vector                                                                     |
+| `xywz`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `xzyw`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `xzwy`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `xwyz`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `xwzy`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `yxzw`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `yxwz`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `yzxw`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `yzwx`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `ywxz`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `ywzx`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `zxyw`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `zxwy`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `zyxw`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `zywx`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `zwxy`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `zwyx`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `wxyz`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `wxzy`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `wyxz`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `wyzx`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `wzxy`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `wzyx`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `ijkl`    | `gvec4u -> gvec4u`           | Returns the original 4-element vector                                                                     |
+| `ijlk`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `ikjl`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `iklj`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `iljk`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `ilkj`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `jikl`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `jilk`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `jkil`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `jkli`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `jlik`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `jlki`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `kijl`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `kilj`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `kjil`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `kjli`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `klij`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `klji`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `lijk`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `likj`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `ljik`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `ljki`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `lkij`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `lkji`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `rgba`    | `gvec4u -> gvec4u`           | Returns the original 4-element vector                                                                     |
+| `rgab`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `rbga`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `rbag`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `ragb`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `rabg`    | `gvec4u -> gvec4u`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `grba`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `grab`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `gbra`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `gbar`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `garb`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `gabr`    | `gvec4u -> gvec4u`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `brga`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `brag`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `bgra`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `bgar`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `barg`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `bagr`    | `gvec4u -> gvec4u`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `argb`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `arbg`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `agrb`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `agbr`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `abrg`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `abgr`    | `gvec4u -> gvec4u`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `x`       | `gvec4i -> gi32`             | Accesses value 0 from the 4-element vector                                                                |
+| `y`       | `gvec4i -> gi32`             | Accesses value 1 from the 4-element vector                                                                |
+| `z`       | `gvec4i -> gi32`             | Accesses value 2 from the 4-element vector                                                                |
+| `w`       | `gvec4i -> gi32`             | Accesses value 3 from the 4-element vector                                                                |
+| `i`       | `gvec4i -> gi32`             | Accesses value 0 from the 4-element vector                                                                |
+| `j`       | `gvec4i -> gi32`             | Accesses value 1 from the 4-element vector                                                                |
+| `k`       | `gvec4i -> gi32`             | Accesses value 2 from the 4-element vector                                                                |
+| `l`       | `gvec4i -> gi32`             | Accesses value 3 from the 4-element vector                                                                |
+| `r`       | `gvec4i -> gi32`             | Accesses value 0 from the 4-element vector                                                                |
+| `g`       | `gvec4i -> gi32`             | Accesses value 1 from the 4-element vector                                                                |
+| `b`       | `gvec4i -> gi32`             | Accesses value 2 from the 4-element vector                                                                |
+| `a`       | `gvec4i -> gi32`             | Accesses value 3 from the 4-element vector                                                                |
+| `gvec42i` | `(gvec4i, string) -> gvec2i` | Manually constructs a method intended to extract a 2-element vector. You probably won't use this directly |
+| `xy`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `yx`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `xz`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `zx`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `xw`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `wx`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `yz`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `zy`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `yw`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `wy`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `zw`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `wz`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `ij`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `ji`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `ik`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `ki`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `il`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `li`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `jk`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `kj`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `jl`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `lj`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `kl`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `lk`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `rg`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `gr`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `rb`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `br`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `ra`      | `gvec4i -> gvec2i`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `ar`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `gb`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `bg`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `ga`      | `gvec4i -> gvec2i`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `ag`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `ba`      | `gvec4i -> gvec2i`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `ab`      | `gvec4i -> gvec2i`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `gvec43i` | `(gvec4i, string) -> gvec3i` | Manually constructs a method intended to extract a 3-element vector. You probably won't use this directly |
+| `xyz`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `xyw`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `xzy`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `xzw`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `xwy`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `xwz`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `yxz`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `yxw`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `yzx`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `yzw`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `ywx`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `ywz`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `zxy`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `zxw`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `zyx`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `zyw`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `zwx`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `zwy`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `wxy`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `wxz`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `wyx`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `wyz`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `wzx`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `wzy`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `ijk`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `ijl`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `ikj`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `ikl`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `ilj`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `ilk`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `jik`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `jil`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `jki`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `jkl`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `jli`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `jlk`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `kij`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `kil`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `kji`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `kjl`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `kli`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `klj`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `lij`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `lik`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `lji`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `ljk`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `lki`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `lkj`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `rgb`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `rga`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `rbg`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `rba`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `rag`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `rab`     | `gvec4i -> gvec3i`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `grb`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `gra`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `gbr`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `gba`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `gar`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `gab`     | `gvec4i -> gvec3i`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `brg`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `bra`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `bgr`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `bgr`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `bar`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `bag`     | `gvec4i -> gvec3i`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `arg`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `arb`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `agr`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `agb`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `abr`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `abg`     | `gvec4i -> gvec3i`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `gvec44i` | `(gvec4i, string) -> gvec4i` | Manually constructs a method intended to extract a 4-element vector. You probably won't use this directly |
+| `xyzw`    | `gvec4i -> gvec4i`           | Returns the original 4-element vector                                                                     |
+| `xywz`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `xzyw`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `xzwy`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `xwyz`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `xwzy`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `yxzw`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `yxwz`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `yzxw`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `yzwx`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `ywxz`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `ywzx`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `zxyw`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `zxwy`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `zyxw`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `zywx`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `zwxy`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `zwyx`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `wxyz`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `wxzy`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `wyxz`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `wyzx`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `wzxy`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `wzyx`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `ijkl`    | `gvec4i -> gvec4i`           | Returns the original 4-element vector                                                                     |
+| `ijlk`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `ikjl`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `iklj`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `iljk`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `ilkj`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `jikl`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `jilk`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `jkil`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `jkli`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `jlik`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `jlki`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `kijl`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `kilj`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `kjil`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `kjli`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `klij`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `klji`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `lijk`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `likj`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `ljik`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `ljki`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `lkij`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `lkji`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `rgba`    | `gvec4i -> gvec4i`           | Returns the original 4-element vector                                                                     |
+| `rgab`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `rbga`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `rbag`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `ragb`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `rabg`    | `gvec4i -> gvec4i`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `grba`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `grab`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `gbra`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `gbar`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `garb`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `gabr`    | `gvec4i -> gvec4i`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `brga`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `brag`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `bgra`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `bgar`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `barg`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `bagr`    | `gvec4i -> gvec4i`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `argb`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `arbg`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `agrb`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `agbr`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `abrg`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `abgr`    | `gvec4i -> gvec4i`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `x`       | `gvec4f -> gf32`             | Accesses value 0 from the 4-element vector                                                                |
+| `y`       | `gvec4f -> gf32`             | Accesses value 1 from the 4-element vector                                                                |
+| `z`       | `gvec4f -> gf32`             | Accesses value 2 from the 4-element vector                                                                |
+| `w`       | `gvec4f -> gf32`             | Accesses value 3 from the 4-element vector                                                                |
+| `i`       | `gvec4f -> gf32`             | Accesses value 0 from the 4-element vector                                                                |
+| `j`       | `gvec4f -> gf32`             | Accesses value 1 from the 4-element vector                                                                |
+| `k`       | `gvec4f -> gf32`             | Accesses value 2 from the 4-element vector                                                                |
+| `l`       | `gvec4f -> gf32`             | Accesses value 3 from the 4-element vector                                                                |
+| `r`       | `gvec4f -> gf32`             | Accesses value 0 from the 4-element vector                                                                |
+| `g`       | `gvec4f -> gf32`             | Accesses value 1 from the 4-element vector                                                                |
+| `b`       | `gvec4f -> gf32`             | Accesses value 2 from the 4-element vector                                                                |
+| `a`       | `gvec4f -> gf32`             | Accesses value 3 from the 4-element vector                                                                |
+| `gvec42f` | `(gvec4f, string) -> gvec2f` | Manually constructs a method intended to extract a 2-element vector. You probably won't use this directly |
+| `xy`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `yx`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `xz`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `zx`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `xw`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `wx`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `yz`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `zy`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `yw`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `wy`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `zw`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `wz`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `ij`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `ji`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `ik`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `ki`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `il`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `li`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `jk`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `kj`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `jl`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `lj`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `kl`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `lk`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `rg`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `gr`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `rb`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `br`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `ra`      | `gvec4f -> gvec2f`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `ar`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `gb`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `bg`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `ga`      | `gvec4f -> gvec2f`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `ag`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `ba`      | `gvec4f -> gvec2f`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `ab`      | `gvec4f -> gvec2f`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `gvec43f` | `(gvec4f, string) -> gvec3f` | Manually constructs a method intended to extract a 3-element vector. You probably won't use this directly |
+| `xyz`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `xyw`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `xzy`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `xzw`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `xwy`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `xwz`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `yxz`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `yxw`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `yzx`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `yzw`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `ywx`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `ywz`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `zxy`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `zxw`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `zyx`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `zyw`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `zwx`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `zwy`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `wxy`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `wxz`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `wyx`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `wyz`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `wzx`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `wzy`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `ijk`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `ijl`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `ikj`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `ikl`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `ilj`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `ilk`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `jik`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `jil`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `jki`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `jkl`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `jli`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `jlk`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `kij`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `kil`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `kji`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `kjl`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `kli`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `klj`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `lij`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `lik`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `lji`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `ljk`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `lki`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `lkj`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `rgb`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `rga`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `rbg`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `rba`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `rag`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `rab`     | `gvec4f -> gvec3f`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `grb`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `gra`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `gbr`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `gba`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `gar`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `gab`     | `gvec4f -> gvec3f`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `brg`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `bra`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `bgr`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `bgr`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `bar`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `bag`     | `gvec4f -> gvec3f`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `arg`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `arb`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `agr`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `agb`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `abr`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `abg`     | `gvec4f -> gvec3f`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `gvec44f` | `(gvec4f, string) -> gvec4f` | Manually constructs a method intended to extract a 4-element vector. You probably won't use this directly |
+| `xyzw`    | `gvec4f -> gvec4f`           | Returns the original 4-element vector                                                                     |
+| `xywz`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `xzyw`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `xzwy`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `xwyz`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `xwzy`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `yxzw`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `yxwz`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `yzxw`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `yzwx`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `ywxz`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `ywzx`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `zxyw`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `zxwy`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `zyxw`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `zywx`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `zwxy`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `zwyx`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `wxyz`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `wxzy`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `wyxz`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `wyzx`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `wzxy`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `wzyx`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `ijkl`    | `gvec4f -> gvec4f`           | Returns the original 4-element vector                                                                     |
+| `ijlk`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `ikjl`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `iklj`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `iljk`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `ilkj`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `jikl`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `jilk`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `jkil`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `jkli`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `jlik`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `jlki`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `kijl`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `kilj`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `kjil`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `kjli`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `klij`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `klji`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `lijk`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `likj`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `ljik`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `ljki`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `lkij`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `lkji`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `rgba`    | `gvec4f -> gvec4f`           | Returns the original 4-element vector                                                                     |
+| `rgab`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `rbga`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `rbag`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `ragb`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `rabg`    | `gvec4f -> gvec4f`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `grba`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `grab`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `gbra`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `gbar`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `garb`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `gabr`    | `gvec4f -> gvec4f`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `brga`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `brag`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `bgra`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `bgar`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `barg`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `bagr`    | `gvec4f -> gvec4f`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `argb`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `arbg`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `agrb`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `agbr`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `abrg`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `abgr`    | `gvec4f -> gvec4f`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `x`       | `gvec4b -> gbool`            | Accesses value 0 from the 4-element vector                                                                |
+| `y`       | `gvec4b -> gbool`            | Accesses value 1 from the 4-element vector                                                                |
+| `z`       | `gvec4b -> gbool`            | Accesses value 2 from the 4-element vector                                                                |
+| `w`       | `gvec4b -> gbool`            | Accesses value 3 from the 4-element vector                                                                |
+| `i`       | `gvec4b -> gbool`            | Accesses value 0 from the 4-element vector                                                                |
+| `j`       | `gvec4b -> gbool`            | Accesses value 1 from the 4-element vector                                                                |
+| `k`       | `gvec4b -> gbool`            | Accesses value 2 from the 4-element vector                                                                |
+| `l`       | `gvec4b -> gbool`            | Accesses value 3 from the 4-element vector                                                                |
+| `r`       | `gvec4b -> gbool`            | Accesses value 0 from the 4-element vector                                                                |
+| `g`       | `gvec4b -> gbool`            | Accesses value 1 from the 4-element vector                                                                |
+| `b`       | `gvec4b -> gbool`            | Accesses value 2 from the 4-element vector                                                                |
+| `a`       | `gvec4b -> gbool`            | Accesses value 3 from the 4-element vector                                                                |
+| `gvec42b` | `(gvec4b, string) -> gvec2b` | Manually constructs a method intended to extract a 2-element vector. You probably won't use this directly |
+| `xy`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `yx`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `xz`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `zx`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `xw`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `wx`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `yz`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `zy`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `yw`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `wy`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `zw`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `wz`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `ij`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `ji`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `ik`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `ki`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `il`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `li`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `jk`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `kj`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `jl`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `lj`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `kl`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `lk`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `rg`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 1]` elements                                                              |
+| `gr`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 0]` elements                                                              |
+| `rb`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 2]` elements                                                              |
+| `br`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 0]` elements                                                              |
+| `ra`      | `gvec4b -> gvec2b`           | Returns a vector using the `[0, 3]` elements                                                              |
+| `ar`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 0]` elements                                                              |
+| `gb`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 2]` elements                                                              |
+| `bg`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 1]` elements                                                              |
+| `ga`      | `gvec4b -> gvec2b`           | Returns a vector using the `[1, 3]` elements                                                              |
+| `ag`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 1]` elements                                                              |
+| `ba`      | `gvec4b -> gvec2b`           | Returns a vector using the `[2, 3]` elements                                                              |
+| `ab`      | `gvec4b -> gvec2b`           | Returns a vector using the `[3, 2]` elements                                                              |
+| `gvec43b` | `(gvec4b, string) -> gvec3b` | Manually constructs a method intended to extract a 3-element vector. You probably won't use this directly |
+| `xyz`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `xyw`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `xzy`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `xzw`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `xwy`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `xwz`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `yxz`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `yxw`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `yzx`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `yzw`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `ywx`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `ywz`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `zxy`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `zxw`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `zyx`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `zyw`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `zwx`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `zwy`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `wxy`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `wxz`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `wyx`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `wyz`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `wzx`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `wzy`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `ijk`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `ijl`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `ikj`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `ikl`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `ilj`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `ilk`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `jik`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `jil`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `jki`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `jkl`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `jli`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `jlk`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `kij`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `kil`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `kji`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `kjl`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `kli`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `klj`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `lij`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `lik`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `lji`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `ljk`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `lki`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `lkj`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `rgb`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 1, 2]` elements                                                           |
+| `rga`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 1, 3]` elements                                                           |
+| `rbg`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 2, 1]` elements                                                           |
+| `rba`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 2, 3]` elements                                                           |
+| `rag`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 3, 1]` elements                                                           |
+| `rab`     | `gvec4b -> gvec3b`           | Returns a vector using the `[0, 3, 2]` elements                                                           |
+| `grb`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 0, 2]` elements                                                           |
+| `gra`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 0, 3]` elements                                                           |
+| `gbr`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 2, 0]` elements                                                           |
+| `gba`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 2, 3]` elements                                                           |
+| `gar`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 3, 0]` elements                                                           |
+| `gab`     | `gvec4b -> gvec3b`           | Returns a vector using the `[1, 3, 2]` elements                                                           |
+| `brg`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 0, 1]` elements                                                           |
+| `bra`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 0, 3]` elements                                                           |
+| `bgr`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 1, 0]` elements                                                           |
+| `bgr`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 1, 3]` elements                                                           |
+| `bar`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 3, 0]` elements                                                           |
+| `bag`     | `gvec4b -> gvec3b`           | Returns a vector using the `[2, 3, 1]` elements                                                           |
+| `arg`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 0, 1]` elements                                                           |
+| `arb`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 0, 2]` elements                                                           |
+| `agr`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 1, 0]` elements                                                           |
+| `agb`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 1, 2]` elements                                                           |
+| `abr`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 2, 0]` elements                                                           |
+| `abg`     | `gvec4b -> gvec3b`           | Returns a vector using the `[3, 2, 1]` elements                                                           |
+| `gvec44b` | `(gvec4b, string) -> gvec4b` | Manually constructs a method intended to extract a 4-element vector. You probably won't use this directly |
+| `xyzw`    | `gvec4b -> gvec4b`           | Returns the original 4-element vector                                                                     |
+| `xywz`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `xzyw`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `xzwy`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `xwyz`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `xwzy`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `yxzw`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `yxwz`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `yzxw`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `yzwx`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `ywxz`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `ywzx`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `zxyw`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `zxwy`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `zyxw`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `zywx`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `zwxy`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `zwyx`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `wxyz`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `wxzy`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `wyxz`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `wyzx`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `wzxy`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `wzyx`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `ijkl`    | `gvec4b -> gvec4b`           | Returns the original 4-element vector                                                                     |
+| `ijlk`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `ikjl`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `iklj`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `iljk`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `ilkj`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `jikl`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `jilk`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `jkil`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `jkli`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `jlik`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `jlki`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `kijl`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `kilj`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `kjil`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `kjli`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `klij`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `klji`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `lijk`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `likj`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `ljik`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `ljki`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `lkij`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `lkji`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `rgba`    | `gvec4b -> gvec4b`           | Returns the original 4-element vector                                                                     |
+| `rgab`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 1, 3, 2]` ordering                                                            |
+| `rbga`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 2, 1, 3]` ordering                                                            |
+| `rbag`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 2, 3, 1]` ordering                                                            |
+| `ragb`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 3, 1, 2]` ordering                                                            |
+| `rabg`    | `gvec4b -> gvec4b`           | Returns a vector using `[0, 3, 2, 1]` ordering                                                            |
+| `grba`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 0, 2, 3]` ordering                                                            |
+| `grab`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 0, 3, 2]` ordering                                                            |
+| `gbra`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 2, 0, 3]` ordering                                                            |
+| `gbar`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 2, 3, 0]` ordering                                                            |
+| `garb`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 3, 0, 2]` ordering                                                            |
+| `gabr`    | `gvec4b -> gvec4b`           | Returns a vector using `[1, 3, 2, 0]` ordering                                                            |
+| `brga`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 0, 1, 3]` ordering                                                            |
+| `brag`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 0, 3, 1]` ordering                                                            |
+| `bgra`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 1, 0, 3]` ordering                                                            |
+| `bgar`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 1, 3, 0]` ordering                                                            |
+| `barg`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 3, 0, 1]` ordering                                                            |
+| `bagr`    | `gvec4b -> gvec4b`           | Returns a vector using `[2, 3, 1, 0]` ordering                                                            |
+| `argb`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 0, 1, 2]` ordering                                                            |
+| `arbg`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 0, 2, 1]` ordering                                                            |
+| `agrb`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 1, 0, 2]` ordering                                                            |
+| `agbr`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 1, 2, 0]` ordering                                                            |
+| `abrg`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 2, 0, 1]` ordering                                                            |
+| `abgr`    | `gvec4b -> gvec4b`           | Returns a vector using `[3, 2, 1, 0]` ordering                                                            |
+| `get`     | `(GBuffer, gu32) -> gi32`    | Returns a value from the GPU buffer as a `gi32`                                                           |
+| `get`     | `(GBuffer, gi32) -> gi32`    | Returns a value from the GPU buffer as a `gi32`                                                           |
+| `get`     | `(GBuffer, i64) -> gi32`     | Returns a value from the GPU buffer as a `gi32`                                                           |
+| `store`   | `(gi32, gi32) -> gi32`       | Replaces the first value with the second value                                                            |
 
 ### GPGPU Math functions
 
