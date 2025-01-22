@@ -3015,7 +3015,10 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### GPGPU Conditional functions
 
-TODO
+| Name    | Type                             | Description                                                                                                                     |
+| :------ | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+| `if{T}` | `(gbool, () -> T, () -> T) -> T` | Conditionally executes either the first or second function depending on the `gbool` value, returning the output of the function |
+| `if{T}` | `(gbool, T, T) -> T`             | Conditionally returns either the first or second value depending on the `gbool` value                                           |
 
 ### GPGPU Boolean and Bitwise functions
 
