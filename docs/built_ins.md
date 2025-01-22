@@ -3022,7 +3022,98 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### GPGPU Boolean and Bitwise functions
 
-TODO
+| Name      | Type                         | Description                                                                                  |
+| :-------- | :--------------------------- | :------------------------------------------------------------------------------------------- |
+| `gnot{I}` | `I -> I`                     | Manually constructs a boolean or bitwise not operation. You probably won't use this directly |
+| `not`     | `gu32 -> gu32`               | Returns a bitwise not                                                                        |
+| `not`     | `gi32 -> gi32`               | Returns a bitwise not                                                                        |
+| `not`     | `gbool -> gbool`             | Returns a boolean not                                                                        |
+| `not`     | `gvec2u -> gvec2u`           | Returns a piecewise bitwise not                                                              |
+| `not`     | `gvec2i -> gvec2i`           | Returns a piecewise bitwise not                                                              |
+| `not`     | `gvec2b -> gvec2b`           | Returns a piecewise boolean not                                                              |
+| `not`     | `gvec3u -> gvec3u`           | Returns a piecewise bitwise not                                                              |
+| `not`     | `gvec3i -> gvec3i`           | Returns a piecewise bitwise not                                                              |
+| `not`     | `gvec3b -> gvec3b`           | Returns a piecewise boolean not                                                              |
+| `not`     | `gvec4u -> gvec4u`           | Returns a piecewise bitwise not                                                              |
+| `not`     | `gvec4i -> gvec4i`           | Returns a piecewise bitwise not                                                              |
+| `not`     | `gvec4b -> gvec4b`           | Returns a piecewise boolean not                                                              |
+| `gor{I}`  | `(I, I) -> I`                | Manually constructs a boolean or bitwise or operation. You probably won't use this directly  |
+| `or`      | `(gu32, gu32) -> gu32`       | Returns a bitwise or                                                                         |
+| `or{T}`   | `(gu32, T) -> gu32`          | Casts the second value to `gu32` and performs a bitwise or operation                         |
+| `or{T}`   | `(T, gu32) -> gu32`          | Casts the first value to `gu32` and performs a bitwise or operation                          |
+| `or`      | `(gi32, gi32) -> gi32`       | Returns a bitwise or                                                                         |
+| `or{T}`   | `(gi32, T) -> gi32`          | Casts the second value to `gi32` and performs a bitwise or operation                         |
+| `or{T}`   | `(T, gi32) -> gi32`          | Casts the first value to `gi32` and performs a bitwise or operation                          |
+| `or`      | `(gbool, gbool) -> gbool`    | Returns a boolean or                                                                         |
+| `or{T}`   | `(gbool, T) -> gbool`        | Casts the second value to `gbool` and performs a boolean or operation                        |
+| `or{T}`   | `(T, gbool) -> gbool`        | Casts the first value to `gbool` and performs a boolean or operation                         |
+| `or`      | `(gvec2u, gvec2u) -> gvec2u` | Performs a bitwise or piecewise across both vectors                                          |
+| `or`      | `(gvec2i, gvec2i) -> gvec2i` | Performs a bitwise or piecewise across both vectors                                          |
+| `or`      | `(gvec2b, gvec2b) -> gvec2b` | Performs a boolean or piecewise across both vectors                                          |
+| `or`      | `(gvec3u, gvec3u) -> gvec3u` | Performs a bitwise or piecewise across both vectors                                          |
+| `or`      | `(gvec3i, gvec3i) -> gvec3i` | Performs a bitwise or piecewise across both vectors                                          |
+| `or`      | `(gvec3b, gvec3b) -> gvec3b` | Performs a boolean or piecewise across both vectors                                          |
+| `or`      | `(gvec4u, gvec4u) -> gvec4u` | Performs a bitwise or piecewise across both vectors                                          |
+| `or`      | `(gvec4i, gvec4i) -> gvec4i` | Performs a bitwise or piecewise across both vectors                                          |
+| `or`      | `(gvec4b, gvec4b) -> gvec4b` | Performs a boolean or piecewise across both vectors                                          |
+| `gand{I}` | `(I, I) -> I`                | Manually constructs a boolean or bitwise and operation. You probably won't use this directly |
+| `and`     | `(gu32, gu32) -> gu32`       | Returns a bitwise and                                                                        |
+| `and{T}`  | `(gu32, T) -> gu32`          | Casts the second value to `gu32` and performs a bitwise and operation                        |
+| `and{T}`  | `(T, gu32) -> gu32`          | Casts the first value to `gu32` and performs a bitwise and operation                         |
+| `and`     | `(gi32, gi32) -> gi32`       | Returns a bitwise and                                                                        |
+| `and{T}`  | `(gi32, T) -> gi32`          | Casts the second value to `gi32` and performs a bitwise and operation                        |
+| `and{T}`  | `(T, gi32) -> gi32`          | Casts the first value to `gi32` and performs a bitwise and operation                         |
+| `and`     | `(gbool, gbool) -> gbool`    | Returns a boolean and                                                                        |
+| `and{T}`  | `(gbool, T) -> gbool`        | Casts the second value to `gbool` and performs a boolean and operation                       |
+| `and{T}`  | `(T, gbool) -> gbool`        | Casts the first value to `gbool` and performs a boolean and operation                        |
+| `and`     | `(gvec2u, gvec2u) -> gvec2u` | Performs a bitwise and piecewise across both vectors                                         |
+| `and`     | `(gvec2i, gvec2i) -> gvec2i` | Performs a bitwise and piecewise across both vectors                                         |
+| `and`     | `(gvec2b, gvec2b) -> gvec2b` | Performs a boolean and piecewise across both vectors                                         |
+| `and`     | `(gvec3u, gvec3u) -> gvec3u` | Performs a bitwise and piecewise across both vectors                                         |
+| `and`     | `(gvec3i, gvec3i) -> gvec3i` | Performs a bitwise and piecewise across both vectors                                         |
+| `and`     | `(gvec3b, gvec3b) -> gvec3b` | Performs a boolean and piecewise across both vectors                                         |
+| `and`     | `(gvec4u, gvec4u) -> gvec4u` | Performs a bitwise and piecewise across both vectors                                         |
+| `and`     | `(gvec4i, gvec4i) -> gvec4i` | Performs a bitwise and piecewise across both vectors                                         |
+| `and`     | `(gvec4b, gvec4b) -> gvec4b` | Performs a boolean and piecewise across both vectors                                         |
+| `gxor{I}` | `(I, I) -> I`                | Manually constructs a bitwise xor operation. You probably won't use this directly            |
+| `xor`     | `(gu32, gu32) -> gu32`       | Returns a bitwise xor                                                                        |
+| `xor{T}`  | `(gu32, T) -> gu32`          | Casts the second value to `gu32` and performs a bitwise xor operation                        |
+| `xor{T}`  | `(T, gu32) -> gu32`          | Casts the first value to `gu32` and performs a bitwise xor operation                         |
+| `xor`     | `(gi32, gi32) -> gi32`       | Returns a bitwise xor                                                                        |
+| `xor{T}`  | `(gi32, T) -> gi32`          | Casts the second value to `gi32` and performs a bitwise xor operation                        |
+| `xor{T}`  | `(T, gi32) -> gi32`          | Casts the first value to `gi32` and performs a bitwise xor operation                         |
+| `xor`     | `(gvec2u, gvec2u) -> gvec2u` | Performs a bitwise xor piecewise across both vectors                                         |
+| `xor`     | `(gvec2i, gvec2i) -> gvec2i` | Performs a bitwise xor piecewise across both vectors                                         |
+| `xor`     | `(gvec3u, gvec3u) -> gvec3u` | Performs a bitwise xor piecewise across both vectors                                         |
+| `xor`     | `(gvec3i, gvec3i) -> gvec3i` | Performs a bitwise xor piecewise across both vectors                                         |
+| `xor`     | `(gvec4u, gvec4u) -> gvec4u` | Performs a bitwise xor piecewise across both vectors                                         |
+| `xor`     | `(gvec4i, gvec4i) -> gvec4i` | Performs a bitwise xor piecewise across both vectors                                         |
+| `gshl{I}` | `(I, I) -> I`                | Manually constructs a shift left operation. You probably won't use this directly             |
+| `shl`     | `(gu32, gu32) -> gu32`       | Returns the first value shifted left as specified by the second value                        |
+| `shl{T}`  | `(gu32, T) -> gu32`          | Casts the second value to `gu32` and shifts the first value left as specified by the second  |
+| `shl{T}`  | `(T, gu32) -> gu32`          | Casts the first value to `gu32` and shifts it left as specified by the second value          |
+| `shl`     | `(gi32, gi32) -> gi32`       | Returns the first value shifted left as specified by the second value                        |
+| `shl{T}`  | `(gi32, T) -> gi32`          | Casts the second value to `gu32` and shifts the first value left as specified by the second  |
+| `shl{T}`  | `(T, gi32) -> gi32`          | Casts the first value to `gu32` and shifts it left as specified by the second value          |
+| `shl`     | `(gvec2u, gvec2u) -> gvec2u` | Performs a shift left piecewise shifting the first vector as specified by the second         |
+| `shl`     | `(gvec2i, gvec2i) -> gvec2i` | Performs a shift left piecewise shifting the first vector as specified by the second         |
+| `shl`     | `(gvec3u, gvec3u) -> gvec3u` | Performs a shift left piecewise shifting the first vector as specified by the second         |
+| `shl`     | `(gvec3i, gvec3i) -> gvec3i` | Performs a shift left piecewise shifting the first vector as specified by the second         |
+| `shl`     | `(gvec4u, gvec4u) -> gvec4u` | Performs a shift left piecewise shifting the first vector as specified by the second         |
+| `shl`     | `(gvec4i, gvec4i) -> gvec4i` | Performs a shift left piecewise shifting the first vector as specified by the second         |
+| `gshr{I}` | `(I, I) -> I`                | Manually constructs a shift right operation. You probably won't use this directly            |
+| `shr`     | `(gu32, gu32) -> gu32`       | Returns the first value shifted right as specified by the second value                       |
+| `shr{T}`  | `(gu32, T) -> gu32`          | Casts the second value to `gu32` and shifts the first value right as specified by the second |
+| `shr{T}`  | `(T, gu32) -> gu32`          | Casts the first value to `gu32` and shifts it right as specified by the second value         |
+| `shr`     | `(gi32, gi32) -> gi32`       | Returns the first value shifted right as specified by the second value                       |
+| `shr{T}`  | `(gi32, T) -> gi32`          | Casts the second value to `gu32` and shifts the first value right as specified by the second |
+| `shr{T}`  | `(T, gi32) -> gi32`          | Casts the first value to `gu32` and shifts it right as specified by the second value         |
+| `shr`     | `(gvec2u, gvec2u) -> gvec2u` | Performs a shift right piecewise shifting the first vector as specified by the second        |
+| `shr`     | `(gvec2i, gvec2i) -> gvec2i` | Performs a shift right piecewise shifting the first vector as specified by the second        |
+| `shr`     | `(gvec3u, gvec3u) -> gvec3u` | Performs a shift right piecewise shifting the first vector as specified by the second        |
+| `shr`     | `(gvec3i, gvec3i) -> gvec3i` | Performs a shift right piecewise shifting the first vector as specified by the second        |
+| `shr`     | `(gvec4u, gvec4u) -> gvec4u` | Performs a shift right piecewise shifting the first vector as specified by the second        |
+| `shr`     | `(gvec4i, gvec4i) -> gvec4i` | Performs a shift right piecewise shifting the first vector as specified by the second        |
 
 ### GPGPU Bitcasting functions
 
