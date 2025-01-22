@@ -2884,7 +2884,134 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### GPGPU Comparison functions
 
-TODO
+| Name         | Type                         | Description                                                                                                     |
+| :----------- | :--------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| `geq{I, O}`  | `(I, I) -> O`                | Manually constructs an equality check on the provided inputs. You probably won't use this directly              |
+| `eq`         | `(gu32, gu32) -> gbool`      | Returns `true` if the two `gu32`s are the same                                                                  |
+| `eq{T}`      | `(gu32, T) -> gbool`         | Casts the second value to `gu32` and returns `true` if it is the same as the first value                        |
+| `eq{T}`      | `(T, gu32) -> gbool`         | Casts the first value to `gu32` and returns `true` if it is the same as the second value                        |
+| `eq`         | `(gi32, gi32) -> gbool`      | Returns `true` if the two `gi32`s are the same                                                                  |
+| `eq{T}`      | `(gi32, T) -> gbool`         | Casts the second value to `gi32` and returns `true` if it is the same as the first value                        |
+| `eq{T}`      | `(T, gi32) -> gbool`         | Casts the first value to `gi32` and returns `true` if it is the same as the second value                        |
+| `eq`         | `(gf32, gf32) -> gbool`      | Returns `true` if the two `gf32`s are the same                                                                  |
+| `eq{T}`      | `(gf32, T) -> gbool`         | Casts the second value to `gf32` and returns `true` if it is the same as the first value                        |
+| `eq{T}`      | `(T, gf32) -> gbool`         | Casts the first value to `gf32` and returns `true` if it is the same as the second value                        |
+| `eq`         | `(gbool, gbool) -> gbool`    | Returns `true` if the two `gbool`s are the same                                                                 |
+| `eq{T}`      | `(gbool, T) -> gbool`        | Casts the second value to `gbool` and returns `true` if it is the same as the first value                       |
+| `eq{T}`      | `(T, gbool) -> gbool`        | Casts the first value to `gbool` and returns `true` if it is the same as the second value                       |
+| `eq{T}`      | `(gvec2u, gvec2u) -> gvec2b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec2i, gvec2i) -> gvec2b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec2f, gvec2f) -> gvec2b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec2b, gvec2b) -> gvec2b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec3u, gvec3u) -> gvec3b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec3i, gvec3i) -> gvec3b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec3f, gvec3f) -> gvec3b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec3b, gvec3b) -> gvec3b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec4u, gvec4u) -> gvec4b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec4i, gvec4i) -> gvec4b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec4f, gvec4f) -> gvec4b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `eq{T}`      | `(gvec4b, gvec4b) -> gvec4b` | Piecewise checks equality of the two vectors and stores the result as a new boolean vector                      |
+| `gneq{I, O}` | `(I, I) -> O`                | Manually constructs an inequality check on the provided inputs. You probably won't use this directly            |
+| `neq`        | `(gu32, gu32) -> gbool`      | Returns `true` if the two `gu32`s are different                                                                 |
+| `neq{T}`     | `(gu32, T) -> gbool`         | Casts the second value to `gu32` and returns `true` if it is different to the first value                       |
+| `neq{T}`     | `(T, gu32) -> gbool`         | Casts the first value to `gu32` and returns `true` if it is different to the second value                       |
+| `neq`        | `(gi32, gi32) -> gbool`      | Returns `true` if the two `gi32`s are different                                                                 |
+| `neq{T}`     | `(gi32, T) -> gbool`         | Casts the second value to `gi32` and returns `true` if it is different to the first value                       |
+| `neq{T}`     | `(T, gi32) -> gbool`         | Casts the first value to `gi32` and returns `true` if it is different to the second value                       |
+| `neq`        | `(gf32, gf32) -> gbool`      | Returns `true` if the two `gf32`s are different                                                                 |
+| `neq{T}`     | `(gf32, T) -> gbool`         | Casts the second value to `gf32` and returns `true` if it is different to the first value                       |
+| `neq{T}`     | `(T, gf32) -> gbool`         | Casts the first value to `gf32` and returns `true` if it is different to the second value                       |
+| `neq`        | `(gbool, gbool) -> gbool`    | Returns `true` if the two `gbool`s are different                                                                |
+| `neq{T}`     | `(gbool, T) -> gbool`        | Casts the second value to `gbool` and returns `true` if it is different to the first value                      |
+| `neq{T}`     | `(T, gbool) -> gbool`        | Casts the first value to `gbool` and returns `true` if it is different to the second value                      |
+| `neq{T}`     | `(gvec2u, gvec2u) -> gvec2b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec2i, gvec2i) -> gvec2b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec2f, gvec2f) -> gvec2b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec2b, gvec2b) -> gvec2b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec3u, gvec3u) -> gvec3b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec3i, gvec3i) -> gvec3b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec3f, gvec3f) -> gvec3b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec3b, gvec3b) -> gvec3b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec4u, gvec4u) -> gvec4b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec4i, gvec4i) -> gvec4b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec4f, gvec4f) -> gvec4b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `neq{T}`     | `(gvec4b, gvec4b) -> gvec4b` | Piecewise checks inequality of the two vectors and stores the result as a new boolean vector                    |
+| `glt{I, O}`  | `(I, I) -> O`                | Manually constructs a less than check on the provided inputs. You probably won't use this directly              |
+| `lt`         | `(gu32, gu32) -> gbool`      | Returns `true` if the first `gu32` is less than the second                                                      |
+| `lt{T}`      | `(gu32, T) -> gbool`         | Casts the second value to `gu32` and returns `true` if the first is less than it                                |
+| `lt{T}`      | `(T, gu32) -> gbool`         | Casts the first value to `gu32` and returns `true` if it is less than the second                                |
+| `lt`         | `(gi32, gi32) -> gbool`      | Returns `true` if the first `gi32` is less than the second                                                      |
+| `lt{T}`      | `(gi32, T) -> gbool`         | Casts the second value to `gi32` and returns `true` if the first is less than it                                |
+| `lt{T}`      | `(T, gi32) -> gbool`         | Casts the first value to `gi32` and returns `true` if it is less than the second                                |
+| `lt`         | `(gf32, gf32) -> gbool`      | Returns `true` if the first `gf32` is less than the second                                                      |
+| `lt{T}`      | `(gf32, T) -> gbool`         | Casts the second value to `gf32` and returns `true` if the first is less than it                                |
+| `lt{T}`      | `(T, gf32) -> gbool`         | Casts the first value to `gf32` and returns `true` if it is less than the second                                |
+| `lt{T}`      | `(gvec2u, gvec2u) -> gvec2b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `lt{T}`      | `(gvec2i, gvec2i) -> gvec2b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `lt{T}`      | `(gvec2f, gvec2f) -> gvec2b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `lt{T}`      | `(gvec3u, gvec3u) -> gvec3b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `lt{T}`      | `(gvec3i, gvec3i) -> gvec3b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `lt{T}`      | `(gvec3f, gvec3f) -> gvec3b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `lt{T}`      | `(gvec4u, gvec4u) -> gvec4b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `lt{T}`      | `(gvec4i, gvec4i) -> gvec4b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `lt{T}`      | `(gvec4f, gvec4f) -> gvec4b` | Piecewise checks if the elements of the first vector are less than the second                                   |
+| `glte{I, O}` | `(I, I) -> O`                | Manually constructs a less than or equals check on the provided inputs. You probably won't use this directly    |
+| `lte`        | `(gu32, gu32) -> gbool`      | Returns `true` if the first `gu32` is less than or equal to the second                                          |
+| `lte{T}`     | `(gu32, T) -> gbool`         | Casts the second value to `gu32` and returns `true` if the first is less than or equal to it                    |
+| `lte{T}`     | `(T, gu32) -> gbool`         | Casts the first value to `gu32` and returns `true` if it is less than or equal to the second                    |
+| `lte`        | `(gi32, gi32) -> gbool`      | Returns `true` if the first `gi32` is less than or equal to the second                                          |
+| `lte{T}`     | `(gi32, T) -> gbool`         | Casts the second value to `gi32` and returns `true` if the first is less than or equal to it                    |
+| `lte{T}`     | `(T, gi32) -> gbool`         | Casts the first value to `gi32` and returns `true` if it is less than or equal to the second                    |
+| `lte`        | `(gf32, gf32) -> gbool`      | Returns `true` if the first `gf32` is less than or equal to the second                                          |
+| `lte{T}`     | `(gf32, T) -> gbool`         | Casts the second value to `gf32` and returns `true` if the first is less than or equal to it                    |
+| `lte{T}`     | `(T, gf32) -> gbool`         | Casts the first value to `gf32` and returns `true` if it is less than or equal to the second                    |
+| `lte{T}`     | `(gvec2u, gvec2u) -> gvec2b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `lte{T}`     | `(gvec2i, gvec2i) -> gvec2b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `lte{T}`     | `(gvec2f, gvec2f) -> gvec2b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `lte{T}`     | `(gvec3u, gvec3u) -> gvec3b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `lte{T}`     | `(gvec3i, gvec3i) -> gvec3b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `lte{T}`     | `(gvec3f, gvec3f) -> gvec3b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `lte{T}`     | `(gvec4u, gvec4u) -> gvec4b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `lte{T}`     | `(gvec4i, gvec4i) -> gvec4b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `lte{T}`     | `(gvec4f, gvec4f) -> gvec4b` | Piecewise checks if the elements of the first vector are less than or equal to the second                       |
+| `ggt{I, O}`  | `(I, I) -> O`                | Manually constructs a greater than check on the provided inputs. You probably won't use this directly           |
+| `gt`         | `(gu32, gu32) -> gbool`      | Returns `true` if the first `gu32` is greater than the second                                                   |
+| `gt{T}`      | `(gu32, T) -> gbool`         | Casts the second value to `gu32` and returns `true` if the first is greater than it                             |
+| `gt{T}`      | `(T, gu32) -> gbool`         | Casts the first value to `gu32` and returns `true` if it is greater than the second                             |
+| `gt`         | `(gi32, gi32) -> gbool`      | Returns `true` if the first `gi32` is greater than the second                                                   |
+| `gt{T}`      | `(gi32, T) -> gbool`         | Casts the second value to `gi32` and returns `true` if the first is greater than it                             |
+| `gt{T}`      | `(T, gi32) -> gbool`         | Casts the first value to `gi32` and returns `true` if it is greater than the second                             |
+| `gt`         | `(gf32, gf32) -> gbool`      | Returns `true` if the first `gf32` is greater than the second                                                   |
+| `gt{T}`      | `(gf32, T) -> gbool`         | Casts the second value to `gf32` and returns `true` if the first is greater than it                             |
+| `gt{T}`      | `(T, gf32) -> gbool`         | Casts the first value to `gf32` and returns `true` if it is greater than the second                             |
+| `gt{T}`      | `(gvec2u, gvec2u) -> gvec2b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `gt{T}`      | `(gvec2i, gvec2i) -> gvec2b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `gt{T}`      | `(gvec2f, gvec2f) -> gvec2b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `gt{T}`      | `(gvec3u, gvec3u) -> gvec3b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `gt{T}`      | `(gvec3i, gvec3i) -> gvec3b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `gt{T}`      | `(gvec3f, gvec3f) -> gvec3b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `gt{T}`      | `(gvec4u, gvec4u) -> gvec4b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `gt{T}`      | `(gvec4i, gvec4i) -> gvec4b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `gt{T}`      | `(gvec4f, gvec4f) -> gvec4b` | Piecewise checks if the elements of the first vector are greater than the second                                |
+| `ggte{I, O}` | `(I, I) -> O`                | Manually constructs a greater than or equals check on the provided inputs. You probably won't use this directly |
+| `gte`        | `(gu32, gu32) -> gbool`      | Returns `true` if the first `gu32` is greater than or equal to the second                                       |
+| `gte{T}`     | `(gu32, T) -> gbool`         | Casts the second value to `gu32` and returns `true` if the first is greater than or equal to it                 |
+| `gte{T}`     | `(T, gu32) -> gbool`         | Casts the first value to `gu32` and returns `true` if it is greater than or equal to the second                 |
+| `gte`        | `(gi32, gi32) -> gbool`      | Returns `true` if the first `gi32` is greater than or equal to the second                                       |
+| `gte{T}`     | `(gi32, T) -> gbool`         | Casts the second value to `gi32` and returns `true` if the first is greater than or equal to it                 |
+| `gte{T}`     | `(T, gi32) -> gbool`         | Casts the first value to `gi32` and returns `true` if it is greater than or equal to the second                 |
+| `gte`        | `(gf32, gf32) -> gbool`      | Returns `true` if the first `gf32` is greater than or equal to the second                                       |
+| `gte{T}`     | `(gf32, T) -> gbool`         | Casts the second value to `gf32` and returns `true` if the first is greater than or equal to it                 |
+| `gte{T}`     | `(T, gf32) -> gbool`         | Casts the first value to `gf32` and returns `true` if it is greater than or equal to the second                 |
+| `gte{T}`     | `(gvec2u, gvec2u) -> gvec2b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
+| `gte{T}`     | `(gvec2i, gvec2i) -> gvec2b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
+| `gte{T}`     | `(gvec2f, gvec2f) -> gvec2b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
+| `gte{T}`     | `(gvec3u, gvec3u) -> gvec3b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
+| `gte{T}`     | `(gvec3i, gvec3i) -> gvec3b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
+| `gte{T}`     | `(gvec3f, gvec3f) -> gvec3b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
+| `gte{T}`     | `(gvec4u, gvec4u) -> gvec4b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
+| `gte{T}`     | `(gvec4i, gvec4i) -> gvec4b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
+| `gte{T}`     | `(gvec4f, gvec4f) -> gvec4b` | Piecewise checks if the elements of the first vector are greater than or equal to the second                    |
 
 ### GPGPU Conditional functions
 
