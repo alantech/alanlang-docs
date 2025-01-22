@@ -3117,7 +3117,45 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### GPGPU Bitcasting functions
 
-TODO
+| Name             | Type               | Description                                                                                |
+| :--------------- | :----------------- | :----------------------------------------------------------------------------------------- |
+| `gbitcast{I, O}` | `I -> O`           | Manually constructs a bitcast operation on the input. You probably won't use this directly |
+| `asU32`          | `gu32 -> gu32`     | Returns the original value back                                                            |
+| `asU32`          | `gi32 -> gu32`     | Bitcasts the `gi32` to a `gu32`                                                            |
+| `asU32`          | `gf32 -> gu32`     | Bitcasts the `gf32` to a `gu32`                                                            |
+| `asI32`          | `gu32 -> gi32`     | Bitcasts the `gu32` to a `gi32`                                                            |
+| `asI32`          | `gi32 -> gi32`     | Returns the original value back                                                            |
+| `asI32`          | `gf32 -> gi32`     | Bitcasts the `gf32` to a `gi32`                                                            |
+| `asF32`          | `gu32 -> gf32`     | Bitcasts the `gu32` to a `gf32`                                                            |
+| `asF32`          | `gi32 -> gf32`     | Bitcasts the `gi32` to a `gf32`                                                            |
+| `asF32`          | `gf32 -> gf32`     | Returns the original value back                                                            |
+| `asVec2u`        | `gvec2u -> gvec2u` | Returns the original value back                                                            |
+| `asVec2u`        | `gvec2i -> gvec2u` | Bitcasts each `gi32` to a `gu32`                                                           |
+| `asVec2u`        | `gvec2f -> gvec2u` | Bitcasts each `gf32` to a `gu32`                                                           |
+| `asVec2i`        | `gvec2u -> gvec2i` | Bitcasts each `gu32` to a `gi32`                                                           |
+| `asVec2i`        | `gvec2i -> gvec2i` | Returns the original value back                                                            |
+| `asVec2i`        | `gvec2f -> gvec2i` | Bitcasts each `gf32` to a `gi32`                                                           |
+| `asVec2f`        | `gvec2u -> gvec2f` | Bitcasts each `gu32` to a `gf32`                                                           |
+| `asVec2f`        | `gvec2i -> gvec2f` | Bitcasts each `gi32` to a `gf32`                                                           |
+| `asVec2f`        | `gvec2f -> gvec2f` | Returns the original value back                                                            |
+| `asVec3u`        | `gvec3u -> gvec3u` | Returns the original value back                                                            |
+| `asVec3u`        | `gvec3i -> gvec3u` | Bitcasts each `gi32` to a `gu32`                                                           |
+| `asVec3u`        | `gvec3f -> gvec3u` | Bitcasts each `gf32` to a `gu32`                                                           |
+| `asVec3i`        | `gvec3u -> gvec3i` | Bitcasts each `gu32` to a `gi32`                                                           |
+| `asVec3i`        | `gvec3i -> gvec3i` | Returns the original value back                                                            |
+| `asVec3i`        | `gvec3f -> gvec3i` | Bitcasts each `gf32` to a `gi32`                                                           |
+| `asVec3f`        | `gvec3u -> gvec3f` | Bitcasts each `gu32` to a `gf32`                                                           |
+| `asVec3f`        | `gvec3i -> gvec3f` | Bitcasts each `gi32` to a `gf32`                                                           |
+| `asVec3f`        | `gvec3f -> gvec3f` | Returns the original value back                                                            |
+| `asVec4u`        | `gvec4u -> gvec4u` | Returns the original value back                                                            |
+| `asVec4u`        | `gvec4i -> gvec4u` | Bitcasts each `gi32` to a `gu32`                                                           |
+| `asVec4u`        | `gvec4f -> gvec4u` | Bitcasts each `gf32` to a `gu32`                                                           |
+| `asVec4i`        | `gvec4u -> gvec4i` | Bitcasts each `gu32` to a `gi32`                                                           |
+| `asVec4i`        | `gvec4i -> gvec4i` | Returns the original value back                                                            |
+| `asVec4i`        | `gvec4f -> gvec4i` | Bitcasts each `gf32` to a `gi32`                                                           |
+| `asVec4f`        | `gvec4u -> gvec4f` | Bitcasts each `gu32` to a `gf32`                                                           |
+| `asVec4f`        | `gvec4i -> gvec4f` | Bitcasts each `gi32` to a `gf32`                                                           |
+| `asVec4f`        | `gvec4f -> gvec4f` | Returns the original value back                                                            |
 
 ### CPU and GPGPU miscellaneous Vector functions
 
