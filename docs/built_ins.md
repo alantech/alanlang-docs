@@ -3159,11 +3159,57 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### CPU and GPGPU miscellaneous Vector functions
 
-TODO
+| Name                | Type                                 | Description                                                                                     |
+| :------------------ | :----------------------------------- | :-----------------------------------------------------------------------------------------------|
+| `gevery{I}`         | `I -> gbool`                         | Manually constructs an every call on the input. You probably won't use this directly            |
+| `every`             | `gvec2b -> gbool`                    | Returns `true` if every element of the vector is `true`                                         |
+| `every`             | `gvec3b -> gbool`                    | Returns `true` if every element of the vector is `true`                                         |
+| `every`             | `gvec4b -> gbool`                    | Returns `true` if every element of the vector is `true`                                         |
+| `gsome{I}`          | `I -> gbool`                         | Manually constructs a some call on the input. You probably won't use this directly              |
+| `some`              | `gvec2b -> gbool`                    | Returns `true` if any element of the vector is `true`                                           |
+| `some`              | `gvec3b -> gbool`                    | Returns `true` if any element of the vector is `true`                                           |
+| `some`              | `gvec4b -> gbool`                    | Returns `true` if any element of the vector is `true`                                           |
+| `piecewiseIf{C, T}` | `(C, T, T) -> T`                     | Manually constructs a piecewise if call on the input. You probably won't use this directly      |
+| `if`                | `(gvec2b, gvec2u, gvec2u) -> gvec2u` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec2b, gvec2i, gvec2i) -> gvec2i` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec2b, gvec2f, gvec2f) -> gvec2f` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec2b, gvec2b, gvec2b) -> gvec2b` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec3b, gvec3u, gvec3u) -> gvec3u` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec3b, gvec3i, gvec3i) -> gvec3i` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec3b, gvec3f, gvec3f) -> gvec3f` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec3b, gvec3b, gvec3b) -> gvec3b` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec4b, gvec4u, gvec4u) -> gvec4u` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec4b, gvec4i, gvec4i) -> gvec4i` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec4b, gvec4f, gvec4f) -> gvec4f` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `if`                | `(gvec4b, gvec4b, gvec4b) -> gvec4b` | Returns a new vector selecting values from the last two vectors based on the value of the first |
+| `pack4x8snorm`      | `gvec4f -> gu32`                     | Packs four floats from -1 to 1 into a singular `gu32`                                           |
+| `pack4x8snorm`      | `f32[4] -> u32`                      | Packs four floats from -1 to 1 into a singular `u32`                                            |
+| `pack4x8unorm`      | `gvec4f -> gu32`                     | Packs four floats from 0 to 1 into a singular `gu32`                                            |
+| `pack4x8unorm`      | `f32[4] -> u32`                      | Packs four floats from 0 to 1 into a singular `u32`                                             |
+| `pack2x16snorm`     | `gvec2f -> gu32`                     | Packs two floats (at half precision) from -1 to 1 into a singular `gu32`                        |
+| `pack2x16snorm`     | `f32[2] -> u32`                      | Packs two floats (at half precision) from -1 to 1 into a singular `u32`                         |
+| `pack2x16unorm`     | `gvec2f -> gu32`                     | Packs two floats (at half precision) from 0 to 1 into a singular `gu32`                         |
+| `pack2x16unorm`     | `f32[2] -> u32`                      | Packs two floats (at half precision) from 0 to 1 into a singular `u32`                          |
+| `pack2x16float`     | `gvec2f -> gu32`                     | Packs two floats (at half precision) into a singular `u32`                                      |
+| `unpack4x8snorm`    | `gu32 -> gvec4f`                     | Unpacks four floats from -1 to 1 from a singular `gu32`                                         |
+| `unpack4x8snorm`    | `u32 -> f32[4]`                      | Unpacks four floats from -1 to 1 from a singular `u32`                                          |
+| `unpack4x8unorm`    | `gu32 -> gvec4f`                     | Unpacks four floats from 0 to 1 from a singular `gu32`                                          |
+| `unpack4x8unorm`    | `u32 -> f32[4]`                      | Unpacks four floats from 0 to 1 from a singular `u32`                                           |
+| `unpack2x16snorm`   | `gu32 -> gvec2f`                     | Unpacks two floats (at half precision) from -1 to 1 from a singular `gu32`                      |
+| `unpack2x16snorm`   | `u32 -> f32[2]`                      | Unpacks two floats (at half precision) from -1 to 1 from a singular `u32`                       |
+| `unpack2x16unorm`   | `gu32 -> gvec2f`                     | Unpacks two floats (at half precision) from 0 to 1 from a singular `gu32`                       |
+| `unpack2x16unorm`   | `u32 -> f32[2]`                      | Unpacks two floats (at half precision) from 0 to 1 from a singular `u32`                        |
+| `unpack2x16float`   | `gu32 -> gvec2f`                     | Unpacks two floats (at half precision) from a singular `u32`                                    |
 
 ### GBuffer-specific functions
 
-TODO
+| Name             | Type                                    | Description                                                                                                                                                     |
+| :--------------- | :-------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `storageBarrier` | `() -> storageBarrier`                  | Special function that requires all parallel execution to synchronize after writing to a storage buffer. Intentionally broken on Metal (MacOS), use with caution |
+| `map`            | `(GBuffer, gu32 -> gu32) -> GBuffer`    | Construct a new GBuffer mapping the contents from one `gu32` to another                                                                                         |
+| `map`            | `(GBuffer, gi32 -> gi32) -> GBuffer`    | Construct a new GBuffer mapping the contents from one `gi32` to another                                                                                         |
+| `map`            | `(GBuffer, gf32 -> gf32) -> GBuffer`    | Construct a new GBuffer mapping the contents from one `gf32` to another                                                                                         |
+| `map{G, G2}`     | `(GBuffer, (G, gu32) -> G2) -> GBuffer` | Construct a new GBuffer mapping the contents from one GPU type `G` to another `G2`, receiving the buffer index `gu32` as well                                   |
 
 ### GPU rendering-related functions
 
