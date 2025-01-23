@@ -3276,4 +3276,43 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ## Operators
 
-TODO
+Like the Type Operators above, the built-in types in Alan are bound to functions by name, specifying the symbol, precedence and prefix/infix/postfix type. Prefix and Postfix are for functions that take only one argument while Infix are for functions that take two arguments. Functions with the same name but the wrong number of arguments will not be bound to an operator. Generic functions that have the same name *may* also be bound by the name, but only if the generic types can be inferred automatically from the input argument types. Generic functions that cannot be inferred will never be bound into an operator.
+
+Also like the Type Operators, you cannot export the operator definitions, but you can define new operator definitions with a single line and you can define new functions with the same name as an existing operator, so you can overload them easily.
+
+| Name        | -fix    | Symbol | Precedence |
+| :---------- | :------ | :----: | ---------: |
+| `add`       | Infix   | `+`    | 5          |
+| `sub`       | Infix   | `-`    | 5          |
+| `neg`       | Prefix  | `-`    | 8          |
+| `mul`       | Infix   | `*`    | 6          |
+| `cross`     | Infix   | `><`   | 6          |
+| `dot`       | Infix   | `*.`   | 6          |
+| `div`       | Infix   | `/`    | 6          |
+| `mod`       | Infix   | `%`    | 6          |
+| `pow`       | Infix   | `**`   | 7          |
+| `and`       | Infix   | `&`    | 3          |
+| `and`       | Infix   | `&&`   | 3          |
+| `or`        | Infix   | `|`    | 2          |
+| `or`        | Infix   | `||`   | 2          |
+| `getOr`     | Infix   | `??`   | 8          |
+| `getOrExit` | Postfix | `!!`   | 8          |
+| `Maybe`     | Postfix | `?`    | 9          |
+| `Fallible`  | Postfix | `!`    | 9          |
+| `xor`       | Infix   | `^`    | 2          |
+| `not`       | Prefix  | `!`    | 4          |
+| `nand`      | Infix   | `!&`   | 3          |
+| `nor`       | Infix   | `!|`   | 2          |
+| `xnor`      | Infix   | `!^`   | 2          |
+| `eq`        | Infix   | `==`   | 4          |
+| `neq`       | Infix   | `!=`   | 4          |
+| `lt`        | Infix   | `<`    | 4          |
+| `lte`       | Infix   | `<=`   | 4          |
+| `gt`        | Infix   | `>`    | 4          |
+| `gte`       | Infix   | `>=`   | 4          |
+| `len`       | Infix   | `#`    | 1          |
+| `shl`       | Infix   | `<<`   | 5          |
+| `shr`       | Infix   | `>>`   | 5          |
+| `wrl`       | Infix   | `<<<`  | 5          |
+| `wrr`       | Infix   | `>>>`  | 5          |
+| `store`     | Infix   | `=`    | 0          |
