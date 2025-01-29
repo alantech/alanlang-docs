@@ -22,7 +22,7 @@ massa, nec semper lorem quam in massa.
 1.  Motivation
     1. [What prototype.js got right](./prototype_was_right.md) / Why Best Practices are shaped by language and ecosystem
     2. Intrinsic, Accidental, and Intentional Complexity wrt GPU APIs
-    3. GPUs are modern day Lisp Machines / How C is a high level language and WGSL is a low level language
+    3. [GPUs are modern day Lisp Machines](./gpus_lisp_machines.md) / How C is a high level language and WGSL is a low level language
     4. Kinds of programs, their structures and tradeoffs / which ones Alan is designed for / latency axis VS volume axis VS CPUs per user
     5. The missing QBASIC/Flash niche, but safe/easy and correct programming language is missing in modern day development; unfortunate barrier to entry for new developers, LLMs are not the answer
 2.  Demonstration
