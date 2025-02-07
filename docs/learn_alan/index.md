@@ -728,17 +728,13 @@ myDict.Array; // [("test", 1)]
 
 ## The GBuffer and GPGPU Types
 
-In Alan, there's one more buffer-like type, the `GBuffer{T}` types. This type is constructed from either a `Buffer` or `Array`. The type sits in-between the two in that its length is not known at compile time, but it cannot be changed once constructed. This represents a block of memory on the GPU, which you can set at construction time (from a buffer or array).
-
-!!! note
-
-    Right now, this type isn't properly generic, but will be before the release of Alan 0.2.0. TODO: Delete this note.
+In Alan, there's one more buffer-like type, the `GBuffer{T}` type. This type is constructed from either a `Buffer` or `Array`. The type sits in-between the two in that its length is not known at compile time, but it cannot be changed once constructed. This represents a block of memory on the GPU, which you can set at construction time (from a buffer or array).
 
 This type cannot be accessed directly at all, it must be explicitly `read` back into an array before it can be accessed, but it can be included in a `GPGPU` execution plan and mutated by that GPGPU compute. The `GPGPU` type can be worked with directly, but most of the time is hidden behind functions that manipulate the `GBuffer` type.
 
 ```rs
 export fn main {
-  GBuffer([1, 2, 3, 4])
+  GBuffer([1.i32, 2.i32, 3.i32, 4.i32])
     .map(fn (val: gi32) = val * 2)
     .read
     .print; // Prints [2, 4, 6, 8]
@@ -1098,11 +1094,7 @@ And we can now `vec1 .+ vec2` in our code. The benefits here are:
 
 ## Binding Functions and Types from Rust (or Javascript)
 
-!!! note
-
-    Currently only Rust binding exists and that's what the documentation currently covers, but before Alan v0.2.0 it is intended to modify the binding syntax to also define bindings for Javascript
-
-Beyond defining functions and types in Alan, you may also bind functions and types to Rust functions and types. This binding process trusts you completely that the binding has been specified correctly, so be sure that you're doing so.
+Beyond defining functions and types in Alan, you may also bind functions and types to Rust or Javascript functions and types. This binding process trusts you completely that the binding has been specified correctly, so be sure that you're doing so.
 
 ### Binding Functions
 
@@ -1127,7 +1119,7 @@ The `::` symbol is an alias for the `Call{N, F}` type, specifying a function cal
 
 !!! note
 
-    The `Call{N, F}` type requires a fully-defined function type, including the return type, for any function being bound from Rust (or Javascript in the future). Alan's type inference cannot operate on a language it wasn't designed for, so it must be told all of the necessary information ahead of time to work.
+    The `Call{N, F}` type requires a fully-defined function type, including the return type, for any function being bound from Rust or Javascript. Alan's type inference cannot operate on a language it wasn't designed for, so it must be told all of the necessary information ahead of time to work.
 
 In fact, you could use this syntax with any type that produces an automatically-defined constructor function, so if you wanted to create an alias for a struct, but only when constructing it, you could do so:
 
@@ -1161,11 +1153,38 @@ fn eq Infix{"=="} :: (Deref{i8}, Deref{i8}) -> bool;
 
 This defines an `eq` function for 8-bit integers, binding it to Rust's `==` operator, but indicating to Alan that it should dereference the arguments when passing them to the operator. These various generic types allow you to annotate the binding, eliminating the need for writing wrapper functions in Rust.
 
+### Binding Functions from Platform-specific Libraries
+
+There are a collection of types involved in specifying dependencies stored on [crates.io](https://crates.io) and [npm](https://npmjs.com) that you can use in conjunction with the `Call{N, F}` type to bind to 3rd party libraries in whichever host language you choose to compile to.
+
+These are:
+
+* `Import{N, D}` - specifying the name of the function or type to import from the dependency. Also bound as the `<-` type operator.
+* `From{D}` - Special syntactic sugar that uses the name of the type or function declaration to determine the name of the type or function to import. Bound to the `<--` type operator.
+* `Dependency{N, V}` - specifying the name and version (or raw git URL) of the dependency. Also bound as the `@` type operator.
+* `Rust{D}` - specifying that this is a Rust crate.
+* `Nodejs{D}` - specifying that this is an NPM package.
+
 !!! note
 
-    Currently you can bind standard library functions and a set of blessed third-party Rust libraries only. Before release this syntax will be extended to allow you to specify packages you wish to install from Cargo during the build process.
+    It is intended for `Import{N, D}` and `From{D}` to both be bound to `<-`, with `Import{N, D}` as an infix operator and `From{D}` as a prefix operator, but some refactoring is needed in the compiler to allow the same symbol to bind to different operators.
 
-    At the same time as this syntax change, binding Javascript functions will also be added to allow compiling to Javascript for use in the browser, which will similarly allow you to specify NPM packages to include in the build process.
+You use three of the five of these types in place of the `N` argument of `Call{N, F}` to specify a platform-native library function or type to import. Eg:
+
+```rs
+fn{Rs} escape Call{Import{"regex_syntax::escape", Rust{Dependency{"regex-syntax", "0.8.5"}}}, Function{string, string}}; // Binds the `escape` function from `regex-syntax`
+fn{Rs} escape "regex_syntax::escape" <- Rust{"regex-syntax" @ "0.8.5"} :: string -> string; // Same binding but using type operators where possible
+fn{Js} yamlLoad Call{Import{"js_yaml.load", Nodejs{Dependency{"js-yaml", "4.1.0"}}}, Function{string, JSObject}}; // Binds the `load` function from `js-yaml` (Alan doesn't have a JSObject type, yet, so good luck with that part!)
+fn{Js} yamlLoad "js_yaml.load" <- Nodejs{"js-yaml" @ "4.1.0"} :: string -> JSObject; // Same binding but using type operators where possible
+```
+
+!!! note
+
+    The conditional compilation on the function definitions when importing libraries native to the platform language is **highly recommended** to prevent compilation failures if/when your code is targeting a different platform language.
+
+    Ideally if you need native code, you have paired `fn{Rs}` and `fn{Js}` bindings so your code can seamlessly compile to the browser as well as natively. Alan's root scope and standard library follow this advice.
+
+For now, you must include the name of the library the function is coming from in the binding string for this to work. In Rust it's separated with `::` between the library name and the thing to import and in Javascript it is separated with `.`. In Javascript, the compiler automatically converts `-` in a package name to `_` for the variable name the package occupies.
 
 ### Binding Types
 
@@ -1198,6 +1217,21 @@ Bound functions and types are tricky to work with, but provide a zero-cost FFI t
     ```rs
     type{Rs} Dom = Fail{"This library can only be used when compiled to Javascript, as Rust does not have a DOM."}
     ```
+
+### Binding Types from Platform-specific Libraries
+
+The same collection of types involved in binding functions from platform languages works identically for types. Well, sort-of identically. Javascript doesn't have types, so what happens there? The type is just an internal construct within the compiler to prevent you from accidentally assigning the wrong kind of value to the wrong variable, and is not emitted in the code generation at all. It just needs to be "distinct", so it's *recommended* to write it in a similar way, with Javascript class names being a decent analog to use.
+
+In neither Rust nor Javascript binding will *constructor functions* be automatically bound for these types; they're opaque to the compiler, so you also need to bind a function to construct them (and by convention that function name should match the type name, and this is where a Javascript library's class would actually be imported, as the constructor function).
+
+For Rust, though, these type bindings must be precise, not just unique, or the generated code will be incorrect. Similar to how import declaration takes the first generic argument of the `Call{N, F}` type, when you bind a type, it takes place of the first generic argument of the `Binds{T, ...}` type:
+
+```rs
+type{Rs} HashMap{K, V} = Binds{"hashbrown::HashMap" <- Rust{"hashbrown" @ "0.15.2"}, K, V}; // Binding the hashbrown high-performance HashMap type
+type{Js} Moment = Binds{"Moment" <- Nodejs{"moment" @ "2.30.1"}}; // Binding the Moment datetime type
+```
+
+You can bind generic functions in Alan as you can see here, but technically what happens under the hood is that a concrete type is constructed for each set of generic arguments you used in your Alan code; the actual generic type is never emitted to the Rust compiler. This is the same thing Rust itself does when generating your binary, effectively duplicating the generic type for each concrete instance of it, so this should have no impact on the size of the resulting binary.
 
 ## Conditional Statements
 
