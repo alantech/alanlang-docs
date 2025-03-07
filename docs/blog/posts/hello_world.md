@@ -35,7 +35,7 @@ massa, nec semper lorem quam in massa.
     1. Binding Rust and Javascript
     2. Modules and dependencies
     3. Alternatives to uncontrolled loops and why they're the default
-    4. Standard library documentation
+    4. [Standard library documentation](../../standard_library.md)
     5. Generic functions and types
     6. Sum types deep dive
     7. Networking? Tasks/Jobs?
