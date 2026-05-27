@@ -920,6 +920,52 @@ When a field in a product type resolves to a constant type value, Alan removes i
 
 This usually only applies for things like the target operation system, processor architecture, or build type (test, debug, release), but there's no restriction on what it can be used for.
 
+### Compile-Time Type Decomposition with Exclude, First, and Rest
+
+When you need to work with the components of a compound type at compile time, Alan provides `Exclude{T, N}`, `First{T}`, and `Rest{T}`. These are especially useful for two patterns: creating censored subsets of types, and implementing compile-time bounded recursion.
+
+**Censored Subsets**
+
+`Exclude{T, N}` removes a property from a type by index or field name, and also generates a constructor that takes the original type and returns the new, smaller type. This makes it straightforward to create a "public-facing" version of a type that omits sensitive fields.
+
+```rs
+type User = name: string, email: string, passwordHash: string;
+type PublicUser = Exclude{User, "passwordHash"};
+
+export fn main {
+  let user = User("Alice", "alice@example.com", "h45h45");
+  let publicUser = PublicUser(user);
+  publicUser.name.print; // Prints Alice
+  // publicUser.passwordHash; // Does not exist
+}
+```
+
+!!! note
+
+    **Compile-Time Recursion**
+
+    The more powerful use of these types is inside generic functions. `First{T}` extracts the first element of a tuple or either type (`Prop{T, 0}`), and `Rest{T}` returns the type with the first element removed (`Exclude{T, 0}`). Combined with `Len{T}`, they let you write recursive functions whose recursion depth is determined entirely at compile time, eliminating any risk of stack overflow.
+
+    The compiler is working towards allowing fully compile-time selection via `If{C, A, B}`, which would compute the possible recursive branches at compile time, reducing the function to a hardwired sequence of actions with no branching overhead at runtime. The syntax for that may look like:
+
+    ```rs
+    // (Aspirational syntax — compiler support in progress)
+    // Sums all i64 values in a compile-time-known tuple, skipping non-numeric types
+    fn sumTuple{T} (t: T) -> i64 =
+      If{Len{T} > 0,
+        If{Eq{First{T}, i64},
+          fn (t: T) = First{T}(t) + sumTuple{Rest{T}}(Rest{T}(t)),
+          fn (t: T) = sumTuple{Rest{T}}(Rest{T}(t))},
+        fn () = 0}(t);
+
+    export fn main {
+      let data = (1.i64, "not a number", 3.i64, 4.i64);
+      sumTuple(data).print; // Prints 8
+    }
+    ```
+
+    The outer `If{Len{T} > 0, ...}` checks if there are elements remaining. The inner `If{Eq{First{T}, i64}, ...}` checks if the first element is an `i64`. When it is, `First{T}(t)` returns the element directly, and we add it to the recursive sum of the rest. When it isn't, we skip it and recurse on `Rest{T}`. When `Len{T}` reaches `0`, the base case returns `0`. Because `If{C, A, B}` only compiles the chosen branch, no invalid property accesses on `Void` occur. The recursion depth is bounded by the compile-time type, not runtime input.
+
 ### Tagged Types Digression
 
 An internal type for implementing the GPU types, `WgpuType{N}`, is used with `N` being the `wgsl` name of the type (which differs from the Alan name for the type) and is a constant string. Eg:
