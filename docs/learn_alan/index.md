@@ -754,8 +754,8 @@ export fn main {
   let original = {Shared{i64}}(42);
   let copy = original.clone;
 
-  original.set(100);
-  copy.get.print; // Prints 42 — the clone is independent
+  original.store(100);
+  copy.print; // Prints 42 — the clone is independent
 }
 ```
 
