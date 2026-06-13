@@ -726,6 +726,125 @@ myDict.Array; // [("test", 1)]
 
     Calls to `store` *always* succeed for Dictionaries, so there is no need to check.
 
+## Shared Types
+
+So far, every value in Alan has been owned by a single variable. When you pass a value to a function or assign it to another variable, a copy is made. `Shared{T}` changes that: it allows multiple variables to point to the same underlying value in memory, so mutations made through one reference are visible through all of them.
+
+```rs
+export fn main {
+  let shared = {Shared{i64}}(42);
+
+  let a = shared;
+  let b = shared;
+
+  // Mutating through `a` is visible through `b`
+  a.store(100);
+  b.print; // Prints 100
+}
+```
+
+`Shared{T}` integrates with Alan's function call semantics transparently. A `Shared{T}` can be passed to any function expecting `T`, where it provides read-only access to the inner value. It can also be passed to a function expecting `Mut{T}`, where it acquires a write lock and permits mutation of the shared value. This means you don't need to manually unwrap or re-wrap — the compiler handles it.
+
+If a `Shared{T}` is passed into a function as a plain `T` (read-only) and the function mutates that parameter, Alan will automatically create a private `clone` of the value for that scope. The original `Shared{T}` is left untouched, making it clear when shared state is actually being updated versus when a function is working with its own private copy.
+
+If you need a truly independent copy, you can explicitly call `clone`:
+
+```rs
+export fn main {
+  let original = {Shared{i64}}(42);
+  let copy = original.clone;
+
+  original.set(100);
+  copy.get.print; // Prints 42 — the clone is independent
+}
+```
+
+## Tree Types
+
+Tree Types allow you to build arbitrary-depth, recursive-like data structures safely, without needing an actually recursive type definition. `Tree{T}` uses `Shared{T}` under the hood so that all `Node{T}` references point to the same underlying tree data.
+
+A `Tree{T}` is constructed with a root value. A `Node{T}` represents a single position within a tree, holding an index (`id`) and a reference back to the `Tree{T}` it belongs to.
+
+```rs
+export fn main {
+  // Create a tree with a root value
+  let myTree = Tree("root");
+
+  // Get the root node
+  myTree.rootNode; // Node{string}(0, myTree)
+
+  // Add children to the root node
+  let child1 = myTree.rootNode.addChild("child1");
+  let child2 = myTree.rootNode.addChild("child2");
+
+  // Access the node's value
+  child1.getOrExit; // "child1"
+  child2.getOr("default"); // "child2"
+
+  // Navigate the tree
+  child1.parent.getOrExit; // Node for "root"
+  myTree.rootNode.children; // Array of child nodes
+}
+```
+
+You can add individual values as children, or attach an entire subtree as a child of a node. Because `Tree{T}` uses `Shared{T}`, the same tree data can be referenced from multiple locations without duplication.
+
+```rs
+export fn main {
+  let mainTree = Tree("main");
+  let subtree = Tree("sub");
+  subtree.rootNode.addChild("subchild");
+
+  // Attach the subtree as a child of mainTree
+  mainTree.rootNode.addChild(subtree);
+
+  // mainTree now contains: "main" -> "sub" -> "subchild"
+  mainTree.len; // 3
+}
+```
+
+Trees provide higher-order functions for traversing and transforming the data, operating over `Node{T}` values rather than raw values, so you always have tree context during traversal.
+
+```rs
+export fn main {
+  let t = Tree(1.i64);
+  t.rootNode.addChild(2.i64);
+  t.rootNode.addChild(3.i64);
+
+  // Map all nodes
+  let doubled = t.map(fn (n: Node{i64}) = Node{i64}(n.getOrExit * 2, t));
+
+  // Check if every node is positive
+  t.every(fn (n: Node{i64}) = n.getOrExit > 0); // true
+
+  // Find the first node with a specific value
+  t.find(fn (n: Node{i64}) = n.getOrExit == 3.i64); // Maybe{Node{i64}}
+
+  // Reduce the tree
+  t.reduce(fn (a: Node{i64}, b: Node{i64}) = Node{i64}(a.getOrExit + b.getOrExit, a.tree));
+}
+```
+
+Trees also support `delete` and `prune` for removing nodes. `delete` removes a single node and re-attaches its children to the node's parent, while `prune` removes a node and its entire subtree.
+
+```rs
+export fn main {
+  let t = Tree("root");
+  let node1 = t.rootNode.addChild("node1");
+  node1.addChild("grandchild");
+
+  // delete removes "node1" but re-attaches "grandchild" to "root"
+  node1.delete;
+
+  // prune removes the node and all descendants
+  let t2 = Tree("a");
+  let branch = t2.rootNode.addChild("b");
+  branch.addChild("c");
+  branch.addChild("d");
+  branch.prune; // Removes "b", "c", and "d"
+}
+```
+
 ## The GBuffer and GPGPU Types
 
 In Alan, there's one more buffer-like type, the `GBuffer{T}` type. This type is constructed from either a `Buffer` or `Array`. The type sits in-between the two in that its length is not known at compile time, but it cannot be changed once constructed. This represents a block of memory on the GPU, which you can set at construction time (from a buffer or array).

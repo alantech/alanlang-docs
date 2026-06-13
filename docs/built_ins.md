@@ -35,6 +35,7 @@ The Meta types are types that are generally not used directly, but represent fea
 
 The Host types are types that are involved in bridging Alan to the host language, allowing you to call native functions, declare native types, and require native 3rd party libraries.
 
+* `Shared{T}` is a shared, reference-counted, thread-safe wrapper around a type. It allows the same data to be included in multiple other values without duplication. Auto-derefs on property/method access.
 * `Binds{T, ...}` is the first built-in type that you *do* use directly. It's a generic type whose first argument is the string name of the type in the host language (Rust or Javascript) that you are compiling to. Extra arguments to the generic type are the types to provide to the generic arguments of the type assuming it is a generic type.
 * `Call{N, F}` takes a "callable" type as the first argument and a `Function{I, O}` declaration on how to "call" it as the second type. A `String` refers to a standard function, while rest of the "callable" types are defined below.
 * `Infix{O}` is the first "callable" type. It takes a `String` representation of an infix operator in the host language, which the compiler will turn into `(A op B)`, with `A` and `B` being the two arguments (it will be a compile-time error if the `Function{I, O}` does not specify exactly two arguments) and `op` is the operator symbol. Parentheses are always used to avoid needing to clarify operator precedence rules in the host language.
@@ -153,8 +154,9 @@ Beyond the "Type" types above, the majority of the "every day useful" types are 
 * `uuid` provides a UUIDv4 type. (v4 is the correct choice for a UUID the vast majority of the time. If you *really* need a different kind, you need to BYOB.)
 * `Dict{K, V}` is a dictionary type. It maintains key insertion order when serialized to an `Array{(K, V)}` or similar.
 * `Set{V}` is a set type. It does not maintain insertion order.
-* `Tree{T}` is a tree type. It allows recursive-like data structures without an actually recursive type.
-* `Node{T}` is a node type. It represents a singular node within a tree.
+* `TreeInner{T}` is the internal storage for a tree. It houses all of the values attached to a tree in an array and two secondary arrays to hold the metadata on which value is the parent (`parentIdxs`) and which are children (`childrenIdxs`), if any. The parent value is `void` if it has no parent and a positive integer otherwise.
+* `Tree{T}` is a tree type. It is a `Shared{TreeInner{T}}`, allowing the same tree data to be shared across multiple `Node{T}` references. It allows recursive-like data structures without an actually recursive type.
+* `Node{T}` is a node type. It represents a singular node within a tree, holding the node's `id` and a reference to the `Tree{T}` it belongs to.
 * `Testing` is a special type that only exists when `Test` is true, and is used for defining a test suite to execute during the test.
 
 #### GPGPU Types
@@ -264,12 +266,12 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 ### Functions for (potentially) every type
 
-| Name       | Type               | Description                |
-| :--------- | :----------------- | :---------------------------------------------------------- |
-| `clone{T}` | `T -> T`           | Creates a copy of the data                                  |
-| `void{T}`  | `T -> void`        | Consumes a value, useful for one-line side-effect functions |
-| `void`     | `() -> void`       | Explicitly returns nothing                                  |
-| `store{T}` | `(Mut{T}, T) -> T` | Replaces the first arg with the second, returning the first |
+| Name       | Type               | Description                                                     |
+| :--------- | :----------------- | :-------------------------------------------------------------- |
+| `clone{T}` | `T -> T`           | Creates a copy of the data. Compiler-provided, not user-defined |
+| `void{T}`  | `T -> void`        | Consumes a value, useful for one-line side-effect functions     |
+| `void`     | `() -> void`       | Explicitly returns nothing                                      |
+| `store{T}` | `(Mut{T}, T) -> T` | Replaces the first arg with the second, returning the first     |
 
 
 ### Fallbile, Maybe, and Either functions
@@ -1022,7 +1024,7 @@ For clarity, the table of functions will be broken up into broad categories, and
 
 | Name           | Type                                                          | Description                                                                                                                   | Explicit |
 | :------------- | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------- | :------: |
-| `Tree{T}`      | `(Array{T}, Array{Maybe{i64}}, Array{Array{i64}}) -> Tree{T}` | Constructs a new tree by manually defining its internals. You probably don't want this                                        | ❌       |
+| `Tree{T}`      | `(Array{T}, Array{Maybe{i64}}, Array{Array{i64}}) -> Tree{T}` | Constructs a new tree by manually defining its internals (wraps in `Shared{TreeInner{T}}`). You probably don't want this      | ❌       |
 | `Node{T}`      | `(i64, Tree{T}) -> Node{T}`                                   | Constructs a new node by manually specifying the node id and the tree it references. You probably don't want this             | ❌       |
 | `Tree{T}`      | `T -> Tree{T}`                                                | Constructs a new tree with the provided `T` value as the root node                                                            | ✅       |
 | `Tree{T}`      | `Node{T} -> Tree{T}`                                          | Returns the tree the node is associated with                                                                                  | ✅       |
@@ -1036,6 +1038,9 @@ For clarity, the table of functions will be broken up into broad categories, and
 | `addChild{T}`  | `(Node{T}, Tree{T}) -> Node{T}`                               | Adds the provided tree as a child of the provided node, returning the new node that represents the root node of the tree      | ✅       |
 | `addChild{T}`  | `(Tree{T}, T) -> Node{T}`                                     | Adds the provided `T` as a child of the root node of the provided tree, returning the new node for that value                 | ✅       |
 | `getOr{T}`     | `(Node{T}, T) -> T`                                           | Returns the value the node points to or the default `T` value provided if the node is invalid                                 | ✅       |
+| `getOrExit{T}` | `Node{T} -> T`                                                | Returns the value the node points to, or halts the program if the node is invalid                                             | ✅       |
+| `delete{T}`    | `Node{T} -> void`                                             | Removes a node from the tree, re-attaching its children to its parent. The node value is retained in the tree for now         | ✅       |
+| `prune{T}`     | `Node{T} -> void`                                             | Removes a node and its entire subtree from the tree. Node values are retained in the tree for now                             | ✅       |
 | `Array{T}`     | `Tree{T} -> Array{Node{T}}`                                   | Returns an array of all nodes in the tree                                                                                     | ✅       |
 | `map{T, U}`    | `(Tree{T}, Node{T} -> Node{U}) -> Tree{U}`                    | Maps a tree from type `T` to `U` using a function that converts from one node type to the other                               | ✅       |
 | `map{T, U}`    | `(Tree{T}, (Node{T}, i64) -> Node{U}) -> Tree{U}`             | Maps a tree from type `T` to `U` using a function that converts from one node type (and node id) to the other                 | ✅       |
