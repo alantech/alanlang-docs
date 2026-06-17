@@ -4,8 +4,9 @@ It is planned to have a web compiler in the future to automatically generate Jav
 
 ## Prerequisites
 
-- Rust v1.76.0 or higher (recommend [rustup](https://rustup.rs/) to install this)
-- Git ([Windows users should probably use this](https://git-scm.com/download/win), Mac and Linux users ought to know how to install git)
+- **Rust** v1.92.0 or higher — required for compilation (recommend [rustup](https://rustup.rs/) to install this)
+- **Git** — required to clone the repository ([Windows users should probably use this](https://git-scm.com/download/win), Mac and Linux users ought to know how to install git)
+- **Node.js** and **npm** (or **yarn**) — optional; needed for `bundle`, `to-js`, and `test --js`
 
 ## Source Installation
 

@@ -59,6 +59,7 @@ nav:
     - overview.md
     - built_ins.md
     - standard_library.md
+    - cli.md
   - Articles:
     - blog/index.md
 plugins:
