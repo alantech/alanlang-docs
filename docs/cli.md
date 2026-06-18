@@ -17,9 +17,9 @@ cargo install --path .
 
 ## Commands
 
-### Default (interpreter mode)
+### Default (run mode)
 
-Running `alan` with only a source file and no subcommand invokes interpreter mode:
+Running `alan` with only a source file and no subcommand compiles and executes the program on-the-fly:
 
 ```bash
 alan [LN_FILE]
@@ -27,10 +27,24 @@ alan [LN_FILE]
 
 | Argument | Default | Description |
 |---|---|---|
-| `LN_FILE` | *(none)* | The `.ln` source file to interpret |
+| `LN_FILE` | *(none)* | The `.ln` source file to compile and run |
 
-!!! warning "Not yet implemented"
-    Interpreter mode is reserved for future use and is currently a stub.
+This mode uses a fast, unoptimized compilation profile (`--profile interp`) to produce a native binary, runs it immediately, and deletes the binary when the program exits. Stdout and stderr are forwarded to the terminal, and the exit code is preserved.
+
+```bash title="Run a program directly"
+alan hello_world.ln
+```
+
+Source files with a shebang line can also be made directly executable:
+
+```bash title="Shebang support"
+#!/usr/bin/env alan
+export fn main = print('Hello, World!');
+```
+
+```bash
+chmod +x hello.ln && ./hello.ln
+```
 
 ### `compile`
 
