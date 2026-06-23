@@ -20,7 +20,7 @@ Variable declarations *are* type inferred, however. You can just `let foo = 5;` 
 
 ### No Recursion / Unbounded Iteration
 
-Alan does not allow recursive functions or types (though you are allowed to `bind` such things fromm the host language), and it only has guarded looping constructs, such as calling `map` on `Array`s, but no generalized `while` or `for` loops.
+Alan does not allow recursive functions or types (though you are allowed to `bind` such things from the host language), and it only has guarded looping constructs, such as calling `map` on `Array`s, but no generalized `while` or `for` loops.
 
 Because of this (and because bound functions and types are required to be fully typed on Alan's side), the impact on the typing of variable is fully discovered during compilation, so you never *need* to specify the type. You are allowed to do, so, though, as an assertion to the compiler to fail if the generated type does not match your expectations.
 
@@ -106,7 +106,7 @@ This bracket accessor syntax works for three-or-more arguments, as well. A `myMa
 
 Re-assignment to a variable with `foo = bar` is equivalent to `foo.store(bar)`. (Not `set` so as not to be confused with the `Set` constructor function for sets. So the re-assignment could itself return a value, which could then be operated on, such as determining if the assignment actually succeeded with a `Fallible{T}` return type.
 
-It is planned for conditionals to also have such syntactic sugar, with `if conditional { trueStatements; } else { falseStatements }` being transformed into `cond(conditional, fn { trueStatements; }, fn { falseStatements })` (with rewriting conditional returns to absorb the statements following the conditional in the non-return branch, as all functions in Alan *must* execute every statement). But for now there is only the set of `cond` functions you can call for conditional logic. (May or may not rename `cond` to `if`, as well.)
+Conditionals also have such syntactic sugar. An `if conditional { trueStatements; } else { falseStatements }` is transformed into `if(conditional, fn { trueStatements; }, fn { falseStatements })`, rewriting conditional returns to absorb the statements following the conditional (the "tail") into any branch that doesn't early return, as all functions in Alan *must* execute every statement. Because it is built directly on top of the `if` *function*, the same function-dispatch rules apply: defining a new `if` function for a new condition type (or a new branch return type) extends what the `if` syntax accepts, scoped to your file (or anything that `import`s your definitions).
 
 A `for .. in` syntax is *not* planned, because while it would still be controlled, it would heavily *imply* that mutation of the outer scope is allowed, which makes automatic parallelization of the loop impossible due to the state dependency between iterations that would fail when execution order is no longer guaranteed. It feels like a potential footgun for those familiar with other languages to have the syntax but have it work differently to the other languages, though with it being blocked at compile time, I am not 100% against it and could be convinced to add it.
 
@@ -118,11 +118,19 @@ Alan uses this for the GPGPU-related types. An `i32` is a 4-byte integer value, 
 
 ### Minimized Extensibility Blast Radius
 
-This is not such a big deal, but there's also extra functionality for `cond` to accept a `gbool` conditional type instead of just a `bool` type, and this one behaves very differently: At AST generation time, we can't know which path will be followed on the GPU; in fact, we probably want it to follow both paths across the entire set of data we're operating on depending on the particular value, so this `cond` evaluates both the true and false callbacks and returns a new AST node to produce the conditional we want the GPU to execute.
+Because the `if` syntax simply lowers to the `if` function, the GPGPU types get conditionals "for free": there's a `gbool` type representing a boolean on the GPU, and the set of GPGPU functions includes `if` definitions that accept a `gbool` conditional instead of a `bool`. This lets you write conditional checks that are evaluated on the GPU using the same "regular looking" `if cond { ... } else { ... }` Alan code you'd write for the CPU.
+
+In the same vein, getting "Do-What-I-Mean" conditionals is just a matter of defining a new `if` function for the condition type you want. Alan deliberately has no built-in "truthiness" -- an `i64` `0` is *not* `false` by default -- but if you want that, you opt in by defining a single `if` function (e.g. one that treats `i64` `0` as `false` and anything else as `true`, or empty strings as `false`), and now the `if` syntax accepts that type. It's explicit, discoverable, and scoped to where you opted in.
 
 There is no ALGOL-like language (that I am aware of) that allows for this kind of extensibility to the *meaning* of the syntax. This kind of extensibility *can* be abused, but it is also the only way to truly integrate GPU and CPU computing seamlessly.
 
 But unlike other languages that have attempted to allow this kind of extensibility, Alan keeps the "blast radius" much lower -- you have to opt-in to the behavior by either writing the function yourself or explicitly `import`ing the function that overrides the syntax behavior, so it's very clear to anyone reading the code what might be different from what you're expecting.
+
+### Inferred Function "Color"
+
+Most languages with `async`/`await` make you manually paint your functions one "color" or the other, and the colors are infectious: calling an `async` function forces its caller to be `async` too. Alan keeps the infectious part but drops the manual bookkeeping. When compiling to Javascript, async functions are annotated by wrapping their return type in the Javascript-only `Promise{T}` type. The compiler tracks this "color" for you: if a function (directly or transitively) calls something that returns a `Promise{T}`, that function is automatically inferred to be `async` as well, and the necessary `await`s are inserted into the generated Javascript.
+
+This means you never write `async` or `await` in Alan. You write straightforward, synchronous-looking code, and `Promise{T}` stays transparent: a function body that awaits has an *actual* return type of `Promise{T}`, but a declared return type of plain `T` still type-checks because Alan auto-awaits. Code that never touches an async function compiles to ordinary synchronous Javascript (and, since `Promise{T}` is Javascript-only, the same source compiles to plain synchronous Rust with no overhead).
 
 ### Maximized Fluency
 

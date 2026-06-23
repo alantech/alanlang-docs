@@ -127,7 +127,7 @@ which will print 3, followed by 5. In this example, `i64` is the "primitive type
 
     When `Mut{T}` is applied to an argument it switches semantically to [call-by-reference](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_reference), using a mutable reference (`&mut`) when compiling via Rust.
 
-    Alan does not generate functions that take ownership of the provided argument like Rust does, primarily because this concept is foreign to most developers, but the function binding logic does support calling functions implemented in Rust that do this via the `Own{T}` generic type. Under the hood it is calling `clone` for you automatically to prevent an unexpected semantic drift, though that may be optimized away if you never use that variable again in a future version of the compiler.
+    Alan does not generate functions that take ownership of the provided argument like Rust does, primarily because this concept is foreign to most developers, but the function binding logic does support calling functions implemented in Rust that do this via the `Own{T}` generic type. Under the hood it is calling `clone` for you automatically to prevent an unexpected semantic drift, though the compiler will optimize that `clone` away when it can determine that the variable is never used again afterwards.
 
 ## Primitive Types
 
@@ -150,8 +150,8 @@ let five = 5;
 Base 2, 8, and 16 require a leading `0` followed by `b`, `o`, and `x`, respectively, and then the digits involved.
 
 ```rs
-let two     = 0b10;
-let eight   = 0o10;
+let two = 0b10;
+let eight = 0o10;
 let sixteen = 0x10;
 ```
 
@@ -175,7 +175,7 @@ let negative_five = -5;
 Floating-point numbers have two representations: Decimal and Scientific Notation.
 
 ```rs
-let decimal    = 12.34;
+let decimal = 12.34;
 let scientific = 1.234e1;
 ```
 
@@ -184,13 +184,13 @@ In scientific notation, the `e` separates the base number from the exponent in t
 Both decimal and scientific notation allow for negative numbers, while scientific notation also allows for negative exponents.
 
 ```rs
-let decimal    = -0.02;
+let decimal = -0.02;
 let scientific = -2e-2;
 ```
 
 ### Booleans
 
-Booleans are simply the bare keywords `true` and `false`. Other types do not automatically coerce into booleans, so there's no "truthy" `0` is `false`, `>=1` is `true` kind of behavior in the language. (At least, by default. More on that later.)
+Booleans are simply the bare keywords `true` and `false`. Other types do not automatically coerce into booleans, so there's no "truthy" `0` is `false`, `>=1` is `true` kind of behavior in the language. (At least, by default. You *can* opt into this per-type for conditionals — see [Conditional Statements](#conditional-statements) later on.)
 
 ### Strings
 
@@ -440,7 +440,6 @@ type intOrString = i64 | string;
 fn intOrString(b: bool) -> intOrString = b.string.intOrString;
 // For most functions, you don't need to specify the return type. This also works:
 // fn intOrString(b: bool) = b.string.intOrString;
-
 export fn main {
   let mightBeBool = intOrString(true); // Now works
 }
@@ -455,7 +454,6 @@ export fn main {
   let mightBeInt = intOrString(5);
   mightBeInt.i64.exists.print; // Prints true
   mightBeInt.string.exists.print; // Prints false
-
   let mightBeStr = intOrString('test');
   mightBeStr.i64.exists.print; // Prints false
   mightBeStr.string.exists.print; // Prints true
@@ -501,7 +499,6 @@ export fn main {
   let mightBeInt = intOrString(5);
   mightBeInt.i64.getOr(3).print; // Prints 5
   mightBeInt.string.getOr('value').print; // Prints value
-
   let mightBeStr = intOrString('test');
   mightBeStr.i64.getOr(3).print; // Prints 3
   mightBeStr.string.getOr('value').print; // Prints test
@@ -654,7 +651,6 @@ Arrays may also be constructed with the array constructor syntax, which elides t
 
 ```rs
 type manyInts = i64[]; // Equivalent to Array{i64}
-
 export fn main {
   let vals = manyInts(1, 2, 5);
   let betterVals = [1, 2, 3];
@@ -663,19 +659,19 @@ export fn main {
 }
 ```
 
-Arrays can be altered with the array assignment syntax just like buffers:
+Arrays can be altered with the array assignment syntax, but its behavior differs from buffers. Because an array can grow, `store`-ing a value at an index *inserts* it at that position, shifting the existing element (and everything after it) one slot to the right rather than replacing it:
 
 ```rs
 let count = [1, 2, 5];
 count[2] = 3;
-count.print; // Prints [1, 2, 3]
+count.print; // Prints [1, 2, 3, 5]
 ```
 
-You similarly can't `store` values out-of-bounds for an array. If you wish to grow the array, you should `push` the new value onto the array rather than attempting to write to a non-existent index.
+The index you insert at must be within the array (or exactly at its end, to append). Inserting at an index beyond the end of the array fails, leaving the array unchanged. If you just want to grow the array by one at the end, `push` is the idiomatic choice.
 
 ```rs
 let count = [1, 2, 3];
-count.store(5, 5).Error.exists.print; // Prints true, 5 is out-of-bounds for the array and the value was not stored.
+count.store(5, 5).Error.exists.print; // Prints true, 5 is beyond the end of the array, so nothing was inserted.
 ```
 
 ## Set Types
@@ -812,16 +808,16 @@ export fn main {
   t.rootNode.addChild(3.i64);
 
   // Map all nodes
-  let doubled = t.map(fn (n: Node{i64}) = Node{i64}(n.getOrExit * 2, t));
+  let doubled = t.map(fn(n: Node{i64}) = Node{i64}(n.getOrExit * 2, t));
 
   // Check if every node is positive
-  t.every(fn (n: Node{i64}) = n.getOrExit > 0); // true
+  t.every(fn(n: Node{i64}) = n.getOrExit > 0); // true
 
   // Find the first node with a specific value
-  t.find(fn (n: Node{i64}) = n.getOrExit == 3.i64); // Maybe{Node{i64}}
+  t.find(fn(n: Node{i64}) = n.getOrExit == 3.i64); // Maybe{Node{i64}}
 
   // Reduce the tree
-  t.reduce(fn (a: Node{i64}, b: Node{i64}) = Node{i64}(a.getOrExit + b.getOrExit, a.tree));
+  t.reduce(fn(a: Node{i64}, b: Node{i64}) = Node{i64}(a.getOrExit + b.getOrExit, a.tree));
 }
 ```
 
@@ -853,10 +849,11 @@ This type cannot be accessed directly at all, it must be explicitly `read` back 
 
 ```rs
 export fn main {
+  // Prints [2, 4, 6, 8]
   GBuffer([1.i32, 2.i32, 3.i32, 4.i32])
-    .map(fn (val: gi32) = val * 2)
+    .map(fn(val: gi32) = val * 2)
     .read
-    .print; // Prints [2, 4, 6, 8]
+    .print;
 }
 ```
 
@@ -873,7 +870,6 @@ Just the type portion of the function definition needs to be provided.
 ```rs
 // "Doubles" the string by concatenating it to itself
 fn doublestring(s: string) = s.concat(s);
-
 // Accepts a function that transforms a string and then returns a
 // string that documents that change
 fn stringChanger(s: string, changer: (string) -> string) {
@@ -887,13 +883,11 @@ export fn main {
   stringChanger("can", doublestring).print;
   // Call `stringChanger` with a string and a closure function that
   // encloses the `danceName` variable defined above
-  stringChanger(
-    "a person",
-    fn (s: string) = s
+  stringChanger("a person", fn(s: string) =
+    s
       .concat(" who can dance the ")
       .concat(danceName)
-      .concat(" through practice")
-  ).print;
+      .concat(" through practice")).print;
 }
 ```
 
@@ -933,7 +927,6 @@ The reverse is also true, *anything* can be the input side of things, but how do
 ```rs
 fn lazyFooString(string) -> string = "foo".concat(arg0);
 // fn lazyFooString(string) = "foo".concat(arg0);
-
 export fn main {
   "bar".lazyFooString.print; // Prints foobar
 }
@@ -987,7 +980,7 @@ fn i64 = 0;
 Now this type has a zero-arg constructor, so if we wanted to use `fma` to return, say, the total length of all captial words in a string, we could do something like:
 
 ```rs
-fn capcount(s: string) = s.split(" ").fma(fn (s: string) = s < "a", len, add);
+fn capcount(s: string) = s.split(" ").fma(fn(s: string) = s < "a", len, add);
 
 export fn main {
   "Hello there! How are you doing this fine Monday morning?".capcount.print; // Prints 14
@@ -1109,7 +1102,7 @@ type{Windows} Path = hasDrive: true, separator "\\", path: string;
 
 Here we're relying on the "last definition wins" tiebreaker for identical definitions. For non-Windows platforms the first `Path` is the only one so it sticks around, while on Windows, both are defined but the Windows-specific one is defined second so it overrides the first definition.
 
-But this works any keyword in the top-level of the source file, so `fn{Test}` defines a function that only exists during testing, `export{Windows}` exports something only for the Windows platform, etc.
+But this works with any keyword in the top-level of the source file, so `fn{Test}` defines a function that only exists during testing, `export{Windows}` exports something only for the Windows platform, etc.
 
 Conditional compilation in Alan simply requires tagging the code that you want to be compiled only in certain circumstances with the condition that it should be compiled. That's it.
 
@@ -1161,10 +1154,7 @@ export fn main {
 This behavior is more useful for your own custom types, for instance:
 
 ```rs
-type Vec{T, L} = If{
-  L < 5,
-  T[L],
-  Fail{"Vector CPU extensions only work for vectors of length 4 or less"}};
+type Vec{T, L} = If{L < 5, T[L], Fail{"Vector CPU extensions only work for vectors of length 4 or less"}};
 ```
 
 A wrapper around a buffer type constrained to lengths 1-4 that you then execute specialized functions on would be nicer to work with if you can use arithmetic operators on it for parallelized addition, multiplication, etc.
@@ -1280,7 +1270,7 @@ But there is a third syntax:
 fn baz "baz" :: (i64, i64, i64) -> i64;
 ```
 
-The `::` symbol is an alias for the `Call{N, F}` type, specifying a function call with the Rust function name as a string on the left, and the function type that it represents on the right. This `Call` type doesn't have any properties, but defines a single "constructor" function that takes the input specified and returns the output. This is used in conjunction with the function declaration syntax to give this "constructor" an easy-to-use name.
+The `::` symbol is an alias for the `Call{N, F}` type, specifying a function call with the host language (Rust or Javascript) function name as a string on the left, and the function type that it represents on the right. This `Call` type doesn't have any properties, but defines a single "constructor" function that takes the input specified and returns the output. This is used in conjunction with the function declaration syntax to give this "constructor" an easy-to-use name.
 
 !!! note
 
@@ -1302,21 +1292,59 @@ fn r (v: string, c: i64) = Record(v, c);
 
 which reduces some redundant syntax, but also eliminates the wrapper function from the call stack.
 
-You can bind more than just Rust functions as Alan functions. Since functions in Alan are also methods, properties, and operators, these concepts in Rust are also bindable as functions (which you can then use as methods or properties automatically and can rebind to an operator if desired).
+You can bind more than just plain host-language functions as Alan functions. Since functions in Alan are also methods, properties, and operators, these concepts in the host language (Rust or Javascript) are also bindable as functions (which you can then use as methods or properties automatically and can rebind to an operator if desired).
 
 ```rs
 fn add Infix{"+"} :: (f32, f32) -> f32;
 ```
 
-This defines an `add` function for 32-bit floats, being bound to Rust's `+` operator *and* that function name `and` being bound to `+` within Alan.
+This defines an `add` function for 32-bit floats, being bound to the host language's `+` operator *and* that function name being bound to `+` within Alan.
 
-In Alan, values are passed by reference to functions, but in Rust, you can call functions in different ways, such as passing ownership to the function, passing a mutable reference, or simply dereferencing a reference. Therefore, you can annotate the function type for these bound functions, operators, etc, with `Own{T}`, `Deref{T}`, etc.
+### Rust Calling Conventions (`Own` and `Deref`)
+
+When binding to Rust specifically, there's an extra wrinkle. In Alan, values are passed by reference to functions, but in Rust you can call functions in different ways, such as passing ownership to the function, passing a mutable reference, or simply dereferencing a reference. Therefore, you can annotate the function type for these bound functions, operators, etc, with `Own{T}`, `Deref{T}`, etc.
 
 ```rs
 fn eq Infix{"=="} :: (Deref{i8}, Deref{i8}) -> bool;
 ```
 
 This defines an `eq` function for 8-bit integers, binding it to Rust's `==` operator, but indicating to Alan that it should dereference the arguments when passing them to the operator. These various generic types allow you to annotate the binding, eliminating the need for writing wrapper functions in Rust.
+
+These annotations are Javascript-irrelevant: Javascript has no ownership or borrowing model (all arguments are mutable references), so they have no effect when compiling to Javascript and are only meaningful for Rust bindings.
+
+### Async Functions and Function "Color"
+
+Javascript has `async` functions that return a `Promise`, and calling one requires `await`ing it (or chaining `.then`). This is the classic "function color" problem: `async` is infectious, since any function that needs to `await` an `async` function must itself become `async`.
+
+Alan handles this for you. When you bind an `async` Javascript function, you annotate it by wrapping its return type in the Javascript-only `Promise{T}` type. For example, a `wait` function that resolves after some milliseconds:
+
+```rs
+fn{Js} wait
+  "((t) => new Promise((r) => setTimeout(() => { r(performance.now()) }, Number(t))))"
+  :: i64 -> Promise{f64};
+```
+
+(This is the actual `wait` binding from Alan's root scope. On the Rust backend `wait` is bound to a synchronous `std::thread::sleep`, so the async-ness is Javascript-only.)
+
+The `Promise{T}` annotation is the only thing you ever write related to async. From there, the compiler tracks the "color" of every function: if a function (directly or transitively, including through closures passed to higher-order functions) calls something that returns a `Promise{T}`, that function is *inferred* to be `async`, and the compiler emits the `await`s and the `async` keyword in the generated Javascript for you.
+
+Crucially, `Promise{T}` is **transparent** in pure Alan code. A function body that awaits has an actual return type of `Promise{T}`, but you declare and use it as plain `T`:
+
+```rs
+// Declared to return `f64`, even though `wait` returns `Promise{f64}`.
+// Alan auto-awaits, so the declared `f64` type-checks and `fetchVal` is colored async.
+fn fetchVal(b: bool) -> f64 {
+  return wait(10);
+}
+
+export fn main {
+  print(fetchVal(true).string);
+}
+```
+
+You never write `async` or `await` in Alan — you write straight-line code and the compiler colors it correctly. This works through the `if` syntax too: a conditional whose taken branch awaits will color its enclosing function `async` and complete the awaited work before running the tail.
+
+Because `Promise{T}` is Javascript-only, this is purely a Javascript-backend concern. The same Alan source compiles to ordinary synchronous Rust (where, for example, `wait` is implemented synchronously), and Javascript code that never touches an async function compiles to plain synchronous Javascript — a pure value conditional, for instance, compiles to a *synchronous* arrow IIFE with no `async`/`await` overhead.
 
 ### Binding Functions from Platform-specific Libraries
 
@@ -1337,9 +1365,15 @@ These are:
 You use three of the five of these types in place of the `N` argument of `Call{N, F}` to specify a platform-native library function or type to import. Eg:
 
 ```rs
-fn{Rs} escape Call{Import{"regex_syntax::escape", Rust{Dependency{"regex-syntax", "0.8.5"}}}, Function{string, string}}; // Binds the `escape` function from `regex-syntax`
+fn{Rs} escape
+  Call{Import{"regex_syntax::escape", Rust{Dependency{"regex-syntax", "0.8.5"}}}, Function{string, string}}; // Binds the `escape` function from `regex-syntax`
 fn{Rs} escape "regex_syntax::escape" <- Rust{"regex-syntax" @ "0.8.5"} :: string -> string; // Same binding but using type operators where possible
-fn{Js} yamlLoad Call{Import{"js_yaml.load", Nodejs{Dependency{"js-yaml", "4.1.0"}}}, Function{string, JSObject}}; // Binds the `load` function from `js-yaml` (Alan doesn't have a JSObject type, yet, so good luck with that part!)
+/*
+ * Binds the `load` function from `js-yaml` (Alan doesn't have a JSObject type, yet, so good luck
+ * with that part!)
+ */
+fn{Js} yamlLoad
+  Call{Import{"js_yaml.load", Nodejs{Dependency{"js-yaml", "4.1.0"}}}, Function{string, JSObject}};
 fn{Js} yamlLoad "js_yaml.load" <- Nodejs{"js-yaml" @ "4.1.0"} :: string -> JSObject; // Same binding but using type operators where possible
 ```
 
@@ -1366,11 +1400,11 @@ Bound types are different from normal Alan types in that *zero* constructor and 
 
     In Alan, it is assumed that **all** types can be `clone`d and `hash`ed, and the Alan compiler will generate code with that assumption. It is **highly** recommended that types that can't be cloned are wrapped in `Rc<T>` or `Arc<T>` during the binding, and types that can't be hashed should be wrapped with the [New Type Idiom](https://doc.rust-lang.org/rust-by-example/generics/new_types.html) and then [`impl` the `Hash`](https://doc.rust-lang.org/stable/std/hash/trait.Hash.html#implementing-hash) and [the `PartialEq` and `Eq`](https://doc.rust-lang.org/std/cmp/trait.PartialEq.html#how-can-i-implement-partialeq) traits. If you need to do both, put the `Rc<T>` wrapping within the New Type wrapper.
 
-Bound functions and types are tricky to work with, but provide a zero-cost FFI to the existing Rust (and eventually Javascript) ecosystem of libraries. The syntax is pretty simple, but leaves correctness up to you, so tread lightly if you need it!
+Bound functions and types are tricky to work with, but provide a zero-cost FFI to the existing Rust and Javascript ecosystems of libraries (Cargo crates and NPM packages, respectively). The syntax is pretty simple, but leaves correctness up to you, so tread lightly if you need it!
 
 !!! note
 
-    When multiple target languages are supported in Alan, there will be global boolean type constants `Rs` and `Js` that you can use with conditional compilation to choose which `type` or `fn` definition is actually selected, eg:
+    Alan supports multiple target languages (Rust and Javascript), and provides global boolean type constants `Rs` and `Js` that you can use with conditional compilation to choose which `type` or `fn` definition is actually selected, eg:
 
     ```rs
     type{Rs} i32 = Binds{"i32"};
@@ -1400,13 +1434,143 @@ You can bind generic functions in Alan as you can see here, but technically what
 
 ## Conditional Statements
 
-Currently in Alan, Conditional statements are implemented solely with the `if` functions, which take a boolean and one or two functions that take zero arguments and optionally return a value.
+### The `if` Function
+
+At the foundation, conditionals in Alan are just the `if` functions, which take a boolean and one or two functions that take zero arguments and optionally return a value.
 
 If you provide just one function, it is run only if the condition is `true` and its return value is passed back through the `if` function wrapped in a `Maybe{T}` that you then need to check the value of.
 
 If you provide two functions, the first is run when `true` and the second is run when `false`. Both functions *must* return the same type, and the `if` function returns the value from either branch for you.
 
-Before Alan v0.2.0 is released a "normal-looking" conditional syntax is planned, allowing for early returns and etc, and will actually be implemented via rewriting your code to use the `if` function, instead, but this has not yet been done.
+```rs
+export fn main {
+  // Two-branch form returns the value of the taken branch
+  let size = if(42 > 10, fn = 'big', fn = 'small');
+  print(size); // Prints big
+
+  // One-branch form returns a Maybe{T}
+  let maybeBig = if(42 > 10, fn = 'big');
+  print(maybeBig.getOr('small')); // Prints big
+}
+```
+
+### The `if`/`else` Syntax
+
+Writing every conditional as a function call gets awkward, so Alan also has the familiar `if`/`else` block syntax, which is simply rewritten into calls to the `if` function for you.
+
+```rs
+fn classify(n: i64) -> string {
+  if n < 0 {
+    return 'negative';
+  }
+  return 'nonneg';
+}
+
+export fn main {
+  print(classify(0 - 3)); // Prints negative
+  print(classify(5)); // Prints nonneg
+}
+```
+
+`else if` chains are supported and normalize into nested conditionals, and a final `else` works as you'd expect.
+
+```rs
+fn name(n: i64) -> string {
+  if n == 1 {
+    return 'one';
+  } else if n == 2 {
+    return 'two';
+  } else {
+    return 'other';
+  }
+}
+```
+
+### How the Rewrite Works (Tails and Early Returns)
+
+The `if`/`else` syntax is transformed into an `if(<condition>, fn() { <then> }, fn() { <else> })` call. But because all functions in Alan *must* execute every statement (there is no mid-function "jump"), early returns inside a branch need special handling.
+
+The rewrite handles this by folding the **tail** — the statements that follow the conditional in the enclosing block — into any branch that does *not* already early-return. So this:
+
+```rs
+fn check(n: i64) {
+  if n > 0 {
+    print('positive');
+    if n > 10 {
+      print('big');
+      return;
+    }
+  }
+  print('end');
+}
+```
+
+is rewritten so that `print('end')` (the tail) is duplicated onto every fall-through path: it runs after `print('positive')` when `n` is between 1 and 10, it runs on its own when `n <= 0`, and it is *skipped* on the path that early-returns after `print('big')`. Calling `check(50)`, `check(5)`, and `check(0 - 1)` prints:
+
+```
+positive
+big
+positive
+end
+end
+```
+
+When a branch with no explicit `else` doesn't early-return, the compiler synthesizes an `else` from the tail so the condition-false path still runs the rest of the block. The one case the compiler rejects is when *both* branches return *and* there are statements after the conditional — those trailing statements would be unreachable, so it's a compile error.
+
+### Extending the `if` Syntax: GPU Conditionals
+
+Because the `if`/`else` syntax bottoms out in the `if` function, and functions in Alan dispatch on their argument types, the conditional syntax automatically works for any condition type that has an `if` function defined. The built-in GPGPU types take advantage of this: there is an `if` function that accepts a `gbool` (a GPU boolean) condition, so the *exact same* block syntax produces WGSL shader code that runs on the GPU.
+
+```rs
+export fn main {
+  let b = GBuffer([1.i32, 2.i32, 3.i32, 4.i32])!!;
+  // `val > 2` is a `gbool`, so this `if` lowers to GPU conditional logic
+  let out = b.map(fn(val: gi32) {
+    let doubled = val * 2;
+    if val > 2 {
+      return doubled + 1;
+    } else {
+      return doubled - 1;
+    }
+  });
+  out.read.print; // Prints [1, 3, 7, 9]
+}
+```
+
+On the GPU we can't know at shader-generation time which path a given element will take, so the `gbool` `if` evaluates *both* arms while building the shader AST. For cheap, pure expressions it emits a branchless WGSL `select`; when the arms have branch-local work, it hoists the shared prefix once and emits a real `if (...) { ... } else { ... }` block so each arm's statements only run on its branch.
+
+### Extending the `if` Syntax: "DWIM" Conditionals
+
+Recall that Alan has no built-in "truthiness": an `i64` `0` is *not* `false`, and an empty string is *not* `false`. The condition of an `if` must be an actual `bool` (or some other type with an `if` function, like `gbool`).
+
+But if you *want* Do-What-I-Mean truthiness, you can opt in by defining your own `if` function for the condition type. It just converts the condition into a `bool` (or some other already-supported condition type) and forwards the two branch closures straight through to the built-in `if`:
+
+```rs
+// Opt into i64 truthiness: 0 is false, anything else is true
+fn if{T}(c: i64, t: () -> T, f: () -> T) = if(c != 0, t, f);
+// Opt into string truthiness: empty strings are false
+fn if{T}(c: string, t: () -> T, f: () -> T) = if(c.len > 0, t, f);
+
+fn describe(n: i64) -> string {
+  if n {
+    return 'nonzero';
+  }
+  return 'zero';
+}
+
+export fn main {
+  print(describe(0)); // Prints zero
+  print(describe(42)); // Prints nonzero
+  let name = '';
+  if name {
+    print('named');
+  } else {
+    print('anonymous'); // This branch runs
+  }
+}
+```
+
+This is the same "minimized blast radius" story as operators: the truthiness behavior only exists in the file where you defined it (or files that explicitly `import` your `if` function), so it can't silently surprise readers of other code. Anyone confused by `if n { ... }` for an integer `n` only needs to look for the `if` function defined for `i64` to see exactly what it means.
 
 ## Interfaces (AKA Types of Types)
 
@@ -1444,7 +1608,7 @@ When `D` is a string, it is treated as a path to another file on the filesystem.
 
 !!! warning
 
-    Passing a `Dpendency{N, V}` *directly* to an `Import{N, D}` is not yet implemented as the finer details of libraries have not yet been fleshed out.
+    Passing a `Dependency{N, V}` *directly* to an `Import{N, D}` is not yet implemented as the finer details of libraries have not yet been fleshed out.
 
 When `D` is `Rust{D}` or `Node{D}`, this indicates that the dependency is a native one to the Rust or Node.js platform, respectively, and this `D` *must* resolve to a `Dependency{N, V}` type. When done this way, `N` is the name of the module in `Cargo` or `NPM`, and `V` is the version, by default. However, `V` could also be the URL to a git repository, and that URL may have a `#` followed by a branch/tag name to specify the particular branch or tag to check out.
 
@@ -1466,7 +1630,7 @@ Importing in Alan requires explicitly declaring whether the value being imported
 
 !!! note
 
-    There currently is no way to import operators or type operators, though this is intended to be implemented in the future. It has been a lower priority since operators and type operators are simple declarative statements so copy-pasting isn't too terrible.
+    Operators and type operators can't be imported; you simply re-declare them. Importing one would be a single line, and declaring one is also a single line, so re-declaring them costs nothing extra and has the added benefit of making the chosen precedence explicit for anyone reading the file.
 
 The `Import{N, D}` syntax is shorter with the `<-` operator syntax:
 
@@ -1577,8 +1741,8 @@ export fn makeFooish (s: string) = getFoo().concat(s);
 export fn{Test} main {
   describe("Foo")
     .it("getFoo")
-      .assert(eq, getFoo(), "foo")
-    .it("makeFooish", fn (test: Mut{Testing}) {
+    .assert(eq, getFoo(), "foo")
+    .it("makeFooish", fn(test: Mut{Testing}) {
       let bar = "bar";
       let bbb = bar.repeat(3);
       test
