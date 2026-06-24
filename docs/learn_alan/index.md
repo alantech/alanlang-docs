@@ -135,7 +135,15 @@ Alan has many built-in types, but a few of them are considered "primitive." Thes
 
 !!! note
 
-    `int` and `float` are currently actually `i64` and `f64`. It is planned to have automatic coercion of the integer and float syntactic constructs into the "best" int and float type as determined by type inference, but this has not yet been done. They are always automatically coerced to their 64-bit representations and the user must explicitly cast to a smaller type if desired.
+    `int` and `float` are syntactic constructs rather than types of their own. A numeric literal is given the *set* of numeric types that can actually hold its value, and type inference then picks one based on how the literal is used.
+
+    When nothing constrains it, a literal "pulls toward" the 64-bit types: `i64` for integers, `f64` for anything with a fractional part, and `u64` for an integer too large to fit in `i64` (so `let big = 18_446_744_073_709_551_615;` is a `u64` automatically, with no cast).
+
+    When a literal is used in a context that requires a specific size, it is automatically given that type — no explicit cast needed. Assigning to an annotated variable, `let x: u8 = 200;`, makes `200` a `u8`; and calling a function `fn foo(x: u8)` as `foo(200)` likewise narrows `200` to `u8`. If more than one size is still valid in that context the same "pull toward the largest/most-default" rule breaks the tie, and a literal that cannot fit any candidate type (for example a fractional value where an integer is required) is a compile-time error.
+
+    This selection happens per-literal at the point of use. A bare, unannotated binding such as `let x = 200;` takes the default type (`i64`) immediately, so if you need `x` to be another type, annotate it (`let x: u8 = 200;`) or pass the literal directly to the function that requires it.
+
+    You can also annotate a literal inline with the type accessor — `200.u8`, or `foo(200.u8)` — which, *for an in-range literal*, is a zero-cost ascription (it produces the constant directly, with no runtime conversion). The same accessor on a variable (`x.u8`) or on a value too large for the type (`300.u8`, which wraps to `44`) is instead a real runtime cast.
 
 ### Integers
 
