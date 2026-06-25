@@ -1547,6 +1547,20 @@ export fn main {
 
 On the GPU we can't know at shader-generation time which path a given element will take, so the `gbool` `if` evaluates *both* arms while building the shader AST. For cheap, pure expressions it emits a branchless WGSL `select`; when the arms have branch-local work, it hoists the shared prefix once and emits a real `if (...) { ... } else { ... }` block so each arm's statements only run on its branch.
 
+Instead of `return`ing a value from each arm, you can also **mutate an outer-scope variable** from inside a branch, just like ordinary imperative code. This is how the live WebGPU demo on the homepage brightens the "light" it shines depending on which mouse button is held:
+
+```rs
+let scale = 3.0.gf32;
+if mouseLeft {
+  scale = 5.0.gf32;
+} else if mouseRight {
+  scale = 10.0.gf32;
+}
+// `scale` now reflects whichever branch was taken (or its original value if neither matched)
+```
+
+The same works for straight-line reassignment outside any conditional (`scale = scale + 1.0.gf32;`), and for branches that do more than one assignment: repeated assignments to the same variable are composed (`acc = acc + 10.gf32; acc = acc + 100.gf32;`) and branch-local `let`s are inlined into the assignments that use them, so each mutated variable still resolves to a single value once the conditional is over.
+
 ### Extending the `if` Syntax: "DWIM" Conditionals
 
 Recall that Alan has no built-in "truthiness": an `i64` `0` is *not* `false`, and an empty string is *not* `false`. The condition of an `if` must be an actual `bool` (or some other type with an `if` function, like `gbool`).
