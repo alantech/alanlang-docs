@@ -15,7 +15,7 @@ Currently, the only way to install `alan` is to build it from source:
 ```bash title="Installation shell commands"
 git clone https://github.com/alantech/alan
 cd alan
-cargo install --path .
+cargo install --path alan
 ```
 
 ## Usage

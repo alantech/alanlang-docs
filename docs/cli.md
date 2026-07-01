@@ -12,7 +12,7 @@ You can install `alan` by building from source:
 ```bash
 git clone https://github.com/alantech/alan
 cd alan
-cargo install --path .
+cargo install --path alan
 ```
 
 ## Commands
