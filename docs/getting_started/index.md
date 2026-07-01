@@ -6,7 +6,7 @@ It is planned to have a web compiler in the future to automatically generate Jav
 
 - **Rust** v1.92.0 or higher — required for compilation (recommend [rustup](https://rustup.rs/) to install this)
 - **Git** — required to clone the repository ([Windows users should probably use this](https://git-scm.com/download/win), Mac and Linux users ought to know how to install git)
-- **Node.js** and **npm** (or **yarn**) — optional; needed for `bundle`, `to-js`, and `test --js`
+- **Node.js** v22.0.0 or higher and a package manager — optional; needed for `bundle`, `to-js`, and `test --js`. The compiler prefers **pnpm** when available (it's faster), then falls back to **yarn**, and finally **npm**.
 
 ## Source Installation
 
