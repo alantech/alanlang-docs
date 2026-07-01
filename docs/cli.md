@@ -5,14 +5,14 @@ The `alan` command-line interface is your entry point for compiling, transpiling
 ## Prerequisites
 
 - **Rust** (v1.92.0+) and **Cargo** — required for `compile`, `test`, and `to-rs`
-- **Node.js** and **npm** (or **yarn**) — required for `bundle`, `to-js`, and `test --js`
+- **Node.js** v22.0.0 or higher and a package manager — required for `bundle`, `to-js`, and `test --js`. The compiler prefers **pnpm** when available (it's faster than **npm** and **yarn**), then falls back to **yarn**, and finally **npm**.
 
 You can install `alan` by building from source:
 
 ```bash
 git clone https://github.com/alantech/alan
 cd alan
-cargo install --path .
+cargo install --path alan
 ```
 
 ## Commands
@@ -77,7 +77,7 @@ alan bundle [LN_FILE]
 |---|---|---|
 | `LN_FILE` | `./index.ln` | The `.ln` source file to compile |
 
-The compiler transpiles to JavaScript, installs npm dependencies, then bundles everything with Rollup (IIFE format, minified with Terser). The output is placed in the current directory as `<name>.js`.
+The compiler transpiles to JavaScript, installs dependencies (using **pnpm** if available, otherwise **yarn**, otherwise **npm**), then bundles everything with Rollup (IIFE format, minified with Terser). The output is placed in the current directory as `<name>.js`. This JavaScript toolchain requires Node.js v22.0.0 or higher.
 
 ```bash title="Compile a web bundle"
 alan bundle app.ln
@@ -101,7 +101,7 @@ alan test --js [LN_FILE]
 |---|---|
 | `--js`, `-j` | Run tests via JavaScript (Node.js) instead of natively |
 
-Without `--js`, the program is compiled to a native binary and executed. With `--js`, it is transpiled to JavaScript and executed with Node.js. In both cases, the test artifact is deleted after the test completes.
+Without `--js`, the program is compiled to a native binary and executed. With `--js`, it is transpiled to JavaScript and executed with Node.js (v22.0.0 or higher). In both cases, the test artifact is deleted after the test completes.
 
 ```bash title="Run tests"
 alan test my_project.ln

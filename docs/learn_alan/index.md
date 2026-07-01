@@ -1781,7 +1781,7 @@ The test suite being defined in a conditonally-compiled `main` function makes it
 
 It is planned to eventually have `alan test` with no compilation target provided to recursively search all `.ln` files in the `PWD` for files that have `export fn{Test} main` and run these tests sequentially.
 
-It is already possible to both `alan test foo.ln` and `alan test --js foo.ln` to execute the test suite both natively and inside of Node.js. This is planned to eventually move to testing within a headless browser once the headless browsers support WebGPU so the GPGPU logic can be tested in the browser context as well, but for now GPGPU testing must be done only natively (or with a very complicated setup on supported operating systems implemented in the Alan monorepo involving Node, Chrome, and Rust simultaneously, but only on MacOS).
+It is already possible to both `alan test foo.ln` and `alan test --js foo.ln` to execute the test suite both natively and inside of Node.js (v22.0.0 or higher). This is planned to eventually move to testing within a headless browser once the headless browsers support WebGPU so the GPGPU logic can be tested in the browser context as well, but for now GPGPU testing must be done only natively (or with a very complicated setup on supported operating systems implemented in the Alan monorepo involving Node.js, Chrome, and Rust simultaneously, but only on MacOS).
 
 ## Want to Learn More?
 
