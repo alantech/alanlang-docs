@@ -295,10 +295,6 @@ export fn main {
 }
 ```
 
-!!! note
-
-    This syntax is not *yet* implemented, but intended to be implemented before Alan v0.2.0 releases. TODO: Delete this note!
-
 ### Structs
 
 Structs are the same as tuples, except they have names for the different sub-types that you can use to access them. A simple struct is defined as:
