@@ -89,13 +89,13 @@ alan bundle app.ln
 Compiles a `.ln` source file in test mode, runs it, and cleans up afterward.
 
 ```bash
-alan test [LN_FILE]
-alan test --js [LN_FILE]
+alan test [LN_FILE...]
+alan test --js [LN_FILE...]
 ```
 
 | Argument | Default | Description |
 |---|---|---|
-| `LN_FILE` | `./index.ln` | The `.ln` source file to compile in test mode |
+| `LN_FILE...` | *(discover)* | One or more `.ln` source files to compile in test mode. When omitted, every `.ln` file under the current directory that exports a `fn{Test} main` entry point is discovered and run in sequence. |
 
 | Flag | Description |
 |---|---|
@@ -103,9 +103,16 @@ alan test --js [LN_FILE]
 
 Without `--js`, the program is compiled to a native binary and executed. With `--js`, it is transpiled to JavaScript and executed with Node.js (v22.0.0 or higher). In both cases, the test artifact is deleted after the test completes.
 
-```bash title="Run tests"
+```bash title="Run specific test files"
 alan test my_project.ln
+alan test foo.ln bar.ln baz.ln
 alan test --js my_project.ln
+```
+
+When run with no target, `alan test` recursively searches the current directory for `.ln` files that export a test-only `main` (`export fn{Test} main` or `export{Test} fn main`) and runs each in sequence. The `target`, `node_modules`, `dependencies`, `.git`, and `.cargo` directories are skipped. When more than one test file is run—whether discovered or named explicitly—each is preceded by a `Testing ./path/to/file.ln...` line so the source of any failure is clear.
+
+```bash title="Discover and run all tests under PWD"
+alan test
 ```
 
 During compilation, `ALAN_TARGET` is set to `test`, which makes the `Test` type evaluate to `true`. The easiest way to write test-only code is to use `fn{Test} main = ...` as the entry point.
