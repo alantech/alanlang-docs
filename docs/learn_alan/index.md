@@ -1775,7 +1775,7 @@ Note that the closure function specifies the type as `Mut{Testing}` because the 
 
 The test suite being defined in a conditonally-compiled `main` function makes it an executable only during tests, while not a compilation target under normal circumstances, which makes it possible to define the test suite for a library in the same file as the library rather than require a separate file, which is useful for unit tests.
 
-It is planned to eventually have `alan test` with no compilation target provided to recursively search all `.ln` files in the `PWD` for files that have `export fn{Test} main` and run these tests sequentially.
+Running `alan test` with no compilation target recursively searches all `.ln` files in the `PWD` for files that have `export fn{Test} main` and runs these tests sequentially. When more than one file is discovered, each test run is preceded by a `Testing ./path/to/file.ln...` line so it's clear which file any failure came from.
 
 It is already possible to both `alan test foo.ln` and `alan test --js foo.ln` to execute the test suite both natively and inside of Node.js (v22.0.0 or higher). This is planned to eventually move to testing within a headless browser once the headless browsers support WebGPU so the GPGPU logic can be tested in the browser context as well, but for now GPGPU testing must be done only natively (or with a very complicated setup on supported operating systems implemented in the Alan monorepo involving Node.js, Chrome, and Rust simultaneously, but only on MacOS).
 
