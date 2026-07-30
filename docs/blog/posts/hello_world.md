@@ -20,7 +20,7 @@ massa, nec semper lorem quam in massa.
 ## Article ideas for Alan
 
 1.  Motivation
-    1. What prototype.js got right / Why Best Practices are shaped by language and ecosystem
+    1. [What prototype.js got right](./prototype_was_right.md) / Why Best Practices are shaped by language and ecosystem
     2. Intrinsic, Accidental, and Intentional Complexity wrt GPU APIs
     3. GPUs are modern day Lisp Machines / How C is a high level language and WGSL is a low level language
     4. Kinds of programs, their structures and tradeoffs / which ones Alan is designed for / latency axis VS volume axis VS CPUs per user
